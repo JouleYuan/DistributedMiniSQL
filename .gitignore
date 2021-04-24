@@ -1,4 +1,6 @@
 /.idea
 DistributedMinisql.iml
 
-/src/test/java/*
+/target
+
+/src/test
