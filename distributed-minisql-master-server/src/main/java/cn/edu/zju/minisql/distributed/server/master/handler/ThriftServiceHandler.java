@@ -1,5 +1,6 @@
 package cn.edu.zju.minisql.distributed.server.master.handler;
 
+import cn.edu.zju.minisql.distributed.service.thrift.Attribute;
 import cn.edu.zju.minisql.distributed.service.thrift.MasterService;
 
 import java.util.List;
@@ -7,15 +8,15 @@ import java.util.List;
 public class ThriftServiceHandler implements MasterService.Iface {
 
     @Override
-    public boolean createTable(String tableName, List<Integer> attributeTypes, List<String> attributeNames, int primaryKey){
+    public boolean createTable(String tableName, List<Attribute> attributes, int primaryKeyIndex){
         System.out.println("createTable(" + tableName + ")");
         System.out.print("attributeTypes: ");
-        for(int type: attributeTypes) System.out.print(type + " ");
+        for(Attribute attribute: attributes) System.out.print(attribute.type + " ");
         System.out.println();
         System.out.print("attributeNames: ");
-        for(String name: attributeNames) System.out.print(name + " ");
+        for(Attribute attribute: attributes) System.out.print(attribute.name + " ");
         System.out.println();
-        System.out.print(primaryKey);
+        System.out.println("primaryKeyIndex: " + primaryKeyIndex);
         return true;
     }
 

@@ -1,5 +1,6 @@
 package cn.edu.zju.minisql.distributed.client;
 
+import cn.edu.zju.minisql.distributed.service.thrift.Attribute;
 import cn.edu.zju.minisql.distributed.service.thrift.MasterService;
 import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;
@@ -22,15 +23,13 @@ public class Client {
             MasterService.Client masterServiceClient = new MasterService.Client(protocol);
 
             String tableName = "student";
-            List<Integer> attributeTypes = new ArrayList<>();
-            List<String> attributeNames = new ArrayList<>();
+            List<Attribute> attributes = new ArrayList<>();
             for(int i = 0; i < 2; i++){
-                attributeTypes.add(i);
-                attributeNames.add("attribute" + i);
+                attributes.add(new Attribute("attribute" + i, i));
             }
             int primaryKey = 0;
 
-            System.out.println(masterServiceClient.createTable(tableName, attributeTypes, attributeNames, primaryKey));
+            System.out.println(masterServiceClient.createTable(tableName, attributes, primaryKey));
             System.out.println(masterServiceClient.dropTable(tableName));
 
             transport.close();

@@ -12,7 +12,7 @@ public class MasterService {
 
   public interface Iface {
 
-    public boolean createTable(java.lang.String tableName, java.util.List<java.lang.Integer> attributeTypes, java.util.List<java.lang.String> attributeNames, int primaryKey) throws org.apache.thrift.TException;
+    public boolean createTable(java.lang.String tableName, java.util.List<Attribute> attributes, int primaryKeyIndex) throws org.apache.thrift.TException;
 
     public boolean dropTable(java.lang.String tableName) throws org.apache.thrift.TException;
 
@@ -20,7 +20,7 @@ public class MasterService {
 
   public interface AsyncIface {
 
-    public void createTable(java.lang.String tableName, java.util.List<java.lang.Integer> attributeTypes, java.util.List<java.lang.String> attributeNames, int primaryKey, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler) throws org.apache.thrift.TException;
+    public void createTable(java.lang.String tableName, java.util.List<Attribute> attributes, int primaryKeyIndex, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler) throws org.apache.thrift.TException;
 
     public void dropTable(java.lang.String tableName, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler) throws org.apache.thrift.TException;
 
@@ -46,19 +46,18 @@ public class MasterService {
       super(iprot, oprot);
     }
 
-    public boolean createTable(java.lang.String tableName, java.util.List<java.lang.Integer> attributeTypes, java.util.List<java.lang.String> attributeNames, int primaryKey) throws org.apache.thrift.TException
+    public boolean createTable(java.lang.String tableName, java.util.List<Attribute> attributes, int primaryKeyIndex) throws org.apache.thrift.TException
     {
-      send_createTable(tableName, attributeTypes, attributeNames, primaryKey);
+      send_createTable(tableName, attributes, primaryKeyIndex);
       return recv_createTable();
     }
 
-    public void send_createTable(java.lang.String tableName, java.util.List<java.lang.Integer> attributeTypes, java.util.List<java.lang.String> attributeNames, int primaryKey) throws org.apache.thrift.TException
+    public void send_createTable(java.lang.String tableName, java.util.List<Attribute> attributes, int primaryKeyIndex) throws org.apache.thrift.TException
     {
       createTable_args args = new createTable_args();
       args.setTableName(tableName);
-      args.setAttributeTypes(attributeTypes);
-      args.setAttributeNames(attributeNames);
-      args.setPrimaryKey(primaryKey);
+      args.setAttributes(attributes);
+      args.setPrimaryKeyIndex(primaryKeyIndex);
       sendBase("createTable", args);
     }
 
@@ -113,33 +112,30 @@ public class MasterService {
       super(protocolFactory, clientManager, transport);
     }
 
-    public void createTable(java.lang.String tableName, java.util.List<java.lang.Integer> attributeTypes, java.util.List<java.lang.String> attributeNames, int primaryKey, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler) throws org.apache.thrift.TException {
+    public void createTable(java.lang.String tableName, java.util.List<Attribute> attributes, int primaryKeyIndex, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler) throws org.apache.thrift.TException {
       checkReady();
-      createTable_call method_call = new createTable_call(tableName, attributeTypes, attributeNames, primaryKey, resultHandler, this, ___protocolFactory, ___transport);
+      createTable_call method_call = new createTable_call(tableName, attributes, primaryKeyIndex, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
 
     public static class createTable_call extends org.apache.thrift.async.TAsyncMethodCall<java.lang.Boolean> {
       private java.lang.String tableName;
-      private java.util.List<java.lang.Integer> attributeTypes;
-      private java.util.List<java.lang.String> attributeNames;
-      private int primaryKey;
-      public createTable_call(java.lang.String tableName, java.util.List<java.lang.Integer> attributeTypes, java.util.List<java.lang.String> attributeNames, int primaryKey, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+      private java.util.List<Attribute> attributes;
+      private int primaryKeyIndex;
+      public createTable_call(java.lang.String tableName, java.util.List<Attribute> attributes, int primaryKeyIndex, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
         super(client, protocolFactory, transport, resultHandler, false);
         this.tableName = tableName;
-        this.attributeTypes = attributeTypes;
-        this.attributeNames = attributeNames;
-        this.primaryKey = primaryKey;
+        this.attributes = attributes;
+        this.primaryKeyIndex = primaryKeyIndex;
       }
 
       public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
         prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("createTable", org.apache.thrift.protocol.TMessageType.CALL, 0));
         createTable_args args = new createTable_args();
         args.setTableName(tableName);
-        args.setAttributeTypes(attributeTypes);
-        args.setAttributeNames(attributeNames);
-        args.setPrimaryKey(primaryKey);
+        args.setAttributes(attributes);
+        args.setPrimaryKeyIndex(primaryKeyIndex);
         args.write(prot);
         prot.writeMessageEnd();
       }
@@ -224,7 +220,7 @@ public class MasterService {
 
       public createTable_result getResult(I iface, createTable_args args) throws org.apache.thrift.TException {
         createTable_result result = new createTable_result();
-        result.success = iface.createTable(args.tableName, args.attributeTypes, args.attributeNames, args.primaryKey);
+        result.success = iface.createTable(args.tableName, args.attributes, args.primaryKeyIndex);
         result.setSuccessIsSet(true);
         return result;
       }
@@ -332,7 +328,7 @@ public class MasterService {
       }
 
       public void start(I iface, createTable_args args, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler) throws org.apache.thrift.TException {
-        iface.createTable(args.tableName, args.attributeTypes, args.attributeNames, args.primaryKey,resultHandler);
+        iface.createTable(args.tableName, args.attributes, args.primaryKeyIndex,resultHandler);
       }
     }
 
@@ -404,24 +400,21 @@ public class MasterService {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("createTable_args");
 
     private static final org.apache.thrift.protocol.TField TABLE_NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("tableName", org.apache.thrift.protocol.TType.STRING, (short)1);
-    private static final org.apache.thrift.protocol.TField ATTRIBUTE_TYPES_FIELD_DESC = new org.apache.thrift.protocol.TField("attributeTypes", org.apache.thrift.protocol.TType.LIST, (short)2);
-    private static final org.apache.thrift.protocol.TField ATTRIBUTE_NAMES_FIELD_DESC = new org.apache.thrift.protocol.TField("attributeNames", org.apache.thrift.protocol.TType.LIST, (short)3);
-    private static final org.apache.thrift.protocol.TField PRIMARY_KEY_FIELD_DESC = new org.apache.thrift.protocol.TField("primaryKey", org.apache.thrift.protocol.TType.I32, (short)4);
+    private static final org.apache.thrift.protocol.TField ATTRIBUTES_FIELD_DESC = new org.apache.thrift.protocol.TField("attributes", org.apache.thrift.protocol.TType.LIST, (short)2);
+    private static final org.apache.thrift.protocol.TField PRIMARY_KEY_INDEX_FIELD_DESC = new org.apache.thrift.protocol.TField("primaryKeyIndex", org.apache.thrift.protocol.TType.I32, (short)3);
 
     private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new createTable_argsStandardSchemeFactory();
     private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new createTable_argsTupleSchemeFactory();
 
     public @org.apache.thrift.annotation.Nullable java.lang.String tableName; // required
-    public @org.apache.thrift.annotation.Nullable java.util.List<java.lang.Integer> attributeTypes; // required
-    public @org.apache.thrift.annotation.Nullable java.util.List<java.lang.String> attributeNames; // required
-    public int primaryKey; // required
+    public @org.apache.thrift.annotation.Nullable java.util.List<Attribute> attributes; // required
+    public int primaryKeyIndex; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
       TABLE_NAME((short)1, "tableName"),
-      ATTRIBUTE_TYPES((short)2, "attributeTypes"),
-      ATTRIBUTE_NAMES((short)3, "attributeNames"),
-      PRIMARY_KEY((short)4, "primaryKey");
+      ATTRIBUTES((short)2, "attributes"),
+      PRIMARY_KEY_INDEX((short)3, "primaryKeyIndex");
 
       private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
 
@@ -439,12 +432,10 @@ public class MasterService {
         switch(fieldId) {
           case 1: // TABLE_NAME
             return TABLE_NAME;
-          case 2: // ATTRIBUTE_TYPES
-            return ATTRIBUTE_TYPES;
-          case 3: // ATTRIBUTE_NAMES
-            return ATTRIBUTE_NAMES;
-          case 4: // PRIMARY_KEY
-            return PRIMARY_KEY;
+          case 2: // ATTRIBUTES
+            return ATTRIBUTES;
+          case 3: // PRIMARY_KEY_INDEX
+            return PRIMARY_KEY_INDEX;
           default:
             return null;
         }
@@ -486,20 +477,17 @@ public class MasterService {
     }
 
     // isset id assignments
-    private static final int __PRIMARYKEY_ISSET_ID = 0;
+    private static final int __PRIMARYKEYINDEX_ISSET_ID = 0;
     private byte __isset_bitfield = 0;
     public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
       tmpMap.put(_Fields.TABLE_NAME, new org.apache.thrift.meta_data.FieldMetaData("tableName", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-      tmpMap.put(_Fields.ATTRIBUTE_TYPES, new org.apache.thrift.meta_data.FieldMetaData("attributeTypes", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+      tmpMap.put(_Fields.ATTRIBUTES, new org.apache.thrift.meta_data.FieldMetaData("attributes", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.ListMetaData(org.apache.thrift.protocol.TType.LIST, 
-              new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32              , "int"))));
-      tmpMap.put(_Fields.ATTRIBUTE_NAMES, new org.apache.thrift.meta_data.FieldMetaData("attributeNames", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.ListMetaData(org.apache.thrift.protocol.TType.LIST, 
-              new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING))));
-      tmpMap.put(_Fields.PRIMARY_KEY, new org.apache.thrift.meta_data.FieldMetaData("primaryKey", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+              new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, Attribute.class))));
+      tmpMap.put(_Fields.PRIMARY_KEY_INDEX, new org.apache.thrift.meta_data.FieldMetaData("primaryKeyIndex", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32          , "int")));
       metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(createTable_args.class, metaDataMap);
@@ -510,16 +498,14 @@ public class MasterService {
 
     public createTable_args(
       java.lang.String tableName,
-      java.util.List<java.lang.Integer> attributeTypes,
-      java.util.List<java.lang.String> attributeNames,
-      int primaryKey)
+      java.util.List<Attribute> attributes,
+      int primaryKeyIndex)
     {
       this();
       this.tableName = tableName;
-      this.attributeTypes = attributeTypes;
-      this.attributeNames = attributeNames;
-      this.primaryKey = primaryKey;
-      setPrimaryKeyIsSet(true);
+      this.attributes = attributes;
+      this.primaryKeyIndex = primaryKeyIndex;
+      setPrimaryKeyIndexIsSet(true);
     }
 
     /**
@@ -530,18 +516,14 @@ public class MasterService {
       if (other.isSetTableName()) {
         this.tableName = other.tableName;
       }
-      if (other.isSetAttributeTypes()) {
-        java.util.List<java.lang.Integer> __this__attributeTypes = new java.util.ArrayList<java.lang.Integer>(other.attributeTypes.size());
-        for (java.lang.Integer other_element : other.attributeTypes) {
-          __this__attributeTypes.add(other_element);
+      if (other.isSetAttributes()) {
+        java.util.List<Attribute> __this__attributes = new java.util.ArrayList<Attribute>(other.attributes.size());
+        for (Attribute other_element : other.attributes) {
+          __this__attributes.add(new Attribute(other_element));
         }
-        this.attributeTypes = __this__attributeTypes;
+        this.attributes = __this__attributes;
       }
-      if (other.isSetAttributeNames()) {
-        java.util.List<java.lang.String> __this__attributeNames = new java.util.ArrayList<java.lang.String>(other.attributeNames);
-        this.attributeNames = __this__attributeNames;
-      }
-      this.primaryKey = other.primaryKey;
+      this.primaryKeyIndex = other.primaryKeyIndex;
     }
 
     public createTable_args deepCopy() {
@@ -551,10 +533,9 @@ public class MasterService {
     @Override
     public void clear() {
       this.tableName = null;
-      this.attributeTypes = null;
-      this.attributeNames = null;
-      setPrimaryKeyIsSet(false);
-      this.primaryKey = 0;
+      this.attributes = null;
+      setPrimaryKeyIndexIsSet(false);
+      this.primaryKeyIndex = 0;
     }
 
     @org.apache.thrift.annotation.Nullable
@@ -582,109 +563,68 @@ public class MasterService {
       }
     }
 
-    public int getAttributeTypesSize() {
-      return (this.attributeTypes == null) ? 0 : this.attributeTypes.size();
+    public int getAttributesSize() {
+      return (this.attributes == null) ? 0 : this.attributes.size();
     }
 
     @org.apache.thrift.annotation.Nullable
-    public java.util.Iterator<java.lang.Integer> getAttributeTypesIterator() {
-      return (this.attributeTypes == null) ? null : this.attributeTypes.iterator();
+    public java.util.Iterator<Attribute> getAttributesIterator() {
+      return (this.attributes == null) ? null : this.attributes.iterator();
     }
 
-    public void addToAttributeTypes(int elem) {
-      if (this.attributeTypes == null) {
-        this.attributeTypes = new java.util.ArrayList<java.lang.Integer>();
+    public void addToAttributes(Attribute elem) {
+      if (this.attributes == null) {
+        this.attributes = new java.util.ArrayList<Attribute>();
       }
-      this.attributeTypes.add(elem);
+      this.attributes.add(elem);
     }
 
     @org.apache.thrift.annotation.Nullable
-    public java.util.List<java.lang.Integer> getAttributeTypes() {
-      return this.attributeTypes;
+    public java.util.List<Attribute> getAttributes() {
+      return this.attributes;
     }
 
-    public createTable_args setAttributeTypes(@org.apache.thrift.annotation.Nullable java.util.List<java.lang.Integer> attributeTypes) {
-      this.attributeTypes = attributeTypes;
+    public createTable_args setAttributes(@org.apache.thrift.annotation.Nullable java.util.List<Attribute> attributes) {
+      this.attributes = attributes;
       return this;
     }
 
-    public void unsetAttributeTypes() {
-      this.attributeTypes = null;
+    public void unsetAttributes() {
+      this.attributes = null;
     }
 
-    /** Returns true if field attributeTypes is set (has been assigned a value) and false otherwise */
-    public boolean isSetAttributeTypes() {
-      return this.attributeTypes != null;
+    /** Returns true if field attributes is set (has been assigned a value) and false otherwise */
+    public boolean isSetAttributes() {
+      return this.attributes != null;
     }
 
-    public void setAttributeTypesIsSet(boolean value) {
+    public void setAttributesIsSet(boolean value) {
       if (!value) {
-        this.attributeTypes = null;
+        this.attributes = null;
       }
     }
 
-    public int getAttributeNamesSize() {
-      return (this.attributeNames == null) ? 0 : this.attributeNames.size();
+    public int getPrimaryKeyIndex() {
+      return this.primaryKeyIndex;
     }
 
-    @org.apache.thrift.annotation.Nullable
-    public java.util.Iterator<java.lang.String> getAttributeNamesIterator() {
-      return (this.attributeNames == null) ? null : this.attributeNames.iterator();
-    }
-
-    public void addToAttributeNames(java.lang.String elem) {
-      if (this.attributeNames == null) {
-        this.attributeNames = new java.util.ArrayList<java.lang.String>();
-      }
-      this.attributeNames.add(elem);
-    }
-
-    @org.apache.thrift.annotation.Nullable
-    public java.util.List<java.lang.String> getAttributeNames() {
-      return this.attributeNames;
-    }
-
-    public createTable_args setAttributeNames(@org.apache.thrift.annotation.Nullable java.util.List<java.lang.String> attributeNames) {
-      this.attributeNames = attributeNames;
+    public createTable_args setPrimaryKeyIndex(int primaryKeyIndex) {
+      this.primaryKeyIndex = primaryKeyIndex;
+      setPrimaryKeyIndexIsSet(true);
       return this;
     }
 
-    public void unsetAttributeNames() {
-      this.attributeNames = null;
+    public void unsetPrimaryKeyIndex() {
+      __isset_bitfield = org.apache.thrift.EncodingUtils.clearBit(__isset_bitfield, __PRIMARYKEYINDEX_ISSET_ID);
     }
 
-    /** Returns true if field attributeNames is set (has been assigned a value) and false otherwise */
-    public boolean isSetAttributeNames() {
-      return this.attributeNames != null;
+    /** Returns true if field primaryKeyIndex is set (has been assigned a value) and false otherwise */
+    public boolean isSetPrimaryKeyIndex() {
+      return org.apache.thrift.EncodingUtils.testBit(__isset_bitfield, __PRIMARYKEYINDEX_ISSET_ID);
     }
 
-    public void setAttributeNamesIsSet(boolean value) {
-      if (!value) {
-        this.attributeNames = null;
-      }
-    }
-
-    public int getPrimaryKey() {
-      return this.primaryKey;
-    }
-
-    public createTable_args setPrimaryKey(int primaryKey) {
-      this.primaryKey = primaryKey;
-      setPrimaryKeyIsSet(true);
-      return this;
-    }
-
-    public void unsetPrimaryKey() {
-      __isset_bitfield = org.apache.thrift.EncodingUtils.clearBit(__isset_bitfield, __PRIMARYKEY_ISSET_ID);
-    }
-
-    /** Returns true if field primaryKey is set (has been assigned a value) and false otherwise */
-    public boolean isSetPrimaryKey() {
-      return org.apache.thrift.EncodingUtils.testBit(__isset_bitfield, __PRIMARYKEY_ISSET_ID);
-    }
-
-    public void setPrimaryKeyIsSet(boolean value) {
-      __isset_bitfield = org.apache.thrift.EncodingUtils.setBit(__isset_bitfield, __PRIMARYKEY_ISSET_ID, value);
+    public void setPrimaryKeyIndexIsSet(boolean value) {
+      __isset_bitfield = org.apache.thrift.EncodingUtils.setBit(__isset_bitfield, __PRIMARYKEYINDEX_ISSET_ID, value);
     }
 
     public void setFieldValue(_Fields field, @org.apache.thrift.annotation.Nullable java.lang.Object value) {
@@ -697,27 +637,19 @@ public class MasterService {
         }
         break;
 
-      case ATTRIBUTE_TYPES:
+      case ATTRIBUTES:
         if (value == null) {
-          unsetAttributeTypes();
+          unsetAttributes();
         } else {
-          setAttributeTypes((java.util.List<java.lang.Integer>)value);
+          setAttributes((java.util.List<Attribute>)value);
         }
         break;
 
-      case ATTRIBUTE_NAMES:
+      case PRIMARY_KEY_INDEX:
         if (value == null) {
-          unsetAttributeNames();
+          unsetPrimaryKeyIndex();
         } else {
-          setAttributeNames((java.util.List<java.lang.String>)value);
-        }
-        break;
-
-      case PRIMARY_KEY:
-        if (value == null) {
-          unsetPrimaryKey();
-        } else {
-          setPrimaryKey((java.lang.Integer)value);
+          setPrimaryKeyIndex((java.lang.Integer)value);
         }
         break;
 
@@ -730,14 +662,11 @@ public class MasterService {
       case TABLE_NAME:
         return getTableName();
 
-      case ATTRIBUTE_TYPES:
-        return getAttributeTypes();
+      case ATTRIBUTES:
+        return getAttributes();
 
-      case ATTRIBUTE_NAMES:
-        return getAttributeNames();
-
-      case PRIMARY_KEY:
-        return getPrimaryKey();
+      case PRIMARY_KEY_INDEX:
+        return getPrimaryKeyIndex();
 
       }
       throw new java.lang.IllegalStateException();
@@ -752,12 +681,10 @@ public class MasterService {
       switch (field) {
       case TABLE_NAME:
         return isSetTableName();
-      case ATTRIBUTE_TYPES:
-        return isSetAttributeTypes();
-      case ATTRIBUTE_NAMES:
-        return isSetAttributeNames();
-      case PRIMARY_KEY:
-        return isSetPrimaryKey();
+      case ATTRIBUTES:
+        return isSetAttributes();
+      case PRIMARY_KEY_INDEX:
+        return isSetPrimaryKeyIndex();
       }
       throw new java.lang.IllegalStateException();
     }
@@ -784,30 +711,21 @@ public class MasterService {
           return false;
       }
 
-      boolean this_present_attributeTypes = true && this.isSetAttributeTypes();
-      boolean that_present_attributeTypes = true && that.isSetAttributeTypes();
-      if (this_present_attributeTypes || that_present_attributeTypes) {
-        if (!(this_present_attributeTypes && that_present_attributeTypes))
+      boolean this_present_attributes = true && this.isSetAttributes();
+      boolean that_present_attributes = true && that.isSetAttributes();
+      if (this_present_attributes || that_present_attributes) {
+        if (!(this_present_attributes && that_present_attributes))
           return false;
-        if (!this.attributeTypes.equals(that.attributeTypes))
-          return false;
-      }
-
-      boolean this_present_attributeNames = true && this.isSetAttributeNames();
-      boolean that_present_attributeNames = true && that.isSetAttributeNames();
-      if (this_present_attributeNames || that_present_attributeNames) {
-        if (!(this_present_attributeNames && that_present_attributeNames))
-          return false;
-        if (!this.attributeNames.equals(that.attributeNames))
+        if (!this.attributes.equals(that.attributes))
           return false;
       }
 
-      boolean this_present_primaryKey = true;
-      boolean that_present_primaryKey = true;
-      if (this_present_primaryKey || that_present_primaryKey) {
-        if (!(this_present_primaryKey && that_present_primaryKey))
+      boolean this_present_primaryKeyIndex = true;
+      boolean that_present_primaryKeyIndex = true;
+      if (this_present_primaryKeyIndex || that_present_primaryKeyIndex) {
+        if (!(this_present_primaryKeyIndex && that_present_primaryKeyIndex))
           return false;
-        if (this.primaryKey != that.primaryKey)
+        if (this.primaryKeyIndex != that.primaryKeyIndex)
           return false;
       }
 
@@ -822,15 +740,11 @@ public class MasterService {
       if (isSetTableName())
         hashCode = hashCode * 8191 + tableName.hashCode();
 
-      hashCode = hashCode * 8191 + ((isSetAttributeTypes()) ? 131071 : 524287);
-      if (isSetAttributeTypes())
-        hashCode = hashCode * 8191 + attributeTypes.hashCode();
+      hashCode = hashCode * 8191 + ((isSetAttributes()) ? 131071 : 524287);
+      if (isSetAttributes())
+        hashCode = hashCode * 8191 + attributes.hashCode();
 
-      hashCode = hashCode * 8191 + ((isSetAttributeNames()) ? 131071 : 524287);
-      if (isSetAttributeNames())
-        hashCode = hashCode * 8191 + attributeNames.hashCode();
-
-      hashCode = hashCode * 8191 + primaryKey;
+      hashCode = hashCode * 8191 + primaryKeyIndex;
 
       return hashCode;
     }
@@ -853,32 +767,22 @@ public class MasterService {
           return lastComparison;
         }
       }
-      lastComparison = java.lang.Boolean.compare(isSetAttributeTypes(), other.isSetAttributeTypes());
+      lastComparison = java.lang.Boolean.compare(isSetAttributes(), other.isSetAttributes());
       if (lastComparison != 0) {
         return lastComparison;
       }
-      if (isSetAttributeTypes()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.attributeTypes, other.attributeTypes);
+      if (isSetAttributes()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.attributes, other.attributes);
         if (lastComparison != 0) {
           return lastComparison;
         }
       }
-      lastComparison = java.lang.Boolean.compare(isSetAttributeNames(), other.isSetAttributeNames());
+      lastComparison = java.lang.Boolean.compare(isSetPrimaryKeyIndex(), other.isSetPrimaryKeyIndex());
       if (lastComparison != 0) {
         return lastComparison;
       }
-      if (isSetAttributeNames()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.attributeNames, other.attributeNames);
-        if (lastComparison != 0) {
-          return lastComparison;
-        }
-      }
-      lastComparison = java.lang.Boolean.compare(isSetPrimaryKey(), other.isSetPrimaryKey());
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-      if (isSetPrimaryKey()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.primaryKey, other.primaryKey);
+      if (isSetPrimaryKeyIndex()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.primaryKeyIndex, other.primaryKeyIndex);
         if (lastComparison != 0) {
           return lastComparison;
         }
@@ -912,24 +816,16 @@ public class MasterService {
       }
       first = false;
       if (!first) sb.append(", ");
-      sb.append("attributeTypes:");
-      if (this.attributeTypes == null) {
+      sb.append("attributes:");
+      if (this.attributes == null) {
         sb.append("null");
       } else {
-        sb.append(this.attributeTypes);
+        sb.append(this.attributes);
       }
       first = false;
       if (!first) sb.append(", ");
-      sb.append("attributeNames:");
-      if (this.attributeNames == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.attributeNames);
-      }
-      first = false;
-      if (!first) sb.append(", ");
-      sb.append("primaryKey:");
-      sb.append(this.primaryKey);
+      sb.append("primaryKeyIndex:");
+      sb.append(this.primaryKeyIndex);
       first = false;
       sb.append(")");
       return sb.toString();
@@ -984,46 +880,29 @@ public class MasterService {
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
-            case 2: // ATTRIBUTE_TYPES
+            case 2: // ATTRIBUTES
               if (schemeField.type == org.apache.thrift.protocol.TType.LIST) {
                 {
                   org.apache.thrift.protocol.TList _list0 = iprot.readListBegin();
-                  struct.attributeTypes = new java.util.ArrayList<java.lang.Integer>(_list0.size);
-                  int _elem1;
+                  struct.attributes = new java.util.ArrayList<Attribute>(_list0.size);
+                  @org.apache.thrift.annotation.Nullable Attribute _elem1;
                   for (int _i2 = 0; _i2 < _list0.size; ++_i2)
                   {
-                    _elem1 = iprot.readI32();
-                    struct.attributeTypes.add(_elem1);
+                    _elem1 = new Attribute();
+                    _elem1.read(iprot);
+                    struct.attributes.add(_elem1);
                   }
                   iprot.readListEnd();
                 }
-                struct.setAttributeTypesIsSet(true);
+                struct.setAttributesIsSet(true);
               } else { 
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
-            case 3: // ATTRIBUTE_NAMES
-              if (schemeField.type == org.apache.thrift.protocol.TType.LIST) {
-                {
-                  org.apache.thrift.protocol.TList _list3 = iprot.readListBegin();
-                  struct.attributeNames = new java.util.ArrayList<java.lang.String>(_list3.size);
-                  @org.apache.thrift.annotation.Nullable java.lang.String _elem4;
-                  for (int _i5 = 0; _i5 < _list3.size; ++_i5)
-                  {
-                    _elem4 = iprot.readString();
-                    struct.attributeNames.add(_elem4);
-                  }
-                  iprot.readListEnd();
-                }
-                struct.setAttributeNamesIsSet(true);
-              } else { 
-                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-              }
-              break;
-            case 4: // PRIMARY_KEY
+            case 3: // PRIMARY_KEY_INDEX
               if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
-                struct.primaryKey = iprot.readI32();
-                struct.setPrimaryKeyIsSet(true);
+                struct.primaryKeyIndex = iprot.readI32();
+                struct.setPrimaryKeyIndexIsSet(true);
               } else { 
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
@@ -1048,32 +927,20 @@ public class MasterService {
           oprot.writeString(struct.tableName);
           oprot.writeFieldEnd();
         }
-        if (struct.attributeTypes != null) {
-          oprot.writeFieldBegin(ATTRIBUTE_TYPES_FIELD_DESC);
+        if (struct.attributes != null) {
+          oprot.writeFieldBegin(ATTRIBUTES_FIELD_DESC);
           {
-            oprot.writeListBegin(new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.I32, struct.attributeTypes.size()));
-            for (int _iter6 : struct.attributeTypes)
+            oprot.writeListBegin(new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, struct.attributes.size()));
+            for (Attribute _iter3 : struct.attributes)
             {
-              oprot.writeI32(_iter6);
+              _iter3.write(oprot);
             }
             oprot.writeListEnd();
           }
           oprot.writeFieldEnd();
         }
-        if (struct.attributeNames != null) {
-          oprot.writeFieldBegin(ATTRIBUTE_NAMES_FIELD_DESC);
-          {
-            oprot.writeListBegin(new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRING, struct.attributeNames.size()));
-            for (java.lang.String _iter7 : struct.attributeNames)
-            {
-              oprot.writeString(_iter7);
-            }
-            oprot.writeListEnd();
-          }
-          oprot.writeFieldEnd();
-        }
-        oprot.writeFieldBegin(PRIMARY_KEY_FIELD_DESC);
-        oprot.writeI32(struct.primaryKey);
+        oprot.writeFieldBegin(PRIMARY_KEY_INDEX_FIELD_DESC);
+        oprot.writeI32(struct.primaryKeyIndex);
         oprot.writeFieldEnd();
         oprot.writeFieldStop();
         oprot.writeStructEnd();
@@ -1096,79 +963,55 @@ public class MasterService {
         if (struct.isSetTableName()) {
           optionals.set(0);
         }
-        if (struct.isSetAttributeTypes()) {
+        if (struct.isSetAttributes()) {
           optionals.set(1);
         }
-        if (struct.isSetAttributeNames()) {
+        if (struct.isSetPrimaryKeyIndex()) {
           optionals.set(2);
         }
-        if (struct.isSetPrimaryKey()) {
-          optionals.set(3);
-        }
-        oprot.writeBitSet(optionals, 4);
+        oprot.writeBitSet(optionals, 3);
         if (struct.isSetTableName()) {
           oprot.writeString(struct.tableName);
         }
-        if (struct.isSetAttributeTypes()) {
+        if (struct.isSetAttributes()) {
           {
-            oprot.writeI32(struct.attributeTypes.size());
-            for (int _iter8 : struct.attributeTypes)
+            oprot.writeI32(struct.attributes.size());
+            for (Attribute _iter4 : struct.attributes)
             {
-              oprot.writeI32(_iter8);
+              _iter4.write(oprot);
             }
           }
         }
-        if (struct.isSetAttributeNames()) {
-          {
-            oprot.writeI32(struct.attributeNames.size());
-            for (java.lang.String _iter9 : struct.attributeNames)
-            {
-              oprot.writeString(_iter9);
-            }
-          }
-        }
-        if (struct.isSetPrimaryKey()) {
-          oprot.writeI32(struct.primaryKey);
+        if (struct.isSetPrimaryKeyIndex()) {
+          oprot.writeI32(struct.primaryKeyIndex);
         }
       }
 
       @Override
       public void read(org.apache.thrift.protocol.TProtocol prot, createTable_args struct) throws org.apache.thrift.TException {
         org.apache.thrift.protocol.TTupleProtocol iprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-        java.util.BitSet incoming = iprot.readBitSet(4);
+        java.util.BitSet incoming = iprot.readBitSet(3);
         if (incoming.get(0)) {
           struct.tableName = iprot.readString();
           struct.setTableNameIsSet(true);
         }
         if (incoming.get(1)) {
           {
-            org.apache.thrift.protocol.TList _list10 = iprot.readListBegin(org.apache.thrift.protocol.TType.I32);
-            struct.attributeTypes = new java.util.ArrayList<java.lang.Integer>(_list10.size);
-            int _elem11;
-            for (int _i12 = 0; _i12 < _list10.size; ++_i12)
+            org.apache.thrift.protocol.TList _list5 = iprot.readListBegin(org.apache.thrift.protocol.TType.STRUCT);
+            struct.attributes = new java.util.ArrayList<Attribute>(_list5.size);
+            @org.apache.thrift.annotation.Nullable Attribute _elem6;
+            for (int _i7 = 0; _i7 < _list5.size; ++_i7)
             {
-              _elem11 = iprot.readI32();
-              struct.attributeTypes.add(_elem11);
+              _elem6 = new Attribute();
+              _elem6.read(iprot);
+              struct.attributes.add(_elem6);
             }
           }
-          struct.setAttributeTypesIsSet(true);
+          struct.setAttributesIsSet(true);
         }
         if (incoming.get(2)) {
-          {
-            org.apache.thrift.protocol.TList _list13 = iprot.readListBegin(org.apache.thrift.protocol.TType.STRING);
-            struct.attributeNames = new java.util.ArrayList<java.lang.String>(_list13.size);
-            @org.apache.thrift.annotation.Nullable java.lang.String _elem14;
-            for (int _i15 = 0; _i15 < _list13.size; ++_i15)
-            {
-              _elem14 = iprot.readString();
-              struct.attributeNames.add(_elem14);
-            }
-          }
-          struct.setAttributeNamesIsSet(true);
-        }
-        if (incoming.get(3)) {
-          struct.primaryKey = iprot.readI32();
-          struct.setPrimaryKeyIsSet(true);
+          struct.primaryKeyIndex = iprot.readI32();
+          struct.setPrimaryKeyIndexIsSet(true);
         }
       }
     }
