@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>cn.edu.zju</groupId>
-    <artifactId>minisql.distributed</artifactId>
+    <artifactId>distributed-minisql</artifactId>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
     <build>
         <plugins>
             <plugin>
@@ -21,6 +21,12 @@
             </plugin>
         </plugins>
     </build>
+    <modules>
+        <module>distributed-minisql-client</module>
+        <module>distributed-minisql-region-server</module>
+        <module>distributed-minisql-master-server</module>
+        <module>distributed-minisql-service</module>
+    </modules>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
