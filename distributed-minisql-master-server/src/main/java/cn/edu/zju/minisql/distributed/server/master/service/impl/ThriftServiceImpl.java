@@ -1,11 +1,11 @@
-package cn.edu.zju.minisql.distributed.server.master.handler;
+package cn.edu.zju.minisql.distributed.server.master.service.impl;
 
 import cn.edu.zju.minisql.distributed.service.thrift.Attribute;
 import cn.edu.zju.minisql.distributed.service.thrift.MasterService;
 
 import java.util.List;
 
-public class ThriftServiceHandler implements MasterService.Iface {
+public class ThriftServiceImpl implements MasterService.Iface {
 
     @Override
     public boolean createTable(String tableName, List<Attribute> attributes, int primaryKeyIndex){
