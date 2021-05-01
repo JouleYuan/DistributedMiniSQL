@@ -19,13 +19,13 @@ public class ThriftServiceImpl implements MasterService.Iface {
 
     @Override
     public List<String> createTable(Table table){
-        System.out.println("createTable(" + table.name + ")");
+        System.out.println("createTable(" + table.getName() + ")");
         System.out.println("attributes:");
-        for(Attribute attribute: table.attributes) {
-            System.out.print(attribute.name + " ");
-            System.out.println(attribute.type);
+        for(Attribute attribute: table.getAttributes()) {
+            System.out.print(attribute.getName() + " ");
+            System.out.println(attribute.getType());
         }
-        System.out.println("primaryKeyIndex: " + table.primaryKeyIndex);
+        System.out.println("primaryKeyIndex: " + table.getPrimaryKeyIndex());
 
         List<String> list = new ArrayList<>();
         list.add("localhost:5000");
