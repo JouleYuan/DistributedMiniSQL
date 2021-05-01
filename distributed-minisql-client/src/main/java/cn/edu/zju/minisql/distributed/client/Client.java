@@ -1,7 +1,9 @@
 package cn.edu.zju.minisql.distributed.client;
 
-import cn.edu.zju.minisql.distributed.service.thrift.Attribute;
-import cn.edu.zju.minisql.distributed.service.thrift.MasterService;
+import cn.edu.zju.minisql.distributed.service.Attribute;
+import cn.edu.zju.minisql.distributed.service.AttributeType;
+import cn.edu.zju.minisql.distributed.service.MasterService;
+import cn.edu.zju.minisql.distributed.service.Table;
 import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
@@ -24,12 +26,10 @@ public class Client {
 
             String tableName = "student";
             List<Attribute> attributes = new ArrayList<>();
-            for(int i = 0; i < 2; i++){
-                attributes.add(new Attribute("attribute" + i, i));
-            }
-            int primaryKey = 0;
+            for(int i = 0; i < 2; i++) attributes.add(new Attribute("attribute" + i, AttributeType.INT));
+            Table table = new Table(tableName, attributes, 1, null);
 
-            System.out.println(masterServiceClient.createTable(tableName, attributes, primaryKey));
+            for(String regionServer: masterServiceClient.createTable(table)) System.out.println(regionServer);
             System.out.println(masterServiceClient.dropTable(tableName));
 
             transport.close();
