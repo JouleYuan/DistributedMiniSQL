@@ -14,7 +14,7 @@ public class Table implements org.apache.thrift.TBase<Table, Table._Fields>, jav
   private static final org.apache.thrift.protocol.TField NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("name", org.apache.thrift.protocol.TType.STRING, (short)1);
   private static final org.apache.thrift.protocol.TField ATTRIBUTES_FIELD_DESC = new org.apache.thrift.protocol.TField("attributes", org.apache.thrift.protocol.TType.LIST, (short)2);
   private static final org.apache.thrift.protocol.TField PRIMARY_KEY_INDEX_FIELD_DESC = new org.apache.thrift.protocol.TField("primaryKeyIndex", org.apache.thrift.protocol.TType.I32, (short)3);
-  private static final org.apache.thrift.protocol.TField ROWS_FIELD_DESC = new org.apache.thrift.protocol.TField("rows", org.apache.thrift.protocol.TType.LIST, (short)4);
+  private static final org.apache.thrift.protocol.TField TUPLES_FIELD_DESC = new org.apache.thrift.protocol.TField("tuples", org.apache.thrift.protocol.TType.LIST, (short)4);
 
   private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new TableStandardSchemeFactory();
   private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new TableTupleSchemeFactory();
@@ -22,14 +22,14 @@ public class Table implements org.apache.thrift.TBase<Table, Table._Fields>, jav
   public @org.apache.thrift.annotation.Nullable java.lang.String name; // required
   public @org.apache.thrift.annotation.Nullable java.util.List<Attribute> attributes; // required
   public int primaryKeyIndex; // required
-  public @org.apache.thrift.annotation.Nullable java.util.List<java.util.List<java.lang.String>> rows; // required
+  public @org.apache.thrift.annotation.Nullable java.util.List<java.util.List<java.lang.String>> tuples; // required
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
     NAME((short)1, "name"),
     ATTRIBUTES((short)2, "attributes"),
     PRIMARY_KEY_INDEX((short)3, "primaryKeyIndex"),
-    ROWS((short)4, "rows");
+    TUPLES((short)4, "tuples");
 
     private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
 
@@ -51,8 +51,8 @@ public class Table implements org.apache.thrift.TBase<Table, Table._Fields>, jav
           return ATTRIBUTES;
         case 3: // PRIMARY_KEY_INDEX
           return PRIMARY_KEY_INDEX;
-        case 4: // ROWS
-          return ROWS;
+        case 4: // TUPLES
+          return TUPLES;
         default:
           return null;
       }
@@ -106,7 +106,7 @@ public class Table implements org.apache.thrift.TBase<Table, Table._Fields>, jav
             new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, Attribute.class))));
     tmpMap.put(_Fields.PRIMARY_KEY_INDEX, new org.apache.thrift.meta_data.FieldMetaData("primaryKeyIndex", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32        , "int")));
-    tmpMap.put(_Fields.ROWS, new org.apache.thrift.meta_data.FieldMetaData("rows", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+    tmpMap.put(_Fields.TUPLES, new org.apache.thrift.meta_data.FieldMetaData("tuples", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.ListMetaData(org.apache.thrift.protocol.TType.LIST, 
             new org.apache.thrift.meta_data.ListMetaData(org.apache.thrift.protocol.TType.LIST, 
                 new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)))));
@@ -121,14 +121,14 @@ public class Table implements org.apache.thrift.TBase<Table, Table._Fields>, jav
     java.lang.String name,
     java.util.List<Attribute> attributes,
     int primaryKeyIndex,
-    java.util.List<java.util.List<java.lang.String>> rows)
+    java.util.List<java.util.List<java.lang.String>> tuples)
   {
     this();
     this.name = name;
     this.attributes = attributes;
     this.primaryKeyIndex = primaryKeyIndex;
     setPrimaryKeyIndexIsSet(true);
-    this.rows = rows;
+    this.tuples = tuples;
   }
 
   /**
@@ -147,13 +147,13 @@ public class Table implements org.apache.thrift.TBase<Table, Table._Fields>, jav
       this.attributes = __this__attributes;
     }
     this.primaryKeyIndex = other.primaryKeyIndex;
-    if (other.isSetRows()) {
-      java.util.List<java.util.List<java.lang.String>> __this__rows = new java.util.ArrayList<java.util.List<java.lang.String>>(other.rows.size());
-      for (java.util.List<java.lang.String> other_element : other.rows) {
-        java.util.List<java.lang.String> __this__rows_copy = new java.util.ArrayList<java.lang.String>(other_element);
-        __this__rows.add(__this__rows_copy);
+    if (other.isSetTuples()) {
+      java.util.List<java.util.List<java.lang.String>> __this__tuples = new java.util.ArrayList<java.util.List<java.lang.String>>(other.tuples.size());
+      for (java.util.List<java.lang.String> other_element : other.tuples) {
+        java.util.List<java.lang.String> __this__tuples_copy = new java.util.ArrayList<java.lang.String>(other_element);
+        __this__tuples.add(__this__tuples_copy);
       }
-      this.rows = __this__rows;
+      this.tuples = __this__tuples;
     }
   }
 
@@ -167,7 +167,7 @@ public class Table implements org.apache.thrift.TBase<Table, Table._Fields>, jav
     this.attributes = null;
     setPrimaryKeyIndexIsSet(false);
     this.primaryKeyIndex = 0;
-    this.rows = null;
+    this.tuples = null;
   }
 
   @org.apache.thrift.annotation.Nullable
@@ -259,44 +259,44 @@ public class Table implements org.apache.thrift.TBase<Table, Table._Fields>, jav
     __isset_bitfield = org.apache.thrift.EncodingUtils.setBit(__isset_bitfield, __PRIMARYKEYINDEX_ISSET_ID, value);
   }
 
-  public int getRowsSize() {
-    return (this.rows == null) ? 0 : this.rows.size();
+  public int getTuplesSize() {
+    return (this.tuples == null) ? 0 : this.tuples.size();
   }
 
   @org.apache.thrift.annotation.Nullable
-  public java.util.Iterator<java.util.List<java.lang.String>> getRowsIterator() {
-    return (this.rows == null) ? null : this.rows.iterator();
+  public java.util.Iterator<java.util.List<java.lang.String>> getTuplesIterator() {
+    return (this.tuples == null) ? null : this.tuples.iterator();
   }
 
-  public void addToRows(java.util.List<java.lang.String> elem) {
-    if (this.rows == null) {
-      this.rows = new java.util.ArrayList<java.util.List<java.lang.String>>();
+  public void addToTuples(java.util.List<java.lang.String> elem) {
+    if (this.tuples == null) {
+      this.tuples = new java.util.ArrayList<java.util.List<java.lang.String>>();
     }
-    this.rows.add(elem);
+    this.tuples.add(elem);
   }
 
   @org.apache.thrift.annotation.Nullable
-  public java.util.List<java.util.List<java.lang.String>> getRows() {
-    return this.rows;
+  public java.util.List<java.util.List<java.lang.String>> getTuples() {
+    return this.tuples;
   }
 
-  public Table setRows(@org.apache.thrift.annotation.Nullable java.util.List<java.util.List<java.lang.String>> rows) {
-    this.rows = rows;
+  public Table setTuples(@org.apache.thrift.annotation.Nullable java.util.List<java.util.List<java.lang.String>> tuples) {
+    this.tuples = tuples;
     return this;
   }
 
-  public void unsetRows() {
-    this.rows = null;
+  public void unsetTuples() {
+    this.tuples = null;
   }
 
-  /** Returns true if field rows is set (has been assigned a value) and false otherwise */
-  public boolean isSetRows() {
-    return this.rows != null;
+  /** Returns true if field tuples is set (has been assigned a value) and false otherwise */
+  public boolean isSetTuples() {
+    return this.tuples != null;
   }
 
-  public void setRowsIsSet(boolean value) {
+  public void setTuplesIsSet(boolean value) {
     if (!value) {
-      this.rows = null;
+      this.tuples = null;
     }
   }
 
@@ -326,11 +326,11 @@ public class Table implements org.apache.thrift.TBase<Table, Table._Fields>, jav
       }
       break;
 
-    case ROWS:
+    case TUPLES:
       if (value == null) {
-        unsetRows();
+        unsetTuples();
       } else {
-        setRows((java.util.List<java.util.List<java.lang.String>>)value);
+        setTuples((java.util.List<java.util.List<java.lang.String>>)value);
       }
       break;
 
@@ -349,8 +349,8 @@ public class Table implements org.apache.thrift.TBase<Table, Table._Fields>, jav
     case PRIMARY_KEY_INDEX:
       return getPrimaryKeyIndex();
 
-    case ROWS:
-      return getRows();
+    case TUPLES:
+      return getTuples();
 
     }
     throw new java.lang.IllegalStateException();
@@ -369,8 +369,8 @@ public class Table implements org.apache.thrift.TBase<Table, Table._Fields>, jav
       return isSetAttributes();
     case PRIMARY_KEY_INDEX:
       return isSetPrimaryKeyIndex();
-    case ROWS:
-      return isSetRows();
+    case TUPLES:
+      return isSetTuples();
     }
     throw new java.lang.IllegalStateException();
   }
@@ -415,12 +415,12 @@ public class Table implements org.apache.thrift.TBase<Table, Table._Fields>, jav
         return false;
     }
 
-    boolean this_present_rows = true && this.isSetRows();
-    boolean that_present_rows = true && that.isSetRows();
-    if (this_present_rows || that_present_rows) {
-      if (!(this_present_rows && that_present_rows))
+    boolean this_present_tuples = true && this.isSetTuples();
+    boolean that_present_tuples = true && that.isSetTuples();
+    if (this_present_tuples || that_present_tuples) {
+      if (!(this_present_tuples && that_present_tuples))
         return false;
-      if (!this.rows.equals(that.rows))
+      if (!this.tuples.equals(that.tuples))
         return false;
     }
 
@@ -441,9 +441,9 @@ public class Table implements org.apache.thrift.TBase<Table, Table._Fields>, jav
 
     hashCode = hashCode * 8191 + primaryKeyIndex;
 
-    hashCode = hashCode * 8191 + ((isSetRows()) ? 131071 : 524287);
-    if (isSetRows())
-      hashCode = hashCode * 8191 + rows.hashCode();
+    hashCode = hashCode * 8191 + ((isSetTuples()) ? 131071 : 524287);
+    if (isSetTuples())
+      hashCode = hashCode * 8191 + tuples.hashCode();
 
     return hashCode;
   }
@@ -486,12 +486,12 @@ public class Table implements org.apache.thrift.TBase<Table, Table._Fields>, jav
         return lastComparison;
       }
     }
-    lastComparison = java.lang.Boolean.compare(isSetRows(), other.isSetRows());
+    lastComparison = java.lang.Boolean.compare(isSetTuples(), other.isSetTuples());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetRows()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.rows, other.rows);
+    if (isSetTuples()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.tuples, other.tuples);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -537,11 +537,11 @@ public class Table implements org.apache.thrift.TBase<Table, Table._Fields>, jav
     sb.append(this.primaryKeyIndex);
     first = false;
     if (!first) sb.append(", ");
-    sb.append("rows:");
-    if (this.rows == null) {
+    sb.append("tuples:");
+    if (this.tuples == null) {
       sb.append("null");
     } else {
-      sb.append(this.rows);
+      sb.append(this.tuples);
     }
     first = false;
     sb.append(")");
@@ -624,11 +624,11 @@ public class Table implements org.apache.thrift.TBase<Table, Table._Fields>, jav
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 4: // ROWS
+          case 4: // TUPLES
             if (schemeField.type == org.apache.thrift.protocol.TType.LIST) {
               {
                 org.apache.thrift.protocol.TList _list3 = iprot.readListBegin();
-                struct.rows = new java.util.ArrayList<java.util.List<java.lang.String>>(_list3.size);
+                struct.tuples = new java.util.ArrayList<java.util.List<java.lang.String>>(_list3.size);
                 @org.apache.thrift.annotation.Nullable java.util.List<java.lang.String> _elem4;
                 for (int _i5 = 0; _i5 < _list3.size; ++_i5)
                 {
@@ -643,11 +643,11 @@ public class Table implements org.apache.thrift.TBase<Table, Table._Fields>, jav
                     }
                     iprot.readListEnd();
                   }
-                  struct.rows.add(_elem4);
+                  struct.tuples.add(_elem4);
                 }
                 iprot.readListEnd();
               }
-              struct.setRowsIsSet(true);
+              struct.setTuplesIsSet(true);
             } else { 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
@@ -687,11 +687,11 @@ public class Table implements org.apache.thrift.TBase<Table, Table._Fields>, jav
       oprot.writeFieldBegin(PRIMARY_KEY_INDEX_FIELD_DESC);
       oprot.writeI32(struct.primaryKeyIndex);
       oprot.writeFieldEnd();
-      if (struct.rows != null) {
-        oprot.writeFieldBegin(ROWS_FIELD_DESC);
+      if (struct.tuples != null) {
+        oprot.writeFieldBegin(TUPLES_FIELD_DESC);
         {
-          oprot.writeListBegin(new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.LIST, struct.rows.size()));
-          for (java.util.List<java.lang.String> _iter10 : struct.rows)
+          oprot.writeListBegin(new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.LIST, struct.tuples.size()));
+          for (java.util.List<java.lang.String> _iter10 : struct.tuples)
           {
             {
               oprot.writeListBegin(new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRING, _iter10.size()));
@@ -733,7 +733,7 @@ public class Table implements org.apache.thrift.TBase<Table, Table._Fields>, jav
       if (struct.isSetPrimaryKeyIndex()) {
         optionals.set(2);
       }
-      if (struct.isSetRows()) {
+      if (struct.isSetTuples()) {
         optionals.set(3);
       }
       oprot.writeBitSet(optionals, 4);
@@ -752,10 +752,10 @@ public class Table implements org.apache.thrift.TBase<Table, Table._Fields>, jav
       if (struct.isSetPrimaryKeyIndex()) {
         oprot.writeI32(struct.primaryKeyIndex);
       }
-      if (struct.isSetRows()) {
+      if (struct.isSetTuples()) {
         {
-          oprot.writeI32(struct.rows.size());
-          for (java.util.List<java.lang.String> _iter13 : struct.rows)
+          oprot.writeI32(struct.tuples.size());
+          for (java.util.List<java.lang.String> _iter13 : struct.tuples)
           {
             {
               oprot.writeI32(_iter13.size());
@@ -798,7 +798,7 @@ public class Table implements org.apache.thrift.TBase<Table, Table._Fields>, jav
       if (incoming.get(3)) {
         {
           org.apache.thrift.protocol.TList _list18 = iprot.readListBegin(org.apache.thrift.protocol.TType.LIST);
-          struct.rows = new java.util.ArrayList<java.util.List<java.lang.String>>(_list18.size);
+          struct.tuples = new java.util.ArrayList<java.util.List<java.lang.String>>(_list18.size);
           @org.apache.thrift.annotation.Nullable java.util.List<java.lang.String> _elem19;
           for (int _i20 = 0; _i20 < _list18.size; ++_i20)
           {
@@ -812,10 +812,10 @@ public class Table implements org.apache.thrift.TBase<Table, Table._Fields>, jav
                 _elem19.add(_elem22);
               }
             }
-            struct.rows.add(_elem19);
+            struct.tuples.add(_elem19);
           }
         }
-        struct.setRowsIsSet(true);
+        struct.setTuplesIsSet(true);
       }
     }
   }

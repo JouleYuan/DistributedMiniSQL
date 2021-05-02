@@ -11,7 +11,7 @@ public class ZookeeperService {
     private static final String ADDRESS = "localhost:2181";
     private static final String NAMESPACE = "region-server";
 
-    public static void register(int id) {
+    public static void register(String path) {
         try {
             CuratorFramework client = CuratorFrameworkFactory.builder()
                     .connectString(ADDRESS)
@@ -22,7 +22,7 @@ public class ZookeeperService {
             client.start();
 
             client.create().withMode(CreateMode.EPHEMERAL)
-                    .forPath("/" + InetAddress.getLocalHost().getHostAddress() + ":" + id, null);
+                    .forPath("/" + InetAddress.getLocalHost().getHostAddress() + "&" + path, null);
         } catch (Exception e) {
             e.printStackTrace();
         }

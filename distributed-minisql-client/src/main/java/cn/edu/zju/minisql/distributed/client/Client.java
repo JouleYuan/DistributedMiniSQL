@@ -26,7 +26,8 @@ public class Client {
 
             String tableName = "student";
             List<Attribute> attributes = new ArrayList<>();
-            for(int i = 0; i < 2; i++) attributes.add(new Attribute("attribute" + i, AttributeType.INT));
+            for(int i = 0; i < 2; i++) attributes.add(
+                    new Attribute("attribute" + i, AttributeType.INT, 4, false));
             Table table = new Table(tableName, attributes, 1, null);
 
             for(String regionServer: masterServiceClient.createTable(table)) System.out.println(regionServer);

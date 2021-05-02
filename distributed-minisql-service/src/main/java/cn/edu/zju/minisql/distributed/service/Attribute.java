@@ -13,6 +13,8 @@ public class Attribute implements org.apache.thrift.TBase<Attribute, Attribute._
 
   private static final org.apache.thrift.protocol.TField NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("name", org.apache.thrift.protocol.TType.STRING, (short)1);
   private static final org.apache.thrift.protocol.TField TYPE_FIELD_DESC = new org.apache.thrift.protocol.TField("type", org.apache.thrift.protocol.TType.I32, (short)2);
+  private static final org.apache.thrift.protocol.TField LENGTH_FIELD_DESC = new org.apache.thrift.protocol.TField("length", org.apache.thrift.protocol.TType.I32, (short)3);
+  private static final org.apache.thrift.protocol.TField IS_UNIQUE_FIELD_DESC = new org.apache.thrift.protocol.TField("isUnique", org.apache.thrift.protocol.TType.BOOL, (short)4);
 
   private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new AttributeStandardSchemeFactory();
   private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new AttributeTupleSchemeFactory();
@@ -23,6 +25,8 @@ public class Attribute implements org.apache.thrift.TBase<Attribute, Attribute._
    * @see AttributeType
    */
   public @org.apache.thrift.annotation.Nullable AttributeType type; // required
+  public int length; // required
+  public boolean isUnique; // required
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
@@ -31,7 +35,9 @@ public class Attribute implements org.apache.thrift.TBase<Attribute, Attribute._
      * 
      * @see AttributeType
      */
-    TYPE((short)2, "type");
+    TYPE((short)2, "type"),
+    LENGTH((short)3, "length"),
+    IS_UNIQUE((short)4, "isUnique");
 
     private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
 
@@ -51,6 +57,10 @@ public class Attribute implements org.apache.thrift.TBase<Attribute, Attribute._
           return NAME;
         case 2: // TYPE
           return TYPE;
+        case 3: // LENGTH
+          return LENGTH;
+        case 4: // IS_UNIQUE
+          return IS_UNIQUE;
         default:
           return null;
       }
@@ -92,6 +102,9 @@ public class Attribute implements org.apache.thrift.TBase<Attribute, Attribute._
   }
 
   // isset id assignments
+  private static final int __LENGTH_ISSET_ID = 0;
+  private static final int __ISUNIQUE_ISSET_ID = 1;
+  private byte __isset_bitfield = 0;
   public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
@@ -99,6 +112,10 @@ public class Attribute implements org.apache.thrift.TBase<Attribute, Attribute._
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     tmpMap.put(_Fields.TYPE, new org.apache.thrift.meta_data.FieldMetaData("type", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.EnumMetaData(org.apache.thrift.protocol.TType.ENUM, AttributeType.class)));
+    tmpMap.put(_Fields.LENGTH, new org.apache.thrift.meta_data.FieldMetaData("length", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32        , "int")));
+    tmpMap.put(_Fields.IS_UNIQUE, new org.apache.thrift.meta_data.FieldMetaData("isUnique", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.BOOL)));
     metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(Attribute.class, metaDataMap);
   }
@@ -108,23 +125,32 @@ public class Attribute implements org.apache.thrift.TBase<Attribute, Attribute._
 
   public Attribute(
     java.lang.String name,
-    AttributeType type)
+    AttributeType type,
+    int length,
+    boolean isUnique)
   {
     this();
     this.name = name;
     this.type = type;
+    this.length = length;
+    setLengthIsSet(true);
+    this.isUnique = isUnique;
+    setIsUniqueIsSet(true);
   }
 
   /**
    * Performs a deep copy on <i>other</i>.
    */
   public Attribute(Attribute other) {
+    __isset_bitfield = other.__isset_bitfield;
     if (other.isSetName()) {
       this.name = other.name;
     }
     if (other.isSetType()) {
       this.type = other.type;
     }
+    this.length = other.length;
+    this.isUnique = other.isUnique;
   }
 
   public Attribute deepCopy() {
@@ -135,6 +161,10 @@ public class Attribute implements org.apache.thrift.TBase<Attribute, Attribute._
   public void clear() {
     this.name = null;
     this.type = null;
+    setLengthIsSet(false);
+    this.length = 0;
+    setIsUniqueIsSet(false);
+    this.isUnique = false;
   }
 
   @org.apache.thrift.annotation.Nullable
@@ -195,6 +225,52 @@ public class Attribute implements org.apache.thrift.TBase<Attribute, Attribute._
     }
   }
 
+  public int getLength() {
+    return this.length;
+  }
+
+  public Attribute setLength(int length) {
+    this.length = length;
+    setLengthIsSet(true);
+    return this;
+  }
+
+  public void unsetLength() {
+    __isset_bitfield = org.apache.thrift.EncodingUtils.clearBit(__isset_bitfield, __LENGTH_ISSET_ID);
+  }
+
+  /** Returns true if field length is set (has been assigned a value) and false otherwise */
+  public boolean isSetLength() {
+    return org.apache.thrift.EncodingUtils.testBit(__isset_bitfield, __LENGTH_ISSET_ID);
+  }
+
+  public void setLengthIsSet(boolean value) {
+    __isset_bitfield = org.apache.thrift.EncodingUtils.setBit(__isset_bitfield, __LENGTH_ISSET_ID, value);
+  }
+
+  public boolean isIsUnique() {
+    return this.isUnique;
+  }
+
+  public Attribute setIsUnique(boolean isUnique) {
+    this.isUnique = isUnique;
+    setIsUniqueIsSet(true);
+    return this;
+  }
+
+  public void unsetIsUnique() {
+    __isset_bitfield = org.apache.thrift.EncodingUtils.clearBit(__isset_bitfield, __ISUNIQUE_ISSET_ID);
+  }
+
+  /** Returns true if field isUnique is set (has been assigned a value) and false otherwise */
+  public boolean isSetIsUnique() {
+    return org.apache.thrift.EncodingUtils.testBit(__isset_bitfield, __ISUNIQUE_ISSET_ID);
+  }
+
+  public void setIsUniqueIsSet(boolean value) {
+    __isset_bitfield = org.apache.thrift.EncodingUtils.setBit(__isset_bitfield, __ISUNIQUE_ISSET_ID, value);
+  }
+
   public void setFieldValue(_Fields field, @org.apache.thrift.annotation.Nullable java.lang.Object value) {
     switch (field) {
     case NAME:
@@ -213,6 +289,22 @@ public class Attribute implements org.apache.thrift.TBase<Attribute, Attribute._
       }
       break;
 
+    case LENGTH:
+      if (value == null) {
+        unsetLength();
+      } else {
+        setLength((java.lang.Integer)value);
+      }
+      break;
+
+    case IS_UNIQUE:
+      if (value == null) {
+        unsetIsUnique();
+      } else {
+        setIsUnique((java.lang.Boolean)value);
+      }
+      break;
+
     }
   }
 
@@ -224,6 +316,12 @@ public class Attribute implements org.apache.thrift.TBase<Attribute, Attribute._
 
     case TYPE:
       return getType();
+
+    case LENGTH:
+      return getLength();
+
+    case IS_UNIQUE:
+      return isIsUnique();
 
     }
     throw new java.lang.IllegalStateException();
@@ -240,6 +338,10 @@ public class Attribute implements org.apache.thrift.TBase<Attribute, Attribute._
       return isSetName();
     case TYPE:
       return isSetType();
+    case LENGTH:
+      return isSetLength();
+    case IS_UNIQUE:
+      return isSetIsUnique();
     }
     throw new java.lang.IllegalStateException();
   }
@@ -275,6 +377,24 @@ public class Attribute implements org.apache.thrift.TBase<Attribute, Attribute._
         return false;
     }
 
+    boolean this_present_length = true;
+    boolean that_present_length = true;
+    if (this_present_length || that_present_length) {
+      if (!(this_present_length && that_present_length))
+        return false;
+      if (this.length != that.length)
+        return false;
+    }
+
+    boolean this_present_isUnique = true;
+    boolean that_present_isUnique = true;
+    if (this_present_isUnique || that_present_isUnique) {
+      if (!(this_present_isUnique && that_present_isUnique))
+        return false;
+      if (this.isUnique != that.isUnique)
+        return false;
+    }
+
     return true;
   }
 
@@ -289,6 +409,10 @@ public class Attribute implements org.apache.thrift.TBase<Attribute, Attribute._
     hashCode = hashCode * 8191 + ((isSetType()) ? 131071 : 524287);
     if (isSetType())
       hashCode = hashCode * 8191 + type.getValue();
+
+    hashCode = hashCode * 8191 + length;
+
+    hashCode = hashCode * 8191 + ((isUnique) ? 131071 : 524287);
 
     return hashCode;
   }
@@ -317,6 +441,26 @@ public class Attribute implements org.apache.thrift.TBase<Attribute, Attribute._
     }
     if (isSetType()) {
       lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.type, other.type);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = java.lang.Boolean.compare(isSetLength(), other.isSetLength());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetLength()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.length, other.length);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = java.lang.Boolean.compare(isSetIsUnique(), other.isSetIsUnique());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetIsUnique()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.isUnique, other.isUnique);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -357,6 +501,14 @@ public class Attribute implements org.apache.thrift.TBase<Attribute, Attribute._
       sb.append(this.type);
     }
     first = false;
+    if (!first) sb.append(", ");
+    sb.append("length:");
+    sb.append(this.length);
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("isUnique:");
+    sb.append(this.isUnique);
+    first = false;
     sb.append(")");
     return sb.toString();
   }
@@ -376,6 +528,8 @@ public class Attribute implements org.apache.thrift.TBase<Attribute, Attribute._
 
   private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, java.lang.ClassNotFoundException {
     try {
+      // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
+      __isset_bitfield = 0;
       read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
     } catch (org.apache.thrift.TException te) {
       throw new java.io.IOException(te);
@@ -416,6 +570,22 @@ public class Attribute implements org.apache.thrift.TBase<Attribute, Attribute._
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
+          case 3: // LENGTH
+            if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
+              struct.length = iprot.readI32();
+              struct.setLengthIsSet(true);
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+            }
+            break;
+          case 4: // IS_UNIQUE
+            if (schemeField.type == org.apache.thrift.protocol.TType.BOOL) {
+              struct.isUnique = iprot.readBool();
+              struct.setIsUniqueIsSet(true);
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+            }
+            break;
           default:
             org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
         }
@@ -441,6 +611,12 @@ public class Attribute implements org.apache.thrift.TBase<Attribute, Attribute._
         oprot.writeI32(struct.type.getValue());
         oprot.writeFieldEnd();
       }
+      oprot.writeFieldBegin(LENGTH_FIELD_DESC);
+      oprot.writeI32(struct.length);
+      oprot.writeFieldEnd();
+      oprot.writeFieldBegin(IS_UNIQUE_FIELD_DESC);
+      oprot.writeBool(struct.isUnique);
+      oprot.writeFieldEnd();
       oprot.writeFieldStop();
       oprot.writeStructEnd();
     }
@@ -465,19 +641,31 @@ public class Attribute implements org.apache.thrift.TBase<Attribute, Attribute._
       if (struct.isSetType()) {
         optionals.set(1);
       }
-      oprot.writeBitSet(optionals, 2);
+      if (struct.isSetLength()) {
+        optionals.set(2);
+      }
+      if (struct.isSetIsUnique()) {
+        optionals.set(3);
+      }
+      oprot.writeBitSet(optionals, 4);
       if (struct.isSetName()) {
         oprot.writeString(struct.name);
       }
       if (struct.isSetType()) {
         oprot.writeI32(struct.type.getValue());
       }
+      if (struct.isSetLength()) {
+        oprot.writeI32(struct.length);
+      }
+      if (struct.isSetIsUnique()) {
+        oprot.writeBool(struct.isUnique);
+      }
     }
 
     @Override
     public void read(org.apache.thrift.protocol.TProtocol prot, Attribute struct) throws org.apache.thrift.TException {
       org.apache.thrift.protocol.TTupleProtocol iprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-      java.util.BitSet incoming = iprot.readBitSet(2);
+      java.util.BitSet incoming = iprot.readBitSet(4);
       if (incoming.get(0)) {
         struct.name = iprot.readString();
         struct.setNameIsSet(true);
@@ -485,6 +673,14 @@ public class Attribute implements org.apache.thrift.TBase<Attribute, Attribute._
       if (incoming.get(1)) {
         struct.type = cn.edu.zju.minisql.distributed.service.AttributeType.findByValue(iprot.readI32());
         struct.setTypeIsSet(true);
+      }
+      if (incoming.get(2)) {
+        struct.length = iprot.readI32();
+        struct.setLengthIsSet(true);
+      }
+      if (incoming.get(3)) {
+        struct.isUnique = iprot.readBool();
+        struct.setIsUniqueIsSet(true);
       }
     }
   }
