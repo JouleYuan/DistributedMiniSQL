@@ -8,16 +8,14 @@ import org.apache.curator.framework.recipes.cache.CuratorCacheListener;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 
 public class ZookeeperService {
-    private static final String ADDRESS = "localhost:2181";
-    private static final String PATH = "region-server";
-
-    public static void listenRegionServer() {
+    public static void listenRegionServer(String ip, String port, int timeout, int baseSleepTime,
+                                          int maxRetries, String namespace) {
         try {
             CuratorFramework client = CuratorFrameworkFactory.builder()
-                    .connectString(ADDRESS)
-                    .connectionTimeoutMs(5000)
-                    .retryPolicy(new ExponentialBackoffRetry(1000,3))
-                    .namespace(PATH)
+                    .connectString(ip + ":" + port)
+                    .connectionTimeoutMs(timeout)
+                    .retryPolicy(new ExponentialBackoffRetry(baseSleepTime, maxRetries))
+                    .namespace(namespace)
                     .build();
             client.start();
 

@@ -11,14 +11,14 @@ public class ThriftService {
     public static ThriftServiceImpl handler;
     public static RegionService.Processor processor;
 
-    public static void exposeInterface() {
+    public static void exposeInterface(int port) {
         try{
             handler = new ThriftServiceImpl();
             processor = new RegionService.Processor(handler);
 
             Thread thriftServiceThread = new Thread(() -> {
                 try {
-                    TServerTransport serverTransport = new TServerSocket(9091);
+                    TServerTransport serverTransport = new TServerSocket(port);
                     TServer server = new TSimpleServer(new TServer.Args(serverTransport).processor(processor));
 
                     server.serve();

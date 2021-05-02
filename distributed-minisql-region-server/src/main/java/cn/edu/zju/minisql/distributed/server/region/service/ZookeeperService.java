@@ -8,16 +8,14 @@ import org.apache.zookeeper.CreateMode;
 import java.net.InetAddress;
 
 public class ZookeeperService {
-    private static final String ADDRESS = "localhost:2181";
-    private static final String NAMESPACE = "region-server";
-
-    public static void register(String path) {
+    public static void register(String ip, String port, int timeout, int baseSleepTime,
+                                int maxRetries, String namespace, String path) {
         try {
             CuratorFramework client = CuratorFrameworkFactory.builder()
-                    .connectString(ADDRESS)
-                    .connectionTimeoutMs(5000)
-                    .retryPolicy(new ExponentialBackoffRetry(1000,3))
-                    .namespace(NAMESPACE)
+                    .connectString(ip + ":" + port)
+                    .connectionTimeoutMs(timeout)
+                    .retryPolicy(new ExponentialBackoffRetry(baseSleepTime, maxRetries))
+                    .namespace(namespace)
                     .build();
             client.start();
 
