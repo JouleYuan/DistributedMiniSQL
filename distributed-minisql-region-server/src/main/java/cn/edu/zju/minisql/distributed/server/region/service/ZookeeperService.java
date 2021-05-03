@@ -9,7 +9,7 @@ import java.net.InetAddress;
 
 public class ZookeeperService {
     public static void register(String ip, String port, int timeout, int baseSleepTime,
-                                int maxRetries, String namespace, String path) {
+                                int maxRetries, String namespace, String thriftPort, String path) {
         try {
             CuratorFramework client = CuratorFrameworkFactory.builder()
                     .connectString(ip + ":" + port)
@@ -20,7 +20,7 @@ public class ZookeeperService {
             client.start();
 
             client.create().withMode(CreateMode.EPHEMERAL)
-                    .forPath("/" + InetAddress.getLocalHost().getHostAddress() + "&" + path, null);
+                    .forPath("/" + InetAddress.getLocalHost().getHostAddress() + ":" + thriftPort + "&" + path, null);
         } catch (Exception e) {
             e.printStackTrace();
         }

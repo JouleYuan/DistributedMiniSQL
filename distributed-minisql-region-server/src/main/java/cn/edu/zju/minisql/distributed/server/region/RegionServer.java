@@ -20,6 +20,7 @@ public class RegionServer {
                     Integer.parseInt(properties.getProperty("zookeeper.baseSleepTime")),
                     Integer.parseInt(properties.getProperty("zookeeper.maxRetries")),
                     properties.getProperty("zookeeper.namespace"),
+                    properties.getProperty("thrift.port"),
                     System.getProperty("user.dir") + properties.getProperty("minisql.path"));
             ThriftService.exposeInterface(Integer.parseInt(properties.getProperty("thrift.port")));
         } catch (Exception e) {
