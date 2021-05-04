@@ -33,7 +33,8 @@ public class Client {
             Table table = new Table(tableName, attributes, 1, null);
 
             for(String regionServer: masterServiceClient.createTable(table)) System.out.println(regionServer);
-            System.out.println(masterServiceClient.dropTable(tableName));
+            for(String regionServer: masterServiceClient.getRegionServers(tableName)) System.out.println(regionServer);
+            for(String str: masterServiceClient.showTables()) System.out.println(str);
 
             transport.close();
         } catch (TException e) {

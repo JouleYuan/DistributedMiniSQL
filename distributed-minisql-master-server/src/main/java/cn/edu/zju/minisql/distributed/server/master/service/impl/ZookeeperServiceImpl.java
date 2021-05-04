@@ -23,10 +23,12 @@ public class ZookeeperServiceImpl {
         System.out.println("Node deleted: " + info);
 
         String[] str = info.split("&", 2);
+
+        List<String> tables = RegionManager.getRegionServer(str[0]).getTables();
+
         RegionManager.removeRegionServer(str[0]);
         checkStatus();
 
-        List<String> tables = RegionManager.getRegionServer(str[0]).getTables();
         for(String table: tables) TableManager.replaceRegion(table, str[0]);
     }
 
@@ -34,7 +36,8 @@ public class ZookeeperServiceImpl {
         int regionNum = RegionManager.getRegionNum();
         System.out.println("current number of region servers: " + regionNum);
         if(regionNum < Config.minRegionSize) {
-            System.out.println("Too few region servers are working! At least 3 region servers are needed!");
+            System.out.println("Too few region servers are working! At least " +
+                    Config.minRegionSize + " region servers are needed!");
         }
     }
 }

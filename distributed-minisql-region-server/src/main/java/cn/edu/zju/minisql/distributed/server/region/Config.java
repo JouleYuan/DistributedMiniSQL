@@ -37,7 +37,7 @@ public class Config {
 
             Thrift.port = Integer.parseInt(properties.getProperty("thrift.port"));
 
-            Minisql.path = properties.getProperty(properties.getProperty("minisql.path"));
+            Minisql.path = properties.getProperty("minisql.path");
         } catch (IOException e) {
             e.printStackTrace();
         }
