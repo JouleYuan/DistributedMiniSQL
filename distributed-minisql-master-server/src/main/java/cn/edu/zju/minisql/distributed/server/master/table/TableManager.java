@@ -1,5 +1,6 @@
 package cn.edu.zju.minisql.distributed.server.master.table;
 
+import cn.edu.zju.minisql.distributed.server.master.Config;
 import cn.edu.zju.minisql.distributed.server.master.region.RegionManager;
 import cn.edu.zju.minisql.distributed.server.master.region.RegionServer;
 import org.apache.thrift.TException;
@@ -16,7 +17,7 @@ public class TableManager {
         if(tableMap.containsKey(tableName)) return null;
         List<String> regionList = RegionManager.getAddressList();
         List<String> tableRegionList = new ArrayList<>();
-        for(int i = 0; tableRegionList.size() < 3 && regionList.size() > 0; i++){
+        for(int i = 0; tableRegionList.size() < Config.minRegionSize && regionList.size() > 0; i++){
             String tableIdentifier = i + tableName;
             int index = tableIdentifier.hashCode()/regionList.size();
             tableRegionList.add(regionList.remove(index));
@@ -42,7 +43,7 @@ public class TableManager {
         List<String> tableRegionList = tableMap.get(tableName);
         tableRegionList.remove(regionIdentifier);
         for(String region: tableRegionList) regionList.remove(region);
-        for(int i = 0; tableRegionList.size() < 3 && regionList.size() > 0; i++) {
+        for(int i = 0; tableRegionList.size() < Config.minRegionSize && regionList.size() > 0; i++) {
             String tableIdentifier = i + tableName;
             String regionAddress = regionList.remove(tableIdentifier.hashCode()/regionList.size());
             RegionServer regionServer = RegionManager.getRegionServer(regionAddress);

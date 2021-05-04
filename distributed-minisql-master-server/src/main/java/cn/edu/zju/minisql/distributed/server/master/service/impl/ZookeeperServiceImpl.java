@@ -1,5 +1,6 @@
 package cn.edu.zju.minisql.distributed.server.master.service.impl;
 
+import cn.edu.zju.minisql.distributed.server.master.Config;
 import cn.edu.zju.minisql.distributed.server.master.region.RegionManager;
 import cn.edu.zju.minisql.distributed.server.master.table.TableManager;
 import org.apache.curator.framework.recipes.cache.ChildData;
@@ -32,7 +33,7 @@ public class ZookeeperServiceImpl {
     private static void checkStatus() {
         int regionNum = RegionManager.getRegionNum();
         System.out.println("current number of region servers: " + regionNum);
-        if(regionNum < 3) {
+        if(regionNum < Config.minRegionSize) {
             System.out.println("Too few region servers are working! At least 3 region servers are needed!");
         }
     }
