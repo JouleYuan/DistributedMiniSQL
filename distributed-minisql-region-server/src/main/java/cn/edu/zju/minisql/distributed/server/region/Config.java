@@ -1,12 +1,10 @@
-package cn.edu.zju.minisql.distributed.server.master;
+package cn.edu.zju.minisql.distributed.server.region;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
 public class Config {
-    public static int minRegionSize;
-
     public static class Zookeeper {
         public static String ip;
         public static int port;
@@ -20,13 +18,15 @@ public class Config {
         public static int port;
     }
 
+    public static class Minisql {
+        public static String path;
+    }
+
     static void init() {
         Properties properties = new Properties();
         InputStream inputStream = Object.class.getResourceAsStream("/config.properties");
         try {
             properties.load(inputStream);
-
-            minRegionSize = Integer.parseInt(properties.getProperty("minRegionSize"));
 
             Zookeeper.ip = properties.getProperty("zookeeper.ip");
             Zookeeper.port = Integer.parseInt(properties.getProperty("zookeeper.port"));
@@ -36,6 +36,8 @@ public class Config {
             Zookeeper.namespace = properties.getProperty("zookeeper.namespace");
 
             Thrift.port = Integer.parseInt(properties.getProperty("thrift.port"));
+
+            Minisql.path = properties.getProperty(properties.getProperty("minisql.path"));
         } catch (IOException e) {
             e.printStackTrace();
         }

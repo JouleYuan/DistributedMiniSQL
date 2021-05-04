@@ -8,8 +8,8 @@ import org.apache.zookeeper.CreateMode;
 import java.net.InetAddress;
 
 public class ZookeeperService {
-    public static void register(String ip, String port, int timeout, int baseSleepTime,
-                                int maxRetries, String namespace, String thriftPort, String path) {
+    public static void register(String ip, int port, int timeout, int baseSleepTime,
+                                int maxRetries, String namespace, int thriftPort, String path) {
         try {
             CuratorFramework client = CuratorFrameworkFactory.builder()
                     .connectString(ip + ":" + port)

@@ -8,7 +8,7 @@ import org.apache.curator.framework.recipes.cache.CuratorCacheListener;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 
 public class ZookeeperService {
-    public static void listenRegionServer(String ip, String port, int timeout, int baseSleepTime,
+    public static void listenRegionServer(String ip, int port, int timeout, int baseSleepTime,
                                           int maxRetries, String namespace) {
         try {
             CuratorFramework client = CuratorFrameworkFactory.builder()
