@@ -45,16 +45,20 @@ public class TableManager {
         for(String region: tableRegionList) regionList.remove(region);
         for(int i = 0; tableRegionList.size() < Config.minRegionSize && regionList.size() > 0; i++) {
             String tableIdentifier = i + tableName;
-            String regionAddress = regionList.remove(tableIdentifier.hashCode() % regionList.size());
-            RegionServer regionServer = RegionManager.getRegionServer(regionAddress);
+            String targetRegionAddress = regionList.remove(tableIdentifier.hashCode() % regionList.size());
+            RegionServer targetRegionServer = RegionManager.getRegionServer(targetRegionAddress);
             String sourceRegionAddress = tableRegionList.get(0);
             RegionServer sourceRegionServer = RegionManager.getRegionServer(sourceRegionAddress);
             try {
-                regionServer.getServiceClient().duplicateTable(
+                sourceRegionServer.getServiceClient().duplicateTable(
+                        tableName,
+                        targetRegionAddress.split(":", 2)[0],
+                        targetRegionServer.getPath());
+                /*targetRegionServer.getServiceClient().duplicateTable(
                         tableName,
                         sourceRegionAddress.split(":", 2)[0],
-                        sourceRegionServer.getPath());
-                tableRegionList.add(regionAddress);
+                        sourceRegionServer.getPath());*/
+                tableRegionList.add(targetRegionAddress);
             } catch (TException e) {
                 e.printStackTrace();
             }
