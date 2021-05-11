@@ -39,7 +39,7 @@ struct ConditionNode {
 struct Index {
     1: string indexName,
     2: string tableName,
-    3: int attributeIndex,
+    3: string attributeName,
 }
 
 service MasterService {
