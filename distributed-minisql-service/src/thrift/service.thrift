@@ -22,20 +22,6 @@ struct Table {
     4: list<list<string>> tuples,
 }
 
-enum Operator {
-    AND = 0, OR = 1, LESS_THAN = 2, LESS_THAN_OR_EQUAL = 3, GREATER_THAN = 4,
-    GREATER_THAN_OR_EQUAL = 5, EQUAL = 6, NOT_EQUAL = 7,
-}
-
-struct ConditionNode {
-    1: string leftElement,
-    2: string rightElement,
-    3: bool isRightElementConstant,
-    4: Operator operator,
-    5: ConditionNode leftNode,
-    6: ConditionNode rightNode,
-}
-
 struct Index {
     1: string indexName,
     2: string tableName,
@@ -61,18 +47,5 @@ service RegionService {
 
     bool duplicateCatalog(1:Table table, 2:list<Index> indexes),
 
-    Table select(
-    1: string tableName,
-    2: list<string> attributeNames,
-    3: ConditionNode conditions,
-    4: string orderKeyAttributeName,
-    5: bool isIncreased),
-
-    bool insert(1:string tableName, 2:list<string> tuple),
-
-    int deleteRecords(1:string tableName, 2:ConditionNode conditions),
-
-    bool createIndex(1:Index index),
-
-    bool dropIndex(1:string indexName),
+    string sqlRequest(1:string request),
 }

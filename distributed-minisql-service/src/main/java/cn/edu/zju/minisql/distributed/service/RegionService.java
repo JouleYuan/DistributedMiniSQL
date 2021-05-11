@@ -20,15 +20,7 @@ public class RegionService {
 
     public boolean duplicateCatalog(Table table, java.util.List<Index> indexes) throws org.apache.thrift.TException;
 
-    public Table select(java.lang.String tableName, java.util.List<java.lang.String> attributeNames, ConditionNode conditions, java.lang.String orderKeyAttributeName, boolean isIncreased) throws org.apache.thrift.TException;
-
-    public boolean insert(java.lang.String tableName, java.util.List<java.lang.String> tuple) throws org.apache.thrift.TException;
-
-    public int deleteRecords(java.lang.String tableName, ConditionNode conditions) throws org.apache.thrift.TException;
-
-    public boolean createIndex(Index index) throws org.apache.thrift.TException;
-
-    public boolean dropIndex(java.lang.String indexName) throws org.apache.thrift.TException;
+    public java.lang.String sqlRequest(java.lang.String request) throws org.apache.thrift.TException;
 
   }
 
@@ -42,15 +34,7 @@ public class RegionService {
 
     public void duplicateCatalog(Table table, java.util.List<Index> indexes, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler) throws org.apache.thrift.TException;
 
-    public void select(java.lang.String tableName, java.util.List<java.lang.String> attributeNames, ConditionNode conditions, java.lang.String orderKeyAttributeName, boolean isIncreased, org.apache.thrift.async.AsyncMethodCallback<Table> resultHandler) throws org.apache.thrift.TException;
-
-    public void insert(java.lang.String tableName, java.util.List<java.lang.String> tuple, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler) throws org.apache.thrift.TException;
-
-    public void deleteRecords(java.lang.String tableName, ConditionNode conditions, org.apache.thrift.async.AsyncMethodCallback<java.lang.Integer> resultHandler) throws org.apache.thrift.TException;
-
-    public void createIndex(Index index, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler) throws org.apache.thrift.TException;
-
-    public void dropIndex(java.lang.String indexName, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler) throws org.apache.thrift.TException;
+    public void sqlRequest(java.lang.String request, org.apache.thrift.async.AsyncMethodCallback<java.lang.String> resultHandler) throws org.apache.thrift.TException;
 
   }
 
@@ -169,125 +153,27 @@ public class RegionService {
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "duplicateCatalog failed: unknown result");
     }
 
-    public Table select(java.lang.String tableName, java.util.List<java.lang.String> attributeNames, ConditionNode conditions, java.lang.String orderKeyAttributeName, boolean isIncreased) throws org.apache.thrift.TException
+    public java.lang.String sqlRequest(java.lang.String request) throws org.apache.thrift.TException
     {
-      send_select(tableName, attributeNames, conditions, orderKeyAttributeName, isIncreased);
-      return recv_select();
+      send_sqlRequest(request);
+      return recv_sqlRequest();
     }
 
-    public void send_select(java.lang.String tableName, java.util.List<java.lang.String> attributeNames, ConditionNode conditions, java.lang.String orderKeyAttributeName, boolean isIncreased) throws org.apache.thrift.TException
+    public void send_sqlRequest(java.lang.String request) throws org.apache.thrift.TException
     {
-      select_args args = new select_args();
-      args.setTableName(tableName);
-      args.setAttributeNames(attributeNames);
-      args.setConditions(conditions);
-      args.setOrderKeyAttributeName(orderKeyAttributeName);
-      args.setIsIncreased(isIncreased);
-      sendBase("select", args);
+      sqlRequest_args args = new sqlRequest_args();
+      args.setRequest(request);
+      sendBase("sqlRequest", args);
     }
 
-    public Table recv_select() throws org.apache.thrift.TException
+    public java.lang.String recv_sqlRequest() throws org.apache.thrift.TException
     {
-      select_result result = new select_result();
-      receiveBase(result, "select");
+      sqlRequest_result result = new sqlRequest_result();
+      receiveBase(result, "sqlRequest");
       if (result.isSetSuccess()) {
         return result.success;
       }
-      throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "select failed: unknown result");
-    }
-
-    public boolean insert(java.lang.String tableName, java.util.List<java.lang.String> tuple) throws org.apache.thrift.TException
-    {
-      send_insert(tableName, tuple);
-      return recv_insert();
-    }
-
-    public void send_insert(java.lang.String tableName, java.util.List<java.lang.String> tuple) throws org.apache.thrift.TException
-    {
-      insert_args args = new insert_args();
-      args.setTableName(tableName);
-      args.setTuple(tuple);
-      sendBase("insert", args);
-    }
-
-    public boolean recv_insert() throws org.apache.thrift.TException
-    {
-      insert_result result = new insert_result();
-      receiveBase(result, "insert");
-      if (result.isSetSuccess()) {
-        return result.success;
-      }
-      throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "insert failed: unknown result");
-    }
-
-    public int deleteRecords(java.lang.String tableName, ConditionNode conditions) throws org.apache.thrift.TException
-    {
-      send_deleteRecords(tableName, conditions);
-      return recv_deleteRecords();
-    }
-
-    public void send_deleteRecords(java.lang.String tableName, ConditionNode conditions) throws org.apache.thrift.TException
-    {
-      deleteRecords_args args = new deleteRecords_args();
-      args.setTableName(tableName);
-      args.setConditions(conditions);
-      sendBase("deleteRecords", args);
-    }
-
-    public int recv_deleteRecords() throws org.apache.thrift.TException
-    {
-      deleteRecords_result result = new deleteRecords_result();
-      receiveBase(result, "deleteRecords");
-      if (result.isSetSuccess()) {
-        return result.success;
-      }
-      throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "deleteRecords failed: unknown result");
-    }
-
-    public boolean createIndex(Index index) throws org.apache.thrift.TException
-    {
-      send_createIndex(index);
-      return recv_createIndex();
-    }
-
-    public void send_createIndex(Index index) throws org.apache.thrift.TException
-    {
-      createIndex_args args = new createIndex_args();
-      args.setIndex(index);
-      sendBase("createIndex", args);
-    }
-
-    public boolean recv_createIndex() throws org.apache.thrift.TException
-    {
-      createIndex_result result = new createIndex_result();
-      receiveBase(result, "createIndex");
-      if (result.isSetSuccess()) {
-        return result.success;
-      }
-      throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "createIndex failed: unknown result");
-    }
-
-    public boolean dropIndex(java.lang.String indexName) throws org.apache.thrift.TException
-    {
-      send_dropIndex(indexName);
-      return recv_dropIndex();
-    }
-
-    public void send_dropIndex(java.lang.String indexName) throws org.apache.thrift.TException
-    {
-      dropIndex_args args = new dropIndex_args();
-      args.setIndexName(indexName);
-      sendBase("dropIndex", args);
-    }
-
-    public boolean recv_dropIndex() throws org.apache.thrift.TException
-    {
-      dropIndex_result result = new dropIndex_result();
-      receiveBase(result, "dropIndex");
-      if (result.isSetSuccess()) {
-        return result.success;
-      }
-      throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "dropIndex failed: unknown result");
+      throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "sqlRequest failed: unknown result");
     }
 
   }
@@ -445,181 +331,35 @@ public class RegionService {
       }
     }
 
-    public void select(java.lang.String tableName, java.util.List<java.lang.String> attributeNames, ConditionNode conditions, java.lang.String orderKeyAttributeName, boolean isIncreased, org.apache.thrift.async.AsyncMethodCallback<Table> resultHandler) throws org.apache.thrift.TException {
+    public void sqlRequest(java.lang.String request, org.apache.thrift.async.AsyncMethodCallback<java.lang.String> resultHandler) throws org.apache.thrift.TException {
       checkReady();
-      select_call method_call = new select_call(tableName, attributeNames, conditions, orderKeyAttributeName, isIncreased, resultHandler, this, ___protocolFactory, ___transport);
+      sqlRequest_call method_call = new sqlRequest_call(request, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
 
-    public static class select_call extends org.apache.thrift.async.TAsyncMethodCall<Table> {
-      private java.lang.String tableName;
-      private java.util.List<java.lang.String> attributeNames;
-      private ConditionNode conditions;
-      private java.lang.String orderKeyAttributeName;
-      private boolean isIncreased;
-      public select_call(java.lang.String tableName, java.util.List<java.lang.String> attributeNames, ConditionNode conditions, java.lang.String orderKeyAttributeName, boolean isIncreased, org.apache.thrift.async.AsyncMethodCallback<Table> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+    public static class sqlRequest_call extends org.apache.thrift.async.TAsyncMethodCall<java.lang.String> {
+      private java.lang.String request;
+      public sqlRequest_call(java.lang.String request, org.apache.thrift.async.AsyncMethodCallback<java.lang.String> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
         super(client, protocolFactory, transport, resultHandler, false);
-        this.tableName = tableName;
-        this.attributeNames = attributeNames;
-        this.conditions = conditions;
-        this.orderKeyAttributeName = orderKeyAttributeName;
-        this.isIncreased = isIncreased;
+        this.request = request;
       }
 
       public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
-        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("select", org.apache.thrift.protocol.TMessageType.CALL, 0));
-        select_args args = new select_args();
-        args.setTableName(tableName);
-        args.setAttributeNames(attributeNames);
-        args.setConditions(conditions);
-        args.setOrderKeyAttributeName(orderKeyAttributeName);
-        args.setIsIncreased(isIncreased);
+        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("sqlRequest", org.apache.thrift.protocol.TMessageType.CALL, 0));
+        sqlRequest_args args = new sqlRequest_args();
+        args.setRequest(request);
         args.write(prot);
         prot.writeMessageEnd();
       }
 
-      public Table getResult() throws org.apache.thrift.TException {
+      public java.lang.String getResult() throws org.apache.thrift.TException {
         if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new java.lang.IllegalStateException("Method call not finished!");
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
         org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
-        return (new Client(prot)).recv_select();
-      }
-    }
-
-    public void insert(java.lang.String tableName, java.util.List<java.lang.String> tuple, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler) throws org.apache.thrift.TException {
-      checkReady();
-      insert_call method_call = new insert_call(tableName, tuple, resultHandler, this, ___protocolFactory, ___transport);
-      this.___currentMethod = method_call;
-      ___manager.call(method_call);
-    }
-
-    public static class insert_call extends org.apache.thrift.async.TAsyncMethodCall<java.lang.Boolean> {
-      private java.lang.String tableName;
-      private java.util.List<java.lang.String> tuple;
-      public insert_call(java.lang.String tableName, java.util.List<java.lang.String> tuple, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
-        super(client, protocolFactory, transport, resultHandler, false);
-        this.tableName = tableName;
-        this.tuple = tuple;
-      }
-
-      public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
-        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("insert", org.apache.thrift.protocol.TMessageType.CALL, 0));
-        insert_args args = new insert_args();
-        args.setTableName(tableName);
-        args.setTuple(tuple);
-        args.write(prot);
-        prot.writeMessageEnd();
-      }
-
-      public java.lang.Boolean getResult() throws org.apache.thrift.TException {
-        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
-          throw new java.lang.IllegalStateException("Method call not finished!");
-        }
-        org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
-        org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
-        return (new Client(prot)).recv_insert();
-      }
-    }
-
-    public void deleteRecords(java.lang.String tableName, ConditionNode conditions, org.apache.thrift.async.AsyncMethodCallback<java.lang.Integer> resultHandler) throws org.apache.thrift.TException {
-      checkReady();
-      deleteRecords_call method_call = new deleteRecords_call(tableName, conditions, resultHandler, this, ___protocolFactory, ___transport);
-      this.___currentMethod = method_call;
-      ___manager.call(method_call);
-    }
-
-    public static class deleteRecords_call extends org.apache.thrift.async.TAsyncMethodCall<java.lang.Integer> {
-      private java.lang.String tableName;
-      private ConditionNode conditions;
-      public deleteRecords_call(java.lang.String tableName, ConditionNode conditions, org.apache.thrift.async.AsyncMethodCallback<java.lang.Integer> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
-        super(client, protocolFactory, transport, resultHandler, false);
-        this.tableName = tableName;
-        this.conditions = conditions;
-      }
-
-      public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
-        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("deleteRecords", org.apache.thrift.protocol.TMessageType.CALL, 0));
-        deleteRecords_args args = new deleteRecords_args();
-        args.setTableName(tableName);
-        args.setConditions(conditions);
-        args.write(prot);
-        prot.writeMessageEnd();
-      }
-
-      public java.lang.Integer getResult() throws org.apache.thrift.TException {
-        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
-          throw new java.lang.IllegalStateException("Method call not finished!");
-        }
-        org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
-        org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
-        return (new Client(prot)).recv_deleteRecords();
-      }
-    }
-
-    public void createIndex(Index index, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler) throws org.apache.thrift.TException {
-      checkReady();
-      createIndex_call method_call = new createIndex_call(index, resultHandler, this, ___protocolFactory, ___transport);
-      this.___currentMethod = method_call;
-      ___manager.call(method_call);
-    }
-
-    public static class createIndex_call extends org.apache.thrift.async.TAsyncMethodCall<java.lang.Boolean> {
-      private Index index;
-      public createIndex_call(Index index, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
-        super(client, protocolFactory, transport, resultHandler, false);
-        this.index = index;
-      }
-
-      public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
-        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("createIndex", org.apache.thrift.protocol.TMessageType.CALL, 0));
-        createIndex_args args = new createIndex_args();
-        args.setIndex(index);
-        args.write(prot);
-        prot.writeMessageEnd();
-      }
-
-      public java.lang.Boolean getResult() throws org.apache.thrift.TException {
-        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
-          throw new java.lang.IllegalStateException("Method call not finished!");
-        }
-        org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
-        org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
-        return (new Client(prot)).recv_createIndex();
-      }
-    }
-
-    public void dropIndex(java.lang.String indexName, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler) throws org.apache.thrift.TException {
-      checkReady();
-      dropIndex_call method_call = new dropIndex_call(indexName, resultHandler, this, ___protocolFactory, ___transport);
-      this.___currentMethod = method_call;
-      ___manager.call(method_call);
-    }
-
-    public static class dropIndex_call extends org.apache.thrift.async.TAsyncMethodCall<java.lang.Boolean> {
-      private java.lang.String indexName;
-      public dropIndex_call(java.lang.String indexName, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
-        super(client, protocolFactory, transport, resultHandler, false);
-        this.indexName = indexName;
-      }
-
-      public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
-        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("dropIndex", org.apache.thrift.protocol.TMessageType.CALL, 0));
-        dropIndex_args args = new dropIndex_args();
-        args.setIndexName(indexName);
-        args.write(prot);
-        prot.writeMessageEnd();
-      }
-
-      public java.lang.Boolean getResult() throws org.apache.thrift.TException {
-        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
-          throw new java.lang.IllegalStateException("Method call not finished!");
-        }
-        org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
-        org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
-        return (new Client(prot)).recv_dropIndex();
+        return (new Client(prot)).recv_sqlRequest();
       }
     }
 
@@ -640,11 +380,7 @@ public class RegionService {
       processMap.put("dropTable", new dropTable());
       processMap.put("duplicateTable", new duplicateTable());
       processMap.put("duplicateCatalog", new duplicateCatalog());
-      processMap.put("select", new select());
-      processMap.put("insert", new insert());
-      processMap.put("deleteRecords", new deleteRecords());
-      processMap.put("createIndex", new createIndex());
-      processMap.put("dropIndex", new dropIndex());
+      processMap.put("sqlRequest", new sqlRequest());
       return processMap;
     }
 
@@ -752,38 +488,13 @@ public class RegionService {
       }
     }
 
-    public static class select<I extends Iface> extends org.apache.thrift.ProcessFunction<I, select_args> {
-      public select() {
-        super("select");
+    public static class sqlRequest<I extends Iface> extends org.apache.thrift.ProcessFunction<I, sqlRequest_args> {
+      public sqlRequest() {
+        super("sqlRequest");
       }
 
-      public select_args getEmptyArgsInstance() {
-        return new select_args();
-      }
-
-      protected boolean isOneway() {
-        return false;
-      }
-
-      @Override
-      protected boolean rethrowUnhandledExceptions() {
-        return false;
-      }
-
-      public select_result getResult(I iface, select_args args) throws org.apache.thrift.TException {
-        select_result result = new select_result();
-        result.success = iface.select(args.tableName, args.attributeNames, args.conditions, args.orderKeyAttributeName, args.isIncreased);
-        return result;
-      }
-    }
-
-    public static class insert<I extends Iface> extends org.apache.thrift.ProcessFunction<I, insert_args> {
-      public insert() {
-        super("insert");
-      }
-
-      public insert_args getEmptyArgsInstance() {
-        return new insert_args();
+      public sqlRequest_args getEmptyArgsInstance() {
+        return new sqlRequest_args();
       }
 
       protected boolean isOneway() {
@@ -795,88 +506,9 @@ public class RegionService {
         return false;
       }
 
-      public insert_result getResult(I iface, insert_args args) throws org.apache.thrift.TException {
-        insert_result result = new insert_result();
-        result.success = iface.insert(args.tableName, args.tuple);
-        result.setSuccessIsSet(true);
-        return result;
-      }
-    }
-
-    public static class deleteRecords<I extends Iface> extends org.apache.thrift.ProcessFunction<I, deleteRecords_args> {
-      public deleteRecords() {
-        super("deleteRecords");
-      }
-
-      public deleteRecords_args getEmptyArgsInstance() {
-        return new deleteRecords_args();
-      }
-
-      protected boolean isOneway() {
-        return false;
-      }
-
-      @Override
-      protected boolean rethrowUnhandledExceptions() {
-        return false;
-      }
-
-      public deleteRecords_result getResult(I iface, deleteRecords_args args) throws org.apache.thrift.TException {
-        deleteRecords_result result = new deleteRecords_result();
-        result.success = iface.deleteRecords(args.tableName, args.conditions);
-        result.setSuccessIsSet(true);
-        return result;
-      }
-    }
-
-    public static class createIndex<I extends Iface> extends org.apache.thrift.ProcessFunction<I, createIndex_args> {
-      public createIndex() {
-        super("createIndex");
-      }
-
-      public createIndex_args getEmptyArgsInstance() {
-        return new createIndex_args();
-      }
-
-      protected boolean isOneway() {
-        return false;
-      }
-
-      @Override
-      protected boolean rethrowUnhandledExceptions() {
-        return false;
-      }
-
-      public createIndex_result getResult(I iface, createIndex_args args) throws org.apache.thrift.TException {
-        createIndex_result result = new createIndex_result();
-        result.success = iface.createIndex(args.index);
-        result.setSuccessIsSet(true);
-        return result;
-      }
-    }
-
-    public static class dropIndex<I extends Iface> extends org.apache.thrift.ProcessFunction<I, dropIndex_args> {
-      public dropIndex() {
-        super("dropIndex");
-      }
-
-      public dropIndex_args getEmptyArgsInstance() {
-        return new dropIndex_args();
-      }
-
-      protected boolean isOneway() {
-        return false;
-      }
-
-      @Override
-      protected boolean rethrowUnhandledExceptions() {
-        return false;
-      }
-
-      public dropIndex_result getResult(I iface, dropIndex_args args) throws org.apache.thrift.TException {
-        dropIndex_result result = new dropIndex_result();
-        result.success = iface.dropIndex(args.indexName);
-        result.setSuccessIsSet(true);
+      public sqlRequest_result getResult(I iface, sqlRequest_args args) throws org.apache.thrift.TException {
+        sqlRequest_result result = new sqlRequest_result();
+        result.success = iface.sqlRequest(args.request);
         return result;
       }
     }
@@ -898,11 +530,7 @@ public class RegionService {
       processMap.put("dropTable", new dropTable());
       processMap.put("duplicateTable", new duplicateTable());
       processMap.put("duplicateCatalog", new duplicateCatalog());
-      processMap.put("select", new select());
-      processMap.put("insert", new insert());
-      processMap.put("deleteRecords", new deleteRecords());
-      processMap.put("createIndex", new createIndex());
-      processMap.put("dropIndex", new dropIndex());
+      processMap.put("sqlRequest", new sqlRequest());
       return processMap;
     }
 
@@ -1154,20 +782,20 @@ public class RegionService {
       }
     }
 
-    public static class select<I extends AsyncIface> extends org.apache.thrift.AsyncProcessFunction<I, select_args, Table> {
-      public select() {
-        super("select");
+    public static class sqlRequest<I extends AsyncIface> extends org.apache.thrift.AsyncProcessFunction<I, sqlRequest_args, java.lang.String> {
+      public sqlRequest() {
+        super("sqlRequest");
       }
 
-      public select_args getEmptyArgsInstance() {
-        return new select_args();
+      public sqlRequest_args getEmptyArgsInstance() {
+        return new sqlRequest_args();
       }
 
-      public org.apache.thrift.async.AsyncMethodCallback<Table> getResultHandler(final org.apache.thrift.server.AbstractNonblockingServer.AsyncFrameBuffer fb, final int seqid) {
+      public org.apache.thrift.async.AsyncMethodCallback<java.lang.String> getResultHandler(final org.apache.thrift.server.AbstractNonblockingServer.AsyncFrameBuffer fb, final int seqid) {
         final org.apache.thrift.AsyncProcessFunction fcall = this;
-        return new org.apache.thrift.async.AsyncMethodCallback<Table>() { 
-          public void onComplete(Table o) {
-            select_result result = new select_result();
+        return new org.apache.thrift.async.AsyncMethodCallback<java.lang.String>() { 
+          public void onComplete(java.lang.String o) {
+            sqlRequest_result result = new sqlRequest_result();
             result.success = o;
             try {
               fcall.sendResponse(fb, result, org.apache.thrift.protocol.TMessageType.REPLY,seqid);
@@ -1182,7 +810,7 @@ public class RegionService {
           public void onError(java.lang.Exception e) {
             byte msgType = org.apache.thrift.protocol.TMessageType.REPLY;
             org.apache.thrift.TSerializable msg;
-            select_result result = new select_result();
+            sqlRequest_result result = new sqlRequest_result();
             if (e instanceof org.apache.thrift.transport.TTransportException) {
               _LOGGER.error("TTransportException inside handler", e);
               fb.close();
@@ -1210,256 +838,8 @@ public class RegionService {
         return false;
       }
 
-      public void start(I iface, select_args args, org.apache.thrift.async.AsyncMethodCallback<Table> resultHandler) throws org.apache.thrift.TException {
-        iface.select(args.tableName, args.attributeNames, args.conditions, args.orderKeyAttributeName, args.isIncreased,resultHandler);
-      }
-    }
-
-    public static class insert<I extends AsyncIface> extends org.apache.thrift.AsyncProcessFunction<I, insert_args, java.lang.Boolean> {
-      public insert() {
-        super("insert");
-      }
-
-      public insert_args getEmptyArgsInstance() {
-        return new insert_args();
-      }
-
-      public org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> getResultHandler(final org.apache.thrift.server.AbstractNonblockingServer.AsyncFrameBuffer fb, final int seqid) {
-        final org.apache.thrift.AsyncProcessFunction fcall = this;
-        return new org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean>() { 
-          public void onComplete(java.lang.Boolean o) {
-            insert_result result = new insert_result();
-            result.success = o;
-            result.setSuccessIsSet(true);
-            try {
-              fcall.sendResponse(fb, result, org.apache.thrift.protocol.TMessageType.REPLY,seqid);
-            } catch (org.apache.thrift.transport.TTransportException e) {
-              _LOGGER.error("TTransportException writing to internal frame buffer", e);
-              fb.close();
-            } catch (java.lang.Exception e) {
-              _LOGGER.error("Exception writing to internal frame buffer", e);
-              onError(e);
-            }
-          }
-          public void onError(java.lang.Exception e) {
-            byte msgType = org.apache.thrift.protocol.TMessageType.REPLY;
-            org.apache.thrift.TSerializable msg;
-            insert_result result = new insert_result();
-            if (e instanceof org.apache.thrift.transport.TTransportException) {
-              _LOGGER.error("TTransportException inside handler", e);
-              fb.close();
-              return;
-            } else if (e instanceof org.apache.thrift.TApplicationException) {
-              _LOGGER.error("TApplicationException inside handler", e);
-              msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
-              msg = (org.apache.thrift.TApplicationException)e;
-            } else {
-              _LOGGER.error("Exception inside handler", e);
-              msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
-              msg = new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.INTERNAL_ERROR, e.getMessage());
-            }
-            try {
-              fcall.sendResponse(fb,msg,msgType,seqid);
-            } catch (java.lang.Exception ex) {
-              _LOGGER.error("Exception writing to internal frame buffer", ex);
-              fb.close();
-            }
-          }
-        };
-      }
-
-      protected boolean isOneway() {
-        return false;
-      }
-
-      public void start(I iface, insert_args args, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler) throws org.apache.thrift.TException {
-        iface.insert(args.tableName, args.tuple,resultHandler);
-      }
-    }
-
-    public static class deleteRecords<I extends AsyncIface> extends org.apache.thrift.AsyncProcessFunction<I, deleteRecords_args, java.lang.Integer> {
-      public deleteRecords() {
-        super("deleteRecords");
-      }
-
-      public deleteRecords_args getEmptyArgsInstance() {
-        return new deleteRecords_args();
-      }
-
-      public org.apache.thrift.async.AsyncMethodCallback<java.lang.Integer> getResultHandler(final org.apache.thrift.server.AbstractNonblockingServer.AsyncFrameBuffer fb, final int seqid) {
-        final org.apache.thrift.AsyncProcessFunction fcall = this;
-        return new org.apache.thrift.async.AsyncMethodCallback<java.lang.Integer>() { 
-          public void onComplete(java.lang.Integer o) {
-            deleteRecords_result result = new deleteRecords_result();
-            result.success = o;
-            result.setSuccessIsSet(true);
-            try {
-              fcall.sendResponse(fb, result, org.apache.thrift.protocol.TMessageType.REPLY,seqid);
-            } catch (org.apache.thrift.transport.TTransportException e) {
-              _LOGGER.error("TTransportException writing to internal frame buffer", e);
-              fb.close();
-            } catch (java.lang.Exception e) {
-              _LOGGER.error("Exception writing to internal frame buffer", e);
-              onError(e);
-            }
-          }
-          public void onError(java.lang.Exception e) {
-            byte msgType = org.apache.thrift.protocol.TMessageType.REPLY;
-            org.apache.thrift.TSerializable msg;
-            deleteRecords_result result = new deleteRecords_result();
-            if (e instanceof org.apache.thrift.transport.TTransportException) {
-              _LOGGER.error("TTransportException inside handler", e);
-              fb.close();
-              return;
-            } else if (e instanceof org.apache.thrift.TApplicationException) {
-              _LOGGER.error("TApplicationException inside handler", e);
-              msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
-              msg = (org.apache.thrift.TApplicationException)e;
-            } else {
-              _LOGGER.error("Exception inside handler", e);
-              msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
-              msg = new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.INTERNAL_ERROR, e.getMessage());
-            }
-            try {
-              fcall.sendResponse(fb,msg,msgType,seqid);
-            } catch (java.lang.Exception ex) {
-              _LOGGER.error("Exception writing to internal frame buffer", ex);
-              fb.close();
-            }
-          }
-        };
-      }
-
-      protected boolean isOneway() {
-        return false;
-      }
-
-      public void start(I iface, deleteRecords_args args, org.apache.thrift.async.AsyncMethodCallback<java.lang.Integer> resultHandler) throws org.apache.thrift.TException {
-        iface.deleteRecords(args.tableName, args.conditions,resultHandler);
-      }
-    }
-
-    public static class createIndex<I extends AsyncIface> extends org.apache.thrift.AsyncProcessFunction<I, createIndex_args, java.lang.Boolean> {
-      public createIndex() {
-        super("createIndex");
-      }
-
-      public createIndex_args getEmptyArgsInstance() {
-        return new createIndex_args();
-      }
-
-      public org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> getResultHandler(final org.apache.thrift.server.AbstractNonblockingServer.AsyncFrameBuffer fb, final int seqid) {
-        final org.apache.thrift.AsyncProcessFunction fcall = this;
-        return new org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean>() { 
-          public void onComplete(java.lang.Boolean o) {
-            createIndex_result result = new createIndex_result();
-            result.success = o;
-            result.setSuccessIsSet(true);
-            try {
-              fcall.sendResponse(fb, result, org.apache.thrift.protocol.TMessageType.REPLY,seqid);
-            } catch (org.apache.thrift.transport.TTransportException e) {
-              _LOGGER.error("TTransportException writing to internal frame buffer", e);
-              fb.close();
-            } catch (java.lang.Exception e) {
-              _LOGGER.error("Exception writing to internal frame buffer", e);
-              onError(e);
-            }
-          }
-          public void onError(java.lang.Exception e) {
-            byte msgType = org.apache.thrift.protocol.TMessageType.REPLY;
-            org.apache.thrift.TSerializable msg;
-            createIndex_result result = new createIndex_result();
-            if (e instanceof org.apache.thrift.transport.TTransportException) {
-              _LOGGER.error("TTransportException inside handler", e);
-              fb.close();
-              return;
-            } else if (e instanceof org.apache.thrift.TApplicationException) {
-              _LOGGER.error("TApplicationException inside handler", e);
-              msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
-              msg = (org.apache.thrift.TApplicationException)e;
-            } else {
-              _LOGGER.error("Exception inside handler", e);
-              msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
-              msg = new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.INTERNAL_ERROR, e.getMessage());
-            }
-            try {
-              fcall.sendResponse(fb,msg,msgType,seqid);
-            } catch (java.lang.Exception ex) {
-              _LOGGER.error("Exception writing to internal frame buffer", ex);
-              fb.close();
-            }
-          }
-        };
-      }
-
-      protected boolean isOneway() {
-        return false;
-      }
-
-      public void start(I iface, createIndex_args args, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler) throws org.apache.thrift.TException {
-        iface.createIndex(args.index,resultHandler);
-      }
-    }
-
-    public static class dropIndex<I extends AsyncIface> extends org.apache.thrift.AsyncProcessFunction<I, dropIndex_args, java.lang.Boolean> {
-      public dropIndex() {
-        super("dropIndex");
-      }
-
-      public dropIndex_args getEmptyArgsInstance() {
-        return new dropIndex_args();
-      }
-
-      public org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> getResultHandler(final org.apache.thrift.server.AbstractNonblockingServer.AsyncFrameBuffer fb, final int seqid) {
-        final org.apache.thrift.AsyncProcessFunction fcall = this;
-        return new org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean>() { 
-          public void onComplete(java.lang.Boolean o) {
-            dropIndex_result result = new dropIndex_result();
-            result.success = o;
-            result.setSuccessIsSet(true);
-            try {
-              fcall.sendResponse(fb, result, org.apache.thrift.protocol.TMessageType.REPLY,seqid);
-            } catch (org.apache.thrift.transport.TTransportException e) {
-              _LOGGER.error("TTransportException writing to internal frame buffer", e);
-              fb.close();
-            } catch (java.lang.Exception e) {
-              _LOGGER.error("Exception writing to internal frame buffer", e);
-              onError(e);
-            }
-          }
-          public void onError(java.lang.Exception e) {
-            byte msgType = org.apache.thrift.protocol.TMessageType.REPLY;
-            org.apache.thrift.TSerializable msg;
-            dropIndex_result result = new dropIndex_result();
-            if (e instanceof org.apache.thrift.transport.TTransportException) {
-              _LOGGER.error("TTransportException inside handler", e);
-              fb.close();
-              return;
-            } else if (e instanceof org.apache.thrift.TApplicationException) {
-              _LOGGER.error("TApplicationException inside handler", e);
-              msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
-              msg = (org.apache.thrift.TApplicationException)e;
-            } else {
-              _LOGGER.error("Exception inside handler", e);
-              msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
-              msg = new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.INTERNAL_ERROR, e.getMessage());
-            }
-            try {
-              fcall.sendResponse(fb,msg,msgType,seqid);
-            } catch (java.lang.Exception ex) {
-              _LOGGER.error("Exception writing to internal frame buffer", ex);
-              fb.close();
-            }
-          }
-        };
-      }
-
-      protected boolean isOneway() {
-        return false;
-      }
-
-      public void start(I iface, dropIndex_args args, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler) throws org.apache.thrift.TException {
-        iface.dropIndex(args.indexName,resultHandler);
+      public void start(I iface, sqlRequest_args args, org.apache.thrift.async.AsyncMethodCallback<java.lang.String> resultHandler) throws org.apache.thrift.TException {
+        iface.sqlRequest(args.request,resultHandler);
       }
     }
 
@@ -4753,31 +4133,19 @@ public class RegionService {
     }
   }
 
-  public static class select_args implements org.apache.thrift.TBase<select_args, select_args._Fields>, java.io.Serializable, Cloneable, Comparable<select_args>   {
-    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("select_args");
+  public static class sqlRequest_args implements org.apache.thrift.TBase<sqlRequest_args, sqlRequest_args._Fields>, java.io.Serializable, Cloneable, Comparable<sqlRequest_args>   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("sqlRequest_args");
 
-    private static final org.apache.thrift.protocol.TField TABLE_NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("tableName", org.apache.thrift.protocol.TType.STRING, (short)1);
-    private static final org.apache.thrift.protocol.TField ATTRIBUTE_NAMES_FIELD_DESC = new org.apache.thrift.protocol.TField("attributeNames", org.apache.thrift.protocol.TType.LIST, (short)2);
-    private static final org.apache.thrift.protocol.TField CONDITIONS_FIELD_DESC = new org.apache.thrift.protocol.TField("conditions", org.apache.thrift.protocol.TType.STRUCT, (short)3);
-    private static final org.apache.thrift.protocol.TField ORDER_KEY_ATTRIBUTE_NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("orderKeyAttributeName", org.apache.thrift.protocol.TType.STRING, (short)4);
-    private static final org.apache.thrift.protocol.TField IS_INCREASED_FIELD_DESC = new org.apache.thrift.protocol.TField("isIncreased", org.apache.thrift.protocol.TType.BOOL, (short)5);
+    private static final org.apache.thrift.protocol.TField REQUEST_FIELD_DESC = new org.apache.thrift.protocol.TField("request", org.apache.thrift.protocol.TType.STRING, (short)1);
 
-    private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new select_argsStandardSchemeFactory();
-    private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new select_argsTupleSchemeFactory();
+    private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new sqlRequest_argsStandardSchemeFactory();
+    private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new sqlRequest_argsTupleSchemeFactory();
 
-    public @org.apache.thrift.annotation.Nullable java.lang.String tableName; // required
-    public @org.apache.thrift.annotation.Nullable java.util.List<java.lang.String> attributeNames; // required
-    public @org.apache.thrift.annotation.Nullable ConditionNode conditions; // required
-    public @org.apache.thrift.annotation.Nullable java.lang.String orderKeyAttributeName; // required
-    public boolean isIncreased; // required
+    public @org.apache.thrift.annotation.Nullable java.lang.String request; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-      TABLE_NAME((short)1, "tableName"),
-      ATTRIBUTE_NAMES((short)2, "attributeNames"),
-      CONDITIONS((short)3, "conditions"),
-      ORDER_KEY_ATTRIBUTE_NAME((short)4, "orderKeyAttributeName"),
-      IS_INCREASED((short)5, "isIncreased");
+      REQUEST((short)1, "request");
 
       private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
 
@@ -4793,16 +4161,8 @@ public class RegionService {
       @org.apache.thrift.annotation.Nullable
       public static _Fields findByThriftId(int fieldId) {
         switch(fieldId) {
-          case 1: // TABLE_NAME
-            return TABLE_NAME;
-          case 2: // ATTRIBUTE_NAMES
-            return ATTRIBUTE_NAMES;
-          case 3: // CONDITIONS
-            return CONDITIONS;
-          case 4: // ORDER_KEY_ATTRIBUTE_NAME
-            return ORDER_KEY_ATTRIBUTE_NAME;
-          case 5: // IS_INCREASED
-            return IS_INCREASED;
+          case 1: // REQUEST
+            return REQUEST;
           default:
             return null;
         }
@@ -4844,258 +4204,75 @@ public class RegionService {
     }
 
     // isset id assignments
-    private static final int __ISINCREASED_ISSET_ID = 0;
-    private byte __isset_bitfield = 0;
     public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.TABLE_NAME, new org.apache.thrift.meta_data.FieldMetaData("tableName", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+      tmpMap.put(_Fields.REQUEST, new org.apache.thrift.meta_data.FieldMetaData("request", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-      tmpMap.put(_Fields.ATTRIBUTE_NAMES, new org.apache.thrift.meta_data.FieldMetaData("attributeNames", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.ListMetaData(org.apache.thrift.protocol.TType.LIST, 
-              new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING))));
-      tmpMap.put(_Fields.CONDITIONS, new org.apache.thrift.meta_data.FieldMetaData("conditions", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, ConditionNode.class)));
-      tmpMap.put(_Fields.ORDER_KEY_ATTRIBUTE_NAME, new org.apache.thrift.meta_data.FieldMetaData("orderKeyAttributeName", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-      tmpMap.put(_Fields.IS_INCREASED, new org.apache.thrift.meta_data.FieldMetaData("isIncreased", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.BOOL)));
       metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
-      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(select_args.class, metaDataMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(sqlRequest_args.class, metaDataMap);
     }
 
-    public select_args() {
+    public sqlRequest_args() {
     }
 
-    public select_args(
-      java.lang.String tableName,
-      java.util.List<java.lang.String> attributeNames,
-      ConditionNode conditions,
-      java.lang.String orderKeyAttributeName,
-      boolean isIncreased)
+    public sqlRequest_args(
+      java.lang.String request)
     {
       this();
-      this.tableName = tableName;
-      this.attributeNames = attributeNames;
-      this.conditions = conditions;
-      this.orderKeyAttributeName = orderKeyAttributeName;
-      this.isIncreased = isIncreased;
-      setIsIncreasedIsSet(true);
+      this.request = request;
     }
 
     /**
      * Performs a deep copy on <i>other</i>.
      */
-    public select_args(select_args other) {
-      __isset_bitfield = other.__isset_bitfield;
-      if (other.isSetTableName()) {
-        this.tableName = other.tableName;
+    public sqlRequest_args(sqlRequest_args other) {
+      if (other.isSetRequest()) {
+        this.request = other.request;
       }
-      if (other.isSetAttributeNames()) {
-        java.util.List<java.lang.String> __this__attributeNames = new java.util.ArrayList<java.lang.String>(other.attributeNames);
-        this.attributeNames = __this__attributeNames;
-      }
-      if (other.isSetConditions()) {
-        this.conditions = new ConditionNode(other.conditions);
-      }
-      if (other.isSetOrderKeyAttributeName()) {
-        this.orderKeyAttributeName = other.orderKeyAttributeName;
-      }
-      this.isIncreased = other.isIncreased;
     }
 
-    public select_args deepCopy() {
-      return new select_args(this);
+    public sqlRequest_args deepCopy() {
+      return new sqlRequest_args(this);
     }
 
     @Override
     public void clear() {
-      this.tableName = null;
-      this.attributeNames = null;
-      this.conditions = null;
-      this.orderKeyAttributeName = null;
-      setIsIncreasedIsSet(false);
-      this.isIncreased = false;
+      this.request = null;
     }
 
     @org.apache.thrift.annotation.Nullable
-    public java.lang.String getTableName() {
-      return this.tableName;
+    public java.lang.String getRequest() {
+      return this.request;
     }
 
-    public select_args setTableName(@org.apache.thrift.annotation.Nullable java.lang.String tableName) {
-      this.tableName = tableName;
+    public sqlRequest_args setRequest(@org.apache.thrift.annotation.Nullable java.lang.String request) {
+      this.request = request;
       return this;
     }
 
-    public void unsetTableName() {
-      this.tableName = null;
+    public void unsetRequest() {
+      this.request = null;
     }
 
-    /** Returns true if field tableName is set (has been assigned a value) and false otherwise */
-    public boolean isSetTableName() {
-      return this.tableName != null;
+    /** Returns true if field request is set (has been assigned a value) and false otherwise */
+    public boolean isSetRequest() {
+      return this.request != null;
     }
 
-    public void setTableNameIsSet(boolean value) {
+    public void setRequestIsSet(boolean value) {
       if (!value) {
-        this.tableName = null;
+        this.request = null;
       }
-    }
-
-    public int getAttributeNamesSize() {
-      return (this.attributeNames == null) ? 0 : this.attributeNames.size();
-    }
-
-    @org.apache.thrift.annotation.Nullable
-    public java.util.Iterator<java.lang.String> getAttributeNamesIterator() {
-      return (this.attributeNames == null) ? null : this.attributeNames.iterator();
-    }
-
-    public void addToAttributeNames(java.lang.String elem) {
-      if (this.attributeNames == null) {
-        this.attributeNames = new java.util.ArrayList<java.lang.String>();
-      }
-      this.attributeNames.add(elem);
-    }
-
-    @org.apache.thrift.annotation.Nullable
-    public java.util.List<java.lang.String> getAttributeNames() {
-      return this.attributeNames;
-    }
-
-    public select_args setAttributeNames(@org.apache.thrift.annotation.Nullable java.util.List<java.lang.String> attributeNames) {
-      this.attributeNames = attributeNames;
-      return this;
-    }
-
-    public void unsetAttributeNames() {
-      this.attributeNames = null;
-    }
-
-    /** Returns true if field attributeNames is set (has been assigned a value) and false otherwise */
-    public boolean isSetAttributeNames() {
-      return this.attributeNames != null;
-    }
-
-    public void setAttributeNamesIsSet(boolean value) {
-      if (!value) {
-        this.attributeNames = null;
-      }
-    }
-
-    @org.apache.thrift.annotation.Nullable
-    public ConditionNode getConditions() {
-      return this.conditions;
-    }
-
-    public select_args setConditions(@org.apache.thrift.annotation.Nullable ConditionNode conditions) {
-      this.conditions = conditions;
-      return this;
-    }
-
-    public void unsetConditions() {
-      this.conditions = null;
-    }
-
-    /** Returns true if field conditions is set (has been assigned a value) and false otherwise */
-    public boolean isSetConditions() {
-      return this.conditions != null;
-    }
-
-    public void setConditionsIsSet(boolean value) {
-      if (!value) {
-        this.conditions = null;
-      }
-    }
-
-    @org.apache.thrift.annotation.Nullable
-    public java.lang.String getOrderKeyAttributeName() {
-      return this.orderKeyAttributeName;
-    }
-
-    public select_args setOrderKeyAttributeName(@org.apache.thrift.annotation.Nullable java.lang.String orderKeyAttributeName) {
-      this.orderKeyAttributeName = orderKeyAttributeName;
-      return this;
-    }
-
-    public void unsetOrderKeyAttributeName() {
-      this.orderKeyAttributeName = null;
-    }
-
-    /** Returns true if field orderKeyAttributeName is set (has been assigned a value) and false otherwise */
-    public boolean isSetOrderKeyAttributeName() {
-      return this.orderKeyAttributeName != null;
-    }
-
-    public void setOrderKeyAttributeNameIsSet(boolean value) {
-      if (!value) {
-        this.orderKeyAttributeName = null;
-      }
-    }
-
-    public boolean isIsIncreased() {
-      return this.isIncreased;
-    }
-
-    public select_args setIsIncreased(boolean isIncreased) {
-      this.isIncreased = isIncreased;
-      setIsIncreasedIsSet(true);
-      return this;
-    }
-
-    public void unsetIsIncreased() {
-      __isset_bitfield = org.apache.thrift.EncodingUtils.clearBit(__isset_bitfield, __ISINCREASED_ISSET_ID);
-    }
-
-    /** Returns true if field isIncreased is set (has been assigned a value) and false otherwise */
-    public boolean isSetIsIncreased() {
-      return org.apache.thrift.EncodingUtils.testBit(__isset_bitfield, __ISINCREASED_ISSET_ID);
-    }
-
-    public void setIsIncreasedIsSet(boolean value) {
-      __isset_bitfield = org.apache.thrift.EncodingUtils.setBit(__isset_bitfield, __ISINCREASED_ISSET_ID, value);
     }
 
     public void setFieldValue(_Fields field, @org.apache.thrift.annotation.Nullable java.lang.Object value) {
       switch (field) {
-      case TABLE_NAME:
+      case REQUEST:
         if (value == null) {
-          unsetTableName();
+          unsetRequest();
         } else {
-          setTableName((java.lang.String)value);
-        }
-        break;
-
-      case ATTRIBUTE_NAMES:
-        if (value == null) {
-          unsetAttributeNames();
-        } else {
-          setAttributeNames((java.util.List<java.lang.String>)value);
-        }
-        break;
-
-      case CONDITIONS:
-        if (value == null) {
-          unsetConditions();
-        } else {
-          setConditions((ConditionNode)value);
-        }
-        break;
-
-      case ORDER_KEY_ATTRIBUTE_NAME:
-        if (value == null) {
-          unsetOrderKeyAttributeName();
-        } else {
-          setOrderKeyAttributeName((java.lang.String)value);
-        }
-        break;
-
-      case IS_INCREASED:
-        if (value == null) {
-          unsetIsIncreased();
-        } else {
-          setIsIncreased((java.lang.Boolean)value);
+          setRequest((java.lang.String)value);
         }
         break;
 
@@ -5105,20 +4282,8 @@ public class RegionService {
     @org.apache.thrift.annotation.Nullable
     public java.lang.Object getFieldValue(_Fields field) {
       switch (field) {
-      case TABLE_NAME:
-        return getTableName();
-
-      case ATTRIBUTE_NAMES:
-        return getAttributeNames();
-
-      case CONDITIONS:
-        return getConditions();
-
-      case ORDER_KEY_ATTRIBUTE_NAME:
-        return getOrderKeyAttributeName();
-
-      case IS_INCREASED:
-        return isIsIncreased();
+      case REQUEST:
+        return getRequest();
 
       }
       throw new java.lang.IllegalStateException();
@@ -5131,75 +4296,31 @@ public class RegionService {
       }
 
       switch (field) {
-      case TABLE_NAME:
-        return isSetTableName();
-      case ATTRIBUTE_NAMES:
-        return isSetAttributeNames();
-      case CONDITIONS:
-        return isSetConditions();
-      case ORDER_KEY_ATTRIBUTE_NAME:
-        return isSetOrderKeyAttributeName();
-      case IS_INCREASED:
-        return isSetIsIncreased();
+      case REQUEST:
+        return isSetRequest();
       }
       throw new java.lang.IllegalStateException();
     }
 
     @Override
     public boolean equals(java.lang.Object that) {
-      if (that instanceof select_args)
-        return this.equals((select_args)that);
+      if (that instanceof sqlRequest_args)
+        return this.equals((sqlRequest_args)that);
       return false;
     }
 
-    public boolean equals(select_args that) {
+    public boolean equals(sqlRequest_args that) {
       if (that == null)
         return false;
       if (this == that)
         return true;
 
-      boolean this_present_tableName = true && this.isSetTableName();
-      boolean that_present_tableName = true && that.isSetTableName();
-      if (this_present_tableName || that_present_tableName) {
-        if (!(this_present_tableName && that_present_tableName))
+      boolean this_present_request = true && this.isSetRequest();
+      boolean that_present_request = true && that.isSetRequest();
+      if (this_present_request || that_present_request) {
+        if (!(this_present_request && that_present_request))
           return false;
-        if (!this.tableName.equals(that.tableName))
-          return false;
-      }
-
-      boolean this_present_attributeNames = true && this.isSetAttributeNames();
-      boolean that_present_attributeNames = true && that.isSetAttributeNames();
-      if (this_present_attributeNames || that_present_attributeNames) {
-        if (!(this_present_attributeNames && that_present_attributeNames))
-          return false;
-        if (!this.attributeNames.equals(that.attributeNames))
-          return false;
-      }
-
-      boolean this_present_conditions = true && this.isSetConditions();
-      boolean that_present_conditions = true && that.isSetConditions();
-      if (this_present_conditions || that_present_conditions) {
-        if (!(this_present_conditions && that_present_conditions))
-          return false;
-        if (!this.conditions.equals(that.conditions))
-          return false;
-      }
-
-      boolean this_present_orderKeyAttributeName = true && this.isSetOrderKeyAttributeName();
-      boolean that_present_orderKeyAttributeName = true && that.isSetOrderKeyAttributeName();
-      if (this_present_orderKeyAttributeName || that_present_orderKeyAttributeName) {
-        if (!(this_present_orderKeyAttributeName && that_present_orderKeyAttributeName))
-          return false;
-        if (!this.orderKeyAttributeName.equals(that.orderKeyAttributeName))
-          return false;
-      }
-
-      boolean this_present_isIncreased = true;
-      boolean that_present_isIncreased = true;
-      if (this_present_isIncreased || that_present_isIncreased) {
-        if (!(this_present_isIncreased && that_present_isIncreased))
-          return false;
-        if (this.isIncreased != that.isIncreased)
+        if (!this.request.equals(that.request))
           return false;
       }
 
@@ -5210,81 +4331,27 @@ public class RegionService {
     public int hashCode() {
       int hashCode = 1;
 
-      hashCode = hashCode * 8191 + ((isSetTableName()) ? 131071 : 524287);
-      if (isSetTableName())
-        hashCode = hashCode * 8191 + tableName.hashCode();
-
-      hashCode = hashCode * 8191 + ((isSetAttributeNames()) ? 131071 : 524287);
-      if (isSetAttributeNames())
-        hashCode = hashCode * 8191 + attributeNames.hashCode();
-
-      hashCode = hashCode * 8191 + ((isSetConditions()) ? 131071 : 524287);
-      if (isSetConditions())
-        hashCode = hashCode * 8191 + conditions.hashCode();
-
-      hashCode = hashCode * 8191 + ((isSetOrderKeyAttributeName()) ? 131071 : 524287);
-      if (isSetOrderKeyAttributeName())
-        hashCode = hashCode * 8191 + orderKeyAttributeName.hashCode();
-
-      hashCode = hashCode * 8191 + ((isIncreased) ? 131071 : 524287);
+      hashCode = hashCode * 8191 + ((isSetRequest()) ? 131071 : 524287);
+      if (isSetRequest())
+        hashCode = hashCode * 8191 + request.hashCode();
 
       return hashCode;
     }
 
     @Override
-    public int compareTo(select_args other) {
+    public int compareTo(sqlRequest_args other) {
       if (!getClass().equals(other.getClass())) {
         return getClass().getName().compareTo(other.getClass().getName());
       }
 
       int lastComparison = 0;
 
-      lastComparison = java.lang.Boolean.compare(isSetTableName(), other.isSetTableName());
+      lastComparison = java.lang.Boolean.compare(isSetRequest(), other.isSetRequest());
       if (lastComparison != 0) {
         return lastComparison;
       }
-      if (isSetTableName()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.tableName, other.tableName);
-        if (lastComparison != 0) {
-          return lastComparison;
-        }
-      }
-      lastComparison = java.lang.Boolean.compare(isSetAttributeNames(), other.isSetAttributeNames());
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-      if (isSetAttributeNames()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.attributeNames, other.attributeNames);
-        if (lastComparison != 0) {
-          return lastComparison;
-        }
-      }
-      lastComparison = java.lang.Boolean.compare(isSetConditions(), other.isSetConditions());
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-      if (isSetConditions()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.conditions, other.conditions);
-        if (lastComparison != 0) {
-          return lastComparison;
-        }
-      }
-      lastComparison = java.lang.Boolean.compare(isSetOrderKeyAttributeName(), other.isSetOrderKeyAttributeName());
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-      if (isSetOrderKeyAttributeName()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.orderKeyAttributeName, other.orderKeyAttributeName);
-        if (lastComparison != 0) {
-          return lastComparison;
-        }
-      }
-      lastComparison = java.lang.Boolean.compare(isSetIsIncreased(), other.isSetIsIncreased());
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-      if (isSetIsIncreased()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.isIncreased, other.isIncreased);
+      if (isSetRequest()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.request, other.request);
         if (lastComparison != 0) {
           return lastComparison;
         }
@@ -5307,43 +4374,15 @@ public class RegionService {
 
     @Override
     public java.lang.String toString() {
-      java.lang.StringBuilder sb = new java.lang.StringBuilder("select_args(");
+      java.lang.StringBuilder sb = new java.lang.StringBuilder("sqlRequest_args(");
       boolean first = true;
 
-      sb.append("tableName:");
-      if (this.tableName == null) {
+      sb.append("request:");
+      if (this.request == null) {
         sb.append("null");
       } else {
-        sb.append(this.tableName);
+        sb.append(this.request);
       }
-      first = false;
-      if (!first) sb.append(", ");
-      sb.append("attributeNames:");
-      if (this.attributeNames == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.attributeNames);
-      }
-      first = false;
-      if (!first) sb.append(", ");
-      sb.append("conditions:");
-      if (this.conditions == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.conditions);
-      }
-      first = false;
-      if (!first) sb.append(", ");
-      sb.append("orderKeyAttributeName:");
-      if (this.orderKeyAttributeName == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.orderKeyAttributeName);
-      }
-      first = false;
-      if (!first) sb.append(", ");
-      sb.append("isIncreased:");
-      sb.append(this.isIncreased);
       first = false;
       sb.append(")");
       return sb.toString();
@@ -5352,9 +4391,6 @@ public class RegionService {
     public void validate() throws org.apache.thrift.TException {
       // check for required fields
       // check for sub-struct validity
-      if (conditions != null) {
-        conditions.validate();
-      }
     }
 
     private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
@@ -5367,23 +4403,21 @@ public class RegionService {
 
     private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, java.lang.ClassNotFoundException {
       try {
-        // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
-        __isset_bitfield = 0;
         read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
       } catch (org.apache.thrift.TException te) {
         throw new java.io.IOException(te);
       }
     }
 
-    private static class select_argsStandardSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
-      public select_argsStandardScheme getScheme() {
-        return new select_argsStandardScheme();
+    private static class sqlRequest_argsStandardSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
+      public sqlRequest_argsStandardScheme getScheme() {
+        return new sqlRequest_argsStandardScheme();
       }
     }
 
-    private static class select_argsStandardScheme extends org.apache.thrift.scheme.StandardScheme<select_args> {
+    private static class sqlRequest_argsStandardScheme extends org.apache.thrift.scheme.StandardScheme<sqlRequest_args> {
 
-      public void read(org.apache.thrift.protocol.TProtocol iprot, select_args struct) throws org.apache.thrift.TException {
+      public void read(org.apache.thrift.protocol.TProtocol iprot, sqlRequest_args struct) throws org.apache.thrift.TException {
         org.apache.thrift.protocol.TField schemeField;
         iprot.readStructBegin();
         while (true)
@@ -5393,53 +4427,10 @@ public class RegionService {
             break;
           }
           switch (schemeField.id) {
-            case 1: // TABLE_NAME
+            case 1: // REQUEST
               if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-                struct.tableName = iprot.readString();
-                struct.setTableNameIsSet(true);
-              } else { 
-                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-              }
-              break;
-            case 2: // ATTRIBUTE_NAMES
-              if (schemeField.type == org.apache.thrift.protocol.TType.LIST) {
-                {
-                  org.apache.thrift.protocol.TList _list56 = iprot.readListBegin();
-                  struct.attributeNames = new java.util.ArrayList<java.lang.String>(_list56.size);
-                  @org.apache.thrift.annotation.Nullable java.lang.String _elem57;
-                  for (int _i58 = 0; _i58 < _list56.size; ++_i58)
-                  {
-                    _elem57 = iprot.readString();
-                    struct.attributeNames.add(_elem57);
-                  }
-                  iprot.readListEnd();
-                }
-                struct.setAttributeNamesIsSet(true);
-              } else { 
-                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-              }
-              break;
-            case 3: // CONDITIONS
-              if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
-                struct.conditions = new ConditionNode();
-                struct.conditions.read(iprot);
-                struct.setConditionsIsSet(true);
-              } else { 
-                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-              }
-              break;
-            case 4: // ORDER_KEY_ATTRIBUTE_NAME
-              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-                struct.orderKeyAttributeName = iprot.readString();
-                struct.setOrderKeyAttributeNameIsSet(true);
-              } else { 
-                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-              }
-              break;
-            case 5: // IS_INCREASED
-              if (schemeField.type == org.apache.thrift.protocol.TType.BOOL) {
-                struct.isIncreased = iprot.readBool();
-                struct.setIsIncreasedIsSet(true);
+                struct.request = iprot.readString();
+                struct.setRequestIsSet(true);
               } else { 
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
@@ -5455,130 +4446,49 @@ public class RegionService {
         struct.validate();
       }
 
-      public void write(org.apache.thrift.protocol.TProtocol oprot, select_args struct) throws org.apache.thrift.TException {
+      public void write(org.apache.thrift.protocol.TProtocol oprot, sqlRequest_args struct) throws org.apache.thrift.TException {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
-        if (struct.tableName != null) {
-          oprot.writeFieldBegin(TABLE_NAME_FIELD_DESC);
-          oprot.writeString(struct.tableName);
+        if (struct.request != null) {
+          oprot.writeFieldBegin(REQUEST_FIELD_DESC);
+          oprot.writeString(struct.request);
           oprot.writeFieldEnd();
         }
-        if (struct.attributeNames != null) {
-          oprot.writeFieldBegin(ATTRIBUTE_NAMES_FIELD_DESC);
-          {
-            oprot.writeListBegin(new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRING, struct.attributeNames.size()));
-            for (java.lang.String _iter59 : struct.attributeNames)
-            {
-              oprot.writeString(_iter59);
-            }
-            oprot.writeListEnd();
-          }
-          oprot.writeFieldEnd();
-        }
-        if (struct.conditions != null) {
-          oprot.writeFieldBegin(CONDITIONS_FIELD_DESC);
-          struct.conditions.write(oprot);
-          oprot.writeFieldEnd();
-        }
-        if (struct.orderKeyAttributeName != null) {
-          oprot.writeFieldBegin(ORDER_KEY_ATTRIBUTE_NAME_FIELD_DESC);
-          oprot.writeString(struct.orderKeyAttributeName);
-          oprot.writeFieldEnd();
-        }
-        oprot.writeFieldBegin(IS_INCREASED_FIELD_DESC);
-        oprot.writeBool(struct.isIncreased);
-        oprot.writeFieldEnd();
         oprot.writeFieldStop();
         oprot.writeStructEnd();
       }
 
     }
 
-    private static class select_argsTupleSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
-      public select_argsTupleScheme getScheme() {
-        return new select_argsTupleScheme();
+    private static class sqlRequest_argsTupleSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
+      public sqlRequest_argsTupleScheme getScheme() {
+        return new sqlRequest_argsTupleScheme();
       }
     }
 
-    private static class select_argsTupleScheme extends org.apache.thrift.scheme.TupleScheme<select_args> {
+    private static class sqlRequest_argsTupleScheme extends org.apache.thrift.scheme.TupleScheme<sqlRequest_args> {
 
       @Override
-      public void write(org.apache.thrift.protocol.TProtocol prot, select_args struct) throws org.apache.thrift.TException {
+      public void write(org.apache.thrift.protocol.TProtocol prot, sqlRequest_args struct) throws org.apache.thrift.TException {
         org.apache.thrift.protocol.TTupleProtocol oprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
         java.util.BitSet optionals = new java.util.BitSet();
-        if (struct.isSetTableName()) {
+        if (struct.isSetRequest()) {
           optionals.set(0);
         }
-        if (struct.isSetAttributeNames()) {
-          optionals.set(1);
-        }
-        if (struct.isSetConditions()) {
-          optionals.set(2);
-        }
-        if (struct.isSetOrderKeyAttributeName()) {
-          optionals.set(3);
-        }
-        if (struct.isSetIsIncreased()) {
-          optionals.set(4);
-        }
-        oprot.writeBitSet(optionals, 5);
-        if (struct.isSetTableName()) {
-          oprot.writeString(struct.tableName);
-        }
-        if (struct.isSetAttributeNames()) {
-          {
-            oprot.writeI32(struct.attributeNames.size());
-            for (java.lang.String _iter60 : struct.attributeNames)
-            {
-              oprot.writeString(_iter60);
-            }
-          }
-        }
-        if (struct.isSetConditions()) {
-          struct.conditions.write(oprot);
-        }
-        if (struct.isSetOrderKeyAttributeName()) {
-          oprot.writeString(struct.orderKeyAttributeName);
-        }
-        if (struct.isSetIsIncreased()) {
-          oprot.writeBool(struct.isIncreased);
+        oprot.writeBitSet(optionals, 1);
+        if (struct.isSetRequest()) {
+          oprot.writeString(struct.request);
         }
       }
 
       @Override
-      public void read(org.apache.thrift.protocol.TProtocol prot, select_args struct) throws org.apache.thrift.TException {
+      public void read(org.apache.thrift.protocol.TProtocol prot, sqlRequest_args struct) throws org.apache.thrift.TException {
         org.apache.thrift.protocol.TTupleProtocol iprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-        java.util.BitSet incoming = iprot.readBitSet(5);
+        java.util.BitSet incoming = iprot.readBitSet(1);
         if (incoming.get(0)) {
-          struct.tableName = iprot.readString();
-          struct.setTableNameIsSet(true);
-        }
-        if (incoming.get(1)) {
-          {
-            org.apache.thrift.protocol.TList _list61 = iprot.readListBegin(org.apache.thrift.protocol.TType.STRING);
-            struct.attributeNames = new java.util.ArrayList<java.lang.String>(_list61.size);
-            @org.apache.thrift.annotation.Nullable java.lang.String _elem62;
-            for (int _i63 = 0; _i63 < _list61.size; ++_i63)
-            {
-              _elem62 = iprot.readString();
-              struct.attributeNames.add(_elem62);
-            }
-          }
-          struct.setAttributeNamesIsSet(true);
-        }
-        if (incoming.get(2)) {
-          struct.conditions = new ConditionNode();
-          struct.conditions.read(iprot);
-          struct.setConditionsIsSet(true);
-        }
-        if (incoming.get(3)) {
-          struct.orderKeyAttributeName = iprot.readString();
-          struct.setOrderKeyAttributeNameIsSet(true);
-        }
-        if (incoming.get(4)) {
-          struct.isIncreased = iprot.readBool();
-          struct.setIsIncreasedIsSet(true);
+          struct.request = iprot.readString();
+          struct.setRequestIsSet(true);
         }
       }
     }
@@ -5588,15 +4498,15 @@ public class RegionService {
     }
   }
 
-  public static class select_result implements org.apache.thrift.TBase<select_result, select_result._Fields>, java.io.Serializable, Cloneable, Comparable<select_result>   {
-    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("select_result");
+  public static class sqlRequest_result implements org.apache.thrift.TBase<sqlRequest_result, sqlRequest_result._Fields>, java.io.Serializable, Cloneable, Comparable<sqlRequest_result>   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("sqlRequest_result");
 
-    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.STRUCT, (short)0);
+    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.STRING, (short)0);
 
-    private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new select_resultStandardSchemeFactory();
-    private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new select_resultTupleSchemeFactory();
+    private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new sqlRequest_resultStandardSchemeFactory();
+    private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new sqlRequest_resultTupleSchemeFactory();
 
-    public @org.apache.thrift.annotation.Nullable Table success; // required
+    public @org.apache.thrift.annotation.Nullable java.lang.String success; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
@@ -5663,16 +4573,16 @@ public class RegionService {
     static {
       java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
       tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, Table.class)));
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
       metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
-      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(select_result.class, metaDataMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(sqlRequest_result.class, metaDataMap);
     }
 
-    public select_result() {
+    public sqlRequest_result() {
     }
 
-    public select_result(
-      Table success)
+    public sqlRequest_result(
+      java.lang.String success)
     {
       this();
       this.success = success;
@@ -5681,14 +4591,14 @@ public class RegionService {
     /**
      * Performs a deep copy on <i>other</i>.
      */
-    public select_result(select_result other) {
+    public sqlRequest_result(sqlRequest_result other) {
       if (other.isSetSuccess()) {
-        this.success = new Table(other.success);
+        this.success = other.success;
       }
     }
 
-    public select_result deepCopy() {
-      return new select_result(this);
+    public sqlRequest_result deepCopy() {
+      return new sqlRequest_result(this);
     }
 
     @Override
@@ -5697,11 +4607,11 @@ public class RegionService {
     }
 
     @org.apache.thrift.annotation.Nullable
-    public Table getSuccess() {
+    public java.lang.String getSuccess() {
       return this.success;
     }
 
-    public select_result setSuccess(@org.apache.thrift.annotation.Nullable Table success) {
+    public sqlRequest_result setSuccess(@org.apache.thrift.annotation.Nullable java.lang.String success) {
       this.success = success;
       return this;
     }
@@ -5727,7 +4637,7 @@ public class RegionService {
         if (value == null) {
           unsetSuccess();
         } else {
-          setSuccess((Table)value);
+          setSuccess((java.lang.String)value);
         }
         break;
 
@@ -5759,12 +4669,12 @@ public class RegionService {
 
     @Override
     public boolean equals(java.lang.Object that) {
-      if (that instanceof select_result)
-        return this.equals((select_result)that);
+      if (that instanceof sqlRequest_result)
+        return this.equals((sqlRequest_result)that);
       return false;
     }
 
-    public boolean equals(select_result that) {
+    public boolean equals(sqlRequest_result that) {
       if (that == null)
         return false;
       if (this == that)
@@ -5794,7 +4704,7 @@ public class RegionService {
     }
 
     @Override
-    public int compareTo(select_result other) {
+    public int compareTo(sqlRequest_result other) {
       if (!getClass().equals(other.getClass())) {
         return getClass().getName().compareTo(other.getClass().getName());
       }
@@ -5829,7 +4739,7 @@ public class RegionService {
 
     @Override
     public java.lang.String toString() {
-      java.lang.StringBuilder sb = new java.lang.StringBuilder("select_result(");
+      java.lang.StringBuilder sb = new java.lang.StringBuilder("sqlRequest_result(");
       boolean first = true;
 
       sb.append("success:");
@@ -5846,9 +4756,6 @@ public class RegionService {
     public void validate() throws org.apache.thrift.TException {
       // check for required fields
       // check for sub-struct validity
-      if (success != null) {
-        success.validate();
-      }
     }
 
     private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
@@ -5867,15 +4774,15 @@ public class RegionService {
       }
     }
 
-    private static class select_resultStandardSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
-      public select_resultStandardScheme getScheme() {
-        return new select_resultStandardScheme();
+    private static class sqlRequest_resultStandardSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
+      public sqlRequest_resultStandardScheme getScheme() {
+        return new sqlRequest_resultStandardScheme();
       }
     }
 
-    private static class select_resultStandardScheme extends org.apache.thrift.scheme.StandardScheme<select_result> {
+    private static class sqlRequest_resultStandardScheme extends org.apache.thrift.scheme.StandardScheme<sqlRequest_result> {
 
-      public void read(org.apache.thrift.protocol.TProtocol iprot, select_result struct) throws org.apache.thrift.TException {
+      public void read(org.apache.thrift.protocol.TProtocol iprot, sqlRequest_result struct) throws org.apache.thrift.TException {
         org.apache.thrift.protocol.TField schemeField;
         iprot.readStructBegin();
         while (true)
@@ -5886,9 +4793,8 @@ public class RegionService {
           }
           switch (schemeField.id) {
             case 0: // SUCCESS
-              if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
-                struct.success = new Table();
-                struct.success.read(iprot);
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+                struct.success = iprot.readString();
                 struct.setSuccessIsSet(true);
               } else { 
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
@@ -5905,13 +4811,13 @@ public class RegionService {
         struct.validate();
       }
 
-      public void write(org.apache.thrift.protocol.TProtocol oprot, select_result struct) throws org.apache.thrift.TException {
+      public void write(org.apache.thrift.protocol.TProtocol oprot, sqlRequest_result struct) throws org.apache.thrift.TException {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
         if (struct.success != null) {
           oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
-          struct.success.write(oprot);
+          oprot.writeString(struct.success);
           oprot.writeFieldEnd();
         }
         oprot.writeFieldStop();
@@ -5920,16 +4826,16 @@ public class RegionService {
 
     }
 
-    private static class select_resultTupleSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
-      public select_resultTupleScheme getScheme() {
-        return new select_resultTupleScheme();
+    private static class sqlRequest_resultTupleSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
+      public sqlRequest_resultTupleScheme getScheme() {
+        return new sqlRequest_resultTupleScheme();
       }
     }
 
-    private static class select_resultTupleScheme extends org.apache.thrift.scheme.TupleScheme<select_result> {
+    private static class sqlRequest_resultTupleScheme extends org.apache.thrift.scheme.TupleScheme<sqlRequest_result> {
 
       @Override
-      public void write(org.apache.thrift.protocol.TProtocol prot, select_result struct) throws org.apache.thrift.TException {
+      public void write(org.apache.thrift.protocol.TProtocol prot, sqlRequest_result struct) throws org.apache.thrift.TException {
         org.apache.thrift.protocol.TTupleProtocol oprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
         java.util.BitSet optionals = new java.util.BitSet();
         if (struct.isSetSuccess()) {
@@ -5937,3195 +4843,16 @@ public class RegionService {
         }
         oprot.writeBitSet(optionals, 1);
         if (struct.isSetSuccess()) {
-          struct.success.write(oprot);
+          oprot.writeString(struct.success);
         }
       }
 
       @Override
-      public void read(org.apache.thrift.protocol.TProtocol prot, select_result struct) throws org.apache.thrift.TException {
+      public void read(org.apache.thrift.protocol.TProtocol prot, sqlRequest_result struct) throws org.apache.thrift.TException {
         org.apache.thrift.protocol.TTupleProtocol iprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
         java.util.BitSet incoming = iprot.readBitSet(1);
         if (incoming.get(0)) {
-          struct.success = new Table();
-          struct.success.read(iprot);
-          struct.setSuccessIsSet(true);
-        }
-      }
-    }
-
-    private static <S extends org.apache.thrift.scheme.IScheme> S scheme(org.apache.thrift.protocol.TProtocol proto) {
-      return (org.apache.thrift.scheme.StandardScheme.class.equals(proto.getScheme()) ? STANDARD_SCHEME_FACTORY : TUPLE_SCHEME_FACTORY).getScheme();
-    }
-  }
-
-  public static class insert_args implements org.apache.thrift.TBase<insert_args, insert_args._Fields>, java.io.Serializable, Cloneable, Comparable<insert_args>   {
-    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("insert_args");
-
-    private static final org.apache.thrift.protocol.TField TABLE_NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("tableName", org.apache.thrift.protocol.TType.STRING, (short)1);
-    private static final org.apache.thrift.protocol.TField TUPLE_FIELD_DESC = new org.apache.thrift.protocol.TField("tuple", org.apache.thrift.protocol.TType.LIST, (short)2);
-
-    private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new insert_argsStandardSchemeFactory();
-    private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new insert_argsTupleSchemeFactory();
-
-    public @org.apache.thrift.annotation.Nullable java.lang.String tableName; // required
-    public @org.apache.thrift.annotation.Nullable java.util.List<java.lang.String> tuple; // required
-
-    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-      TABLE_NAME((short)1, "tableName"),
-      TUPLE((short)2, "tuple");
-
-      private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
-
-      static {
-        for (_Fields field : java.util.EnumSet.allOf(_Fields.class)) {
-          byName.put(field.getFieldName(), field);
-        }
-      }
-
-      /**
-       * Find the _Fields constant that matches fieldId, or null if its not found.
-       */
-      @org.apache.thrift.annotation.Nullable
-      public static _Fields findByThriftId(int fieldId) {
-        switch(fieldId) {
-          case 1: // TABLE_NAME
-            return TABLE_NAME;
-          case 2: // TUPLE
-            return TUPLE;
-          default:
-            return null;
-        }
-      }
-
-      /**
-       * Find the _Fields constant that matches fieldId, throwing an exception
-       * if it is not found.
-       */
-      public static _Fields findByThriftIdOrThrow(int fieldId) {
-        _Fields fields = findByThriftId(fieldId);
-        if (fields == null) throw new java.lang.IllegalArgumentException("Field " + fieldId + " doesn't exist!");
-        return fields;
-      }
-
-      /**
-       * Find the _Fields constant that matches name, or null if its not found.
-       */
-      @org.apache.thrift.annotation.Nullable
-      public static _Fields findByName(java.lang.String name) {
-        return byName.get(name);
-      }
-
-      private final short _thriftId;
-      private final java.lang.String _fieldName;
-
-      _Fields(short thriftId, java.lang.String fieldName) {
-        _thriftId = thriftId;
-        _fieldName = fieldName;
-      }
-
-      public short getThriftFieldId() {
-        return _thriftId;
-      }
-
-      public java.lang.String getFieldName() {
-        return _fieldName;
-      }
-    }
-
-    // isset id assignments
-    public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
-    static {
-      java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.TABLE_NAME, new org.apache.thrift.meta_data.FieldMetaData("tableName", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-      tmpMap.put(_Fields.TUPLE, new org.apache.thrift.meta_data.FieldMetaData("tuple", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.ListMetaData(org.apache.thrift.protocol.TType.LIST, 
-              new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING))));
-      metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
-      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(insert_args.class, metaDataMap);
-    }
-
-    public insert_args() {
-    }
-
-    public insert_args(
-      java.lang.String tableName,
-      java.util.List<java.lang.String> tuple)
-    {
-      this();
-      this.tableName = tableName;
-      this.tuple = tuple;
-    }
-
-    /**
-     * Performs a deep copy on <i>other</i>.
-     */
-    public insert_args(insert_args other) {
-      if (other.isSetTableName()) {
-        this.tableName = other.tableName;
-      }
-      if (other.isSetTuple()) {
-        java.util.List<java.lang.String> __this__tuple = new java.util.ArrayList<java.lang.String>(other.tuple);
-        this.tuple = __this__tuple;
-      }
-    }
-
-    public insert_args deepCopy() {
-      return new insert_args(this);
-    }
-
-    @Override
-    public void clear() {
-      this.tableName = null;
-      this.tuple = null;
-    }
-
-    @org.apache.thrift.annotation.Nullable
-    public java.lang.String getTableName() {
-      return this.tableName;
-    }
-
-    public insert_args setTableName(@org.apache.thrift.annotation.Nullable java.lang.String tableName) {
-      this.tableName = tableName;
-      return this;
-    }
-
-    public void unsetTableName() {
-      this.tableName = null;
-    }
-
-    /** Returns true if field tableName is set (has been assigned a value) and false otherwise */
-    public boolean isSetTableName() {
-      return this.tableName != null;
-    }
-
-    public void setTableNameIsSet(boolean value) {
-      if (!value) {
-        this.tableName = null;
-      }
-    }
-
-    public int getTupleSize() {
-      return (this.tuple == null) ? 0 : this.tuple.size();
-    }
-
-    @org.apache.thrift.annotation.Nullable
-    public java.util.Iterator<java.lang.String> getTupleIterator() {
-      return (this.tuple == null) ? null : this.tuple.iterator();
-    }
-
-    public void addToTuple(java.lang.String elem) {
-      if (this.tuple == null) {
-        this.tuple = new java.util.ArrayList<java.lang.String>();
-      }
-      this.tuple.add(elem);
-    }
-
-    @org.apache.thrift.annotation.Nullable
-    public java.util.List<java.lang.String> getTuple() {
-      return this.tuple;
-    }
-
-    public insert_args setTuple(@org.apache.thrift.annotation.Nullable java.util.List<java.lang.String> tuple) {
-      this.tuple = tuple;
-      return this;
-    }
-
-    public void unsetTuple() {
-      this.tuple = null;
-    }
-
-    /** Returns true if field tuple is set (has been assigned a value) and false otherwise */
-    public boolean isSetTuple() {
-      return this.tuple != null;
-    }
-
-    public void setTupleIsSet(boolean value) {
-      if (!value) {
-        this.tuple = null;
-      }
-    }
-
-    public void setFieldValue(_Fields field, @org.apache.thrift.annotation.Nullable java.lang.Object value) {
-      switch (field) {
-      case TABLE_NAME:
-        if (value == null) {
-          unsetTableName();
-        } else {
-          setTableName((java.lang.String)value);
-        }
-        break;
-
-      case TUPLE:
-        if (value == null) {
-          unsetTuple();
-        } else {
-          setTuple((java.util.List<java.lang.String>)value);
-        }
-        break;
-
-      }
-    }
-
-    @org.apache.thrift.annotation.Nullable
-    public java.lang.Object getFieldValue(_Fields field) {
-      switch (field) {
-      case TABLE_NAME:
-        return getTableName();
-
-      case TUPLE:
-        return getTuple();
-
-      }
-      throw new java.lang.IllegalStateException();
-    }
-
-    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
-    public boolean isSet(_Fields field) {
-      if (field == null) {
-        throw new java.lang.IllegalArgumentException();
-      }
-
-      switch (field) {
-      case TABLE_NAME:
-        return isSetTableName();
-      case TUPLE:
-        return isSetTuple();
-      }
-      throw new java.lang.IllegalStateException();
-    }
-
-    @Override
-    public boolean equals(java.lang.Object that) {
-      if (that instanceof insert_args)
-        return this.equals((insert_args)that);
-      return false;
-    }
-
-    public boolean equals(insert_args that) {
-      if (that == null)
-        return false;
-      if (this == that)
-        return true;
-
-      boolean this_present_tableName = true && this.isSetTableName();
-      boolean that_present_tableName = true && that.isSetTableName();
-      if (this_present_tableName || that_present_tableName) {
-        if (!(this_present_tableName && that_present_tableName))
-          return false;
-        if (!this.tableName.equals(that.tableName))
-          return false;
-      }
-
-      boolean this_present_tuple = true && this.isSetTuple();
-      boolean that_present_tuple = true && that.isSetTuple();
-      if (this_present_tuple || that_present_tuple) {
-        if (!(this_present_tuple && that_present_tuple))
-          return false;
-        if (!this.tuple.equals(that.tuple))
-          return false;
-      }
-
-      return true;
-    }
-
-    @Override
-    public int hashCode() {
-      int hashCode = 1;
-
-      hashCode = hashCode * 8191 + ((isSetTableName()) ? 131071 : 524287);
-      if (isSetTableName())
-        hashCode = hashCode * 8191 + tableName.hashCode();
-
-      hashCode = hashCode * 8191 + ((isSetTuple()) ? 131071 : 524287);
-      if (isSetTuple())
-        hashCode = hashCode * 8191 + tuple.hashCode();
-
-      return hashCode;
-    }
-
-    @Override
-    public int compareTo(insert_args other) {
-      if (!getClass().equals(other.getClass())) {
-        return getClass().getName().compareTo(other.getClass().getName());
-      }
-
-      int lastComparison = 0;
-
-      lastComparison = java.lang.Boolean.compare(isSetTableName(), other.isSetTableName());
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-      if (isSetTableName()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.tableName, other.tableName);
-        if (lastComparison != 0) {
-          return lastComparison;
-        }
-      }
-      lastComparison = java.lang.Boolean.compare(isSetTuple(), other.isSetTuple());
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-      if (isSetTuple()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.tuple, other.tuple);
-        if (lastComparison != 0) {
-          return lastComparison;
-        }
-      }
-      return 0;
-    }
-
-    @org.apache.thrift.annotation.Nullable
-    public _Fields fieldForId(int fieldId) {
-      return _Fields.findByThriftId(fieldId);
-    }
-
-    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
-      scheme(iprot).read(iprot, this);
-    }
-
-    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
-      scheme(oprot).write(oprot, this);
-    }
-
-    @Override
-    public java.lang.String toString() {
-      java.lang.StringBuilder sb = new java.lang.StringBuilder("insert_args(");
-      boolean first = true;
-
-      sb.append("tableName:");
-      if (this.tableName == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.tableName);
-      }
-      first = false;
-      if (!first) sb.append(", ");
-      sb.append("tuple:");
-      if (this.tuple == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.tuple);
-      }
-      first = false;
-      sb.append(")");
-      return sb.toString();
-    }
-
-    public void validate() throws org.apache.thrift.TException {
-      // check for required fields
-      // check for sub-struct validity
-    }
-
-    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
-      try {
-        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
-      } catch (org.apache.thrift.TException te) {
-        throw new java.io.IOException(te);
-      }
-    }
-
-    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, java.lang.ClassNotFoundException {
-      try {
-        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
-      } catch (org.apache.thrift.TException te) {
-        throw new java.io.IOException(te);
-      }
-    }
-
-    private static class insert_argsStandardSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
-      public insert_argsStandardScheme getScheme() {
-        return new insert_argsStandardScheme();
-      }
-    }
-
-    private static class insert_argsStandardScheme extends org.apache.thrift.scheme.StandardScheme<insert_args> {
-
-      public void read(org.apache.thrift.protocol.TProtocol iprot, insert_args struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TField schemeField;
-        iprot.readStructBegin();
-        while (true)
-        {
-          schemeField = iprot.readFieldBegin();
-          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
-            break;
-          }
-          switch (schemeField.id) {
-            case 1: // TABLE_NAME
-              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-                struct.tableName = iprot.readString();
-                struct.setTableNameIsSet(true);
-              } else { 
-                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-              }
-              break;
-            case 2: // TUPLE
-              if (schemeField.type == org.apache.thrift.protocol.TType.LIST) {
-                {
-                  org.apache.thrift.protocol.TList _list64 = iprot.readListBegin();
-                  struct.tuple = new java.util.ArrayList<java.lang.String>(_list64.size);
-                  @org.apache.thrift.annotation.Nullable java.lang.String _elem65;
-                  for (int _i66 = 0; _i66 < _list64.size; ++_i66)
-                  {
-                    _elem65 = iprot.readString();
-                    struct.tuple.add(_elem65);
-                  }
-                  iprot.readListEnd();
-                }
-                struct.setTupleIsSet(true);
-              } else { 
-                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-              }
-              break;
-            default:
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-          }
-          iprot.readFieldEnd();
-        }
-        iprot.readStructEnd();
-
-        // check for required fields of primitive type, which can't be checked in the validate method
-        struct.validate();
-      }
-
-      public void write(org.apache.thrift.protocol.TProtocol oprot, insert_args struct) throws org.apache.thrift.TException {
-        struct.validate();
-
-        oprot.writeStructBegin(STRUCT_DESC);
-        if (struct.tableName != null) {
-          oprot.writeFieldBegin(TABLE_NAME_FIELD_DESC);
-          oprot.writeString(struct.tableName);
-          oprot.writeFieldEnd();
-        }
-        if (struct.tuple != null) {
-          oprot.writeFieldBegin(TUPLE_FIELD_DESC);
-          {
-            oprot.writeListBegin(new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRING, struct.tuple.size()));
-            for (java.lang.String _iter67 : struct.tuple)
-            {
-              oprot.writeString(_iter67);
-            }
-            oprot.writeListEnd();
-          }
-          oprot.writeFieldEnd();
-        }
-        oprot.writeFieldStop();
-        oprot.writeStructEnd();
-      }
-
-    }
-
-    private static class insert_argsTupleSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
-      public insert_argsTupleScheme getScheme() {
-        return new insert_argsTupleScheme();
-      }
-    }
-
-    private static class insert_argsTupleScheme extends org.apache.thrift.scheme.TupleScheme<insert_args> {
-
-      @Override
-      public void write(org.apache.thrift.protocol.TProtocol prot, insert_args struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TTupleProtocol oprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-        java.util.BitSet optionals = new java.util.BitSet();
-        if (struct.isSetTableName()) {
-          optionals.set(0);
-        }
-        if (struct.isSetTuple()) {
-          optionals.set(1);
-        }
-        oprot.writeBitSet(optionals, 2);
-        if (struct.isSetTableName()) {
-          oprot.writeString(struct.tableName);
-        }
-        if (struct.isSetTuple()) {
-          {
-            oprot.writeI32(struct.tuple.size());
-            for (java.lang.String _iter68 : struct.tuple)
-            {
-              oprot.writeString(_iter68);
-            }
-          }
-        }
-      }
-
-      @Override
-      public void read(org.apache.thrift.protocol.TProtocol prot, insert_args struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TTupleProtocol iprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-        java.util.BitSet incoming = iprot.readBitSet(2);
-        if (incoming.get(0)) {
-          struct.tableName = iprot.readString();
-          struct.setTableNameIsSet(true);
-        }
-        if (incoming.get(1)) {
-          {
-            org.apache.thrift.protocol.TList _list69 = iprot.readListBegin(org.apache.thrift.protocol.TType.STRING);
-            struct.tuple = new java.util.ArrayList<java.lang.String>(_list69.size);
-            @org.apache.thrift.annotation.Nullable java.lang.String _elem70;
-            for (int _i71 = 0; _i71 < _list69.size; ++_i71)
-            {
-              _elem70 = iprot.readString();
-              struct.tuple.add(_elem70);
-            }
-          }
-          struct.setTupleIsSet(true);
-        }
-      }
-    }
-
-    private static <S extends org.apache.thrift.scheme.IScheme> S scheme(org.apache.thrift.protocol.TProtocol proto) {
-      return (org.apache.thrift.scheme.StandardScheme.class.equals(proto.getScheme()) ? STANDARD_SCHEME_FACTORY : TUPLE_SCHEME_FACTORY).getScheme();
-    }
-  }
-
-  public static class insert_result implements org.apache.thrift.TBase<insert_result, insert_result._Fields>, java.io.Serializable, Cloneable, Comparable<insert_result>   {
-    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("insert_result");
-
-    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.BOOL, (short)0);
-
-    private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new insert_resultStandardSchemeFactory();
-    private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new insert_resultTupleSchemeFactory();
-
-    public boolean success; // required
-
-    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-      SUCCESS((short)0, "success");
-
-      private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
-
-      static {
-        for (_Fields field : java.util.EnumSet.allOf(_Fields.class)) {
-          byName.put(field.getFieldName(), field);
-        }
-      }
-
-      /**
-       * Find the _Fields constant that matches fieldId, or null if its not found.
-       */
-      @org.apache.thrift.annotation.Nullable
-      public static _Fields findByThriftId(int fieldId) {
-        switch(fieldId) {
-          case 0: // SUCCESS
-            return SUCCESS;
-          default:
-            return null;
-        }
-      }
-
-      /**
-       * Find the _Fields constant that matches fieldId, throwing an exception
-       * if it is not found.
-       */
-      public static _Fields findByThriftIdOrThrow(int fieldId) {
-        _Fields fields = findByThriftId(fieldId);
-        if (fields == null) throw new java.lang.IllegalArgumentException("Field " + fieldId + " doesn't exist!");
-        return fields;
-      }
-
-      /**
-       * Find the _Fields constant that matches name, or null if its not found.
-       */
-      @org.apache.thrift.annotation.Nullable
-      public static _Fields findByName(java.lang.String name) {
-        return byName.get(name);
-      }
-
-      private final short _thriftId;
-      private final java.lang.String _fieldName;
-
-      _Fields(short thriftId, java.lang.String fieldName) {
-        _thriftId = thriftId;
-        _fieldName = fieldName;
-      }
-
-      public short getThriftFieldId() {
-        return _thriftId;
-      }
-
-      public java.lang.String getFieldName() {
-        return _fieldName;
-      }
-    }
-
-    // isset id assignments
-    private static final int __SUCCESS_ISSET_ID = 0;
-    private byte __isset_bitfield = 0;
-    public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
-    static {
-      java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.BOOL)));
-      metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
-      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(insert_result.class, metaDataMap);
-    }
-
-    public insert_result() {
-    }
-
-    public insert_result(
-      boolean success)
-    {
-      this();
-      this.success = success;
-      setSuccessIsSet(true);
-    }
-
-    /**
-     * Performs a deep copy on <i>other</i>.
-     */
-    public insert_result(insert_result other) {
-      __isset_bitfield = other.__isset_bitfield;
-      this.success = other.success;
-    }
-
-    public insert_result deepCopy() {
-      return new insert_result(this);
-    }
-
-    @Override
-    public void clear() {
-      setSuccessIsSet(false);
-      this.success = false;
-    }
-
-    public boolean isSuccess() {
-      return this.success;
-    }
-
-    public insert_result setSuccess(boolean success) {
-      this.success = success;
-      setSuccessIsSet(true);
-      return this;
-    }
-
-    public void unsetSuccess() {
-      __isset_bitfield = org.apache.thrift.EncodingUtils.clearBit(__isset_bitfield, __SUCCESS_ISSET_ID);
-    }
-
-    /** Returns true if field success is set (has been assigned a value) and false otherwise */
-    public boolean isSetSuccess() {
-      return org.apache.thrift.EncodingUtils.testBit(__isset_bitfield, __SUCCESS_ISSET_ID);
-    }
-
-    public void setSuccessIsSet(boolean value) {
-      __isset_bitfield = org.apache.thrift.EncodingUtils.setBit(__isset_bitfield, __SUCCESS_ISSET_ID, value);
-    }
-
-    public void setFieldValue(_Fields field, @org.apache.thrift.annotation.Nullable java.lang.Object value) {
-      switch (field) {
-      case SUCCESS:
-        if (value == null) {
-          unsetSuccess();
-        } else {
-          setSuccess((java.lang.Boolean)value);
-        }
-        break;
-
-      }
-    }
-
-    @org.apache.thrift.annotation.Nullable
-    public java.lang.Object getFieldValue(_Fields field) {
-      switch (field) {
-      case SUCCESS:
-        return isSuccess();
-
-      }
-      throw new java.lang.IllegalStateException();
-    }
-
-    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
-    public boolean isSet(_Fields field) {
-      if (field == null) {
-        throw new java.lang.IllegalArgumentException();
-      }
-
-      switch (field) {
-      case SUCCESS:
-        return isSetSuccess();
-      }
-      throw new java.lang.IllegalStateException();
-    }
-
-    @Override
-    public boolean equals(java.lang.Object that) {
-      if (that instanceof insert_result)
-        return this.equals((insert_result)that);
-      return false;
-    }
-
-    public boolean equals(insert_result that) {
-      if (that == null)
-        return false;
-      if (this == that)
-        return true;
-
-      boolean this_present_success = true;
-      boolean that_present_success = true;
-      if (this_present_success || that_present_success) {
-        if (!(this_present_success && that_present_success))
-          return false;
-        if (this.success != that.success)
-          return false;
-      }
-
-      return true;
-    }
-
-    @Override
-    public int hashCode() {
-      int hashCode = 1;
-
-      hashCode = hashCode * 8191 + ((success) ? 131071 : 524287);
-
-      return hashCode;
-    }
-
-    @Override
-    public int compareTo(insert_result other) {
-      if (!getClass().equals(other.getClass())) {
-        return getClass().getName().compareTo(other.getClass().getName());
-      }
-
-      int lastComparison = 0;
-
-      lastComparison = java.lang.Boolean.compare(isSetSuccess(), other.isSetSuccess());
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-      if (isSetSuccess()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.success, other.success);
-        if (lastComparison != 0) {
-          return lastComparison;
-        }
-      }
-      return 0;
-    }
-
-    @org.apache.thrift.annotation.Nullable
-    public _Fields fieldForId(int fieldId) {
-      return _Fields.findByThriftId(fieldId);
-    }
-
-    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
-      scheme(iprot).read(iprot, this);
-    }
-
-    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
-      scheme(oprot).write(oprot, this);
-      }
-
-    @Override
-    public java.lang.String toString() {
-      java.lang.StringBuilder sb = new java.lang.StringBuilder("insert_result(");
-      boolean first = true;
-
-      sb.append("success:");
-      sb.append(this.success);
-      first = false;
-      sb.append(")");
-      return sb.toString();
-    }
-
-    public void validate() throws org.apache.thrift.TException {
-      // check for required fields
-      // check for sub-struct validity
-    }
-
-    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
-      try {
-        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
-      } catch (org.apache.thrift.TException te) {
-        throw new java.io.IOException(te);
-      }
-    }
-
-    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, java.lang.ClassNotFoundException {
-      try {
-        // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
-        __isset_bitfield = 0;
-        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
-      } catch (org.apache.thrift.TException te) {
-        throw new java.io.IOException(te);
-      }
-    }
-
-    private static class insert_resultStandardSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
-      public insert_resultStandardScheme getScheme() {
-        return new insert_resultStandardScheme();
-      }
-    }
-
-    private static class insert_resultStandardScheme extends org.apache.thrift.scheme.StandardScheme<insert_result> {
-
-      public void read(org.apache.thrift.protocol.TProtocol iprot, insert_result struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TField schemeField;
-        iprot.readStructBegin();
-        while (true)
-        {
-          schemeField = iprot.readFieldBegin();
-          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
-            break;
-          }
-          switch (schemeField.id) {
-            case 0: // SUCCESS
-              if (schemeField.type == org.apache.thrift.protocol.TType.BOOL) {
-                struct.success = iprot.readBool();
-                struct.setSuccessIsSet(true);
-              } else { 
-                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-              }
-              break;
-            default:
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-          }
-          iprot.readFieldEnd();
-        }
-        iprot.readStructEnd();
-
-        // check for required fields of primitive type, which can't be checked in the validate method
-        struct.validate();
-      }
-
-      public void write(org.apache.thrift.protocol.TProtocol oprot, insert_result struct) throws org.apache.thrift.TException {
-        struct.validate();
-
-        oprot.writeStructBegin(STRUCT_DESC);
-        if (struct.isSetSuccess()) {
-          oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
-          oprot.writeBool(struct.success);
-          oprot.writeFieldEnd();
-        }
-        oprot.writeFieldStop();
-        oprot.writeStructEnd();
-      }
-
-    }
-
-    private static class insert_resultTupleSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
-      public insert_resultTupleScheme getScheme() {
-        return new insert_resultTupleScheme();
-      }
-    }
-
-    private static class insert_resultTupleScheme extends org.apache.thrift.scheme.TupleScheme<insert_result> {
-
-      @Override
-      public void write(org.apache.thrift.protocol.TProtocol prot, insert_result struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TTupleProtocol oprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-        java.util.BitSet optionals = new java.util.BitSet();
-        if (struct.isSetSuccess()) {
-          optionals.set(0);
-        }
-        oprot.writeBitSet(optionals, 1);
-        if (struct.isSetSuccess()) {
-          oprot.writeBool(struct.success);
-        }
-      }
-
-      @Override
-      public void read(org.apache.thrift.protocol.TProtocol prot, insert_result struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TTupleProtocol iprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-        java.util.BitSet incoming = iprot.readBitSet(1);
-        if (incoming.get(0)) {
-          struct.success = iprot.readBool();
-          struct.setSuccessIsSet(true);
-        }
-      }
-    }
-
-    private static <S extends org.apache.thrift.scheme.IScheme> S scheme(org.apache.thrift.protocol.TProtocol proto) {
-      return (org.apache.thrift.scheme.StandardScheme.class.equals(proto.getScheme()) ? STANDARD_SCHEME_FACTORY : TUPLE_SCHEME_FACTORY).getScheme();
-    }
-  }
-
-  public static class deleteRecords_args implements org.apache.thrift.TBase<deleteRecords_args, deleteRecords_args._Fields>, java.io.Serializable, Cloneable, Comparable<deleteRecords_args>   {
-    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("deleteRecords_args");
-
-    private static final org.apache.thrift.protocol.TField TABLE_NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("tableName", org.apache.thrift.protocol.TType.STRING, (short)1);
-    private static final org.apache.thrift.protocol.TField CONDITIONS_FIELD_DESC = new org.apache.thrift.protocol.TField("conditions", org.apache.thrift.protocol.TType.STRUCT, (short)2);
-
-    private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new deleteRecords_argsStandardSchemeFactory();
-    private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new deleteRecords_argsTupleSchemeFactory();
-
-    public @org.apache.thrift.annotation.Nullable java.lang.String tableName; // required
-    public @org.apache.thrift.annotation.Nullable ConditionNode conditions; // required
-
-    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-      TABLE_NAME((short)1, "tableName"),
-      CONDITIONS((short)2, "conditions");
-
-      private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
-
-      static {
-        for (_Fields field : java.util.EnumSet.allOf(_Fields.class)) {
-          byName.put(field.getFieldName(), field);
-        }
-      }
-
-      /**
-       * Find the _Fields constant that matches fieldId, or null if its not found.
-       */
-      @org.apache.thrift.annotation.Nullable
-      public static _Fields findByThriftId(int fieldId) {
-        switch(fieldId) {
-          case 1: // TABLE_NAME
-            return TABLE_NAME;
-          case 2: // CONDITIONS
-            return CONDITIONS;
-          default:
-            return null;
-        }
-      }
-
-      /**
-       * Find the _Fields constant that matches fieldId, throwing an exception
-       * if it is not found.
-       */
-      public static _Fields findByThriftIdOrThrow(int fieldId) {
-        _Fields fields = findByThriftId(fieldId);
-        if (fields == null) throw new java.lang.IllegalArgumentException("Field " + fieldId + " doesn't exist!");
-        return fields;
-      }
-
-      /**
-       * Find the _Fields constant that matches name, or null if its not found.
-       */
-      @org.apache.thrift.annotation.Nullable
-      public static _Fields findByName(java.lang.String name) {
-        return byName.get(name);
-      }
-
-      private final short _thriftId;
-      private final java.lang.String _fieldName;
-
-      _Fields(short thriftId, java.lang.String fieldName) {
-        _thriftId = thriftId;
-        _fieldName = fieldName;
-      }
-
-      public short getThriftFieldId() {
-        return _thriftId;
-      }
-
-      public java.lang.String getFieldName() {
-        return _fieldName;
-      }
-    }
-
-    // isset id assignments
-    public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
-    static {
-      java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.TABLE_NAME, new org.apache.thrift.meta_data.FieldMetaData("tableName", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-      tmpMap.put(_Fields.CONDITIONS, new org.apache.thrift.meta_data.FieldMetaData("conditions", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, ConditionNode.class)));
-      metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
-      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(deleteRecords_args.class, metaDataMap);
-    }
-
-    public deleteRecords_args() {
-    }
-
-    public deleteRecords_args(
-      java.lang.String tableName,
-      ConditionNode conditions)
-    {
-      this();
-      this.tableName = tableName;
-      this.conditions = conditions;
-    }
-
-    /**
-     * Performs a deep copy on <i>other</i>.
-     */
-    public deleteRecords_args(deleteRecords_args other) {
-      if (other.isSetTableName()) {
-        this.tableName = other.tableName;
-      }
-      if (other.isSetConditions()) {
-        this.conditions = new ConditionNode(other.conditions);
-      }
-    }
-
-    public deleteRecords_args deepCopy() {
-      return new deleteRecords_args(this);
-    }
-
-    @Override
-    public void clear() {
-      this.tableName = null;
-      this.conditions = null;
-    }
-
-    @org.apache.thrift.annotation.Nullable
-    public java.lang.String getTableName() {
-      return this.tableName;
-    }
-
-    public deleteRecords_args setTableName(@org.apache.thrift.annotation.Nullable java.lang.String tableName) {
-      this.tableName = tableName;
-      return this;
-    }
-
-    public void unsetTableName() {
-      this.tableName = null;
-    }
-
-    /** Returns true if field tableName is set (has been assigned a value) and false otherwise */
-    public boolean isSetTableName() {
-      return this.tableName != null;
-    }
-
-    public void setTableNameIsSet(boolean value) {
-      if (!value) {
-        this.tableName = null;
-      }
-    }
-
-    @org.apache.thrift.annotation.Nullable
-    public ConditionNode getConditions() {
-      return this.conditions;
-    }
-
-    public deleteRecords_args setConditions(@org.apache.thrift.annotation.Nullable ConditionNode conditions) {
-      this.conditions = conditions;
-      return this;
-    }
-
-    public void unsetConditions() {
-      this.conditions = null;
-    }
-
-    /** Returns true if field conditions is set (has been assigned a value) and false otherwise */
-    public boolean isSetConditions() {
-      return this.conditions != null;
-    }
-
-    public void setConditionsIsSet(boolean value) {
-      if (!value) {
-        this.conditions = null;
-      }
-    }
-
-    public void setFieldValue(_Fields field, @org.apache.thrift.annotation.Nullable java.lang.Object value) {
-      switch (field) {
-      case TABLE_NAME:
-        if (value == null) {
-          unsetTableName();
-        } else {
-          setTableName((java.lang.String)value);
-        }
-        break;
-
-      case CONDITIONS:
-        if (value == null) {
-          unsetConditions();
-        } else {
-          setConditions((ConditionNode)value);
-        }
-        break;
-
-      }
-    }
-
-    @org.apache.thrift.annotation.Nullable
-    public java.lang.Object getFieldValue(_Fields field) {
-      switch (field) {
-      case TABLE_NAME:
-        return getTableName();
-
-      case CONDITIONS:
-        return getConditions();
-
-      }
-      throw new java.lang.IllegalStateException();
-    }
-
-    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
-    public boolean isSet(_Fields field) {
-      if (field == null) {
-        throw new java.lang.IllegalArgumentException();
-      }
-
-      switch (field) {
-      case TABLE_NAME:
-        return isSetTableName();
-      case CONDITIONS:
-        return isSetConditions();
-      }
-      throw new java.lang.IllegalStateException();
-    }
-
-    @Override
-    public boolean equals(java.lang.Object that) {
-      if (that instanceof deleteRecords_args)
-        return this.equals((deleteRecords_args)that);
-      return false;
-    }
-
-    public boolean equals(deleteRecords_args that) {
-      if (that == null)
-        return false;
-      if (this == that)
-        return true;
-
-      boolean this_present_tableName = true && this.isSetTableName();
-      boolean that_present_tableName = true && that.isSetTableName();
-      if (this_present_tableName || that_present_tableName) {
-        if (!(this_present_tableName && that_present_tableName))
-          return false;
-        if (!this.tableName.equals(that.tableName))
-          return false;
-      }
-
-      boolean this_present_conditions = true && this.isSetConditions();
-      boolean that_present_conditions = true && that.isSetConditions();
-      if (this_present_conditions || that_present_conditions) {
-        if (!(this_present_conditions && that_present_conditions))
-          return false;
-        if (!this.conditions.equals(that.conditions))
-          return false;
-      }
-
-      return true;
-    }
-
-    @Override
-    public int hashCode() {
-      int hashCode = 1;
-
-      hashCode = hashCode * 8191 + ((isSetTableName()) ? 131071 : 524287);
-      if (isSetTableName())
-        hashCode = hashCode * 8191 + tableName.hashCode();
-
-      hashCode = hashCode * 8191 + ((isSetConditions()) ? 131071 : 524287);
-      if (isSetConditions())
-        hashCode = hashCode * 8191 + conditions.hashCode();
-
-      return hashCode;
-    }
-
-    @Override
-    public int compareTo(deleteRecords_args other) {
-      if (!getClass().equals(other.getClass())) {
-        return getClass().getName().compareTo(other.getClass().getName());
-      }
-
-      int lastComparison = 0;
-
-      lastComparison = java.lang.Boolean.compare(isSetTableName(), other.isSetTableName());
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-      if (isSetTableName()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.tableName, other.tableName);
-        if (lastComparison != 0) {
-          return lastComparison;
-        }
-      }
-      lastComparison = java.lang.Boolean.compare(isSetConditions(), other.isSetConditions());
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-      if (isSetConditions()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.conditions, other.conditions);
-        if (lastComparison != 0) {
-          return lastComparison;
-        }
-      }
-      return 0;
-    }
-
-    @org.apache.thrift.annotation.Nullable
-    public _Fields fieldForId(int fieldId) {
-      return _Fields.findByThriftId(fieldId);
-    }
-
-    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
-      scheme(iprot).read(iprot, this);
-    }
-
-    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
-      scheme(oprot).write(oprot, this);
-    }
-
-    @Override
-    public java.lang.String toString() {
-      java.lang.StringBuilder sb = new java.lang.StringBuilder("deleteRecords_args(");
-      boolean first = true;
-
-      sb.append("tableName:");
-      if (this.tableName == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.tableName);
-      }
-      first = false;
-      if (!first) sb.append(", ");
-      sb.append("conditions:");
-      if (this.conditions == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.conditions);
-      }
-      first = false;
-      sb.append(")");
-      return sb.toString();
-    }
-
-    public void validate() throws org.apache.thrift.TException {
-      // check for required fields
-      // check for sub-struct validity
-      if (conditions != null) {
-        conditions.validate();
-      }
-    }
-
-    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
-      try {
-        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
-      } catch (org.apache.thrift.TException te) {
-        throw new java.io.IOException(te);
-      }
-    }
-
-    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, java.lang.ClassNotFoundException {
-      try {
-        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
-      } catch (org.apache.thrift.TException te) {
-        throw new java.io.IOException(te);
-      }
-    }
-
-    private static class deleteRecords_argsStandardSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
-      public deleteRecords_argsStandardScheme getScheme() {
-        return new deleteRecords_argsStandardScheme();
-      }
-    }
-
-    private static class deleteRecords_argsStandardScheme extends org.apache.thrift.scheme.StandardScheme<deleteRecords_args> {
-
-      public void read(org.apache.thrift.protocol.TProtocol iprot, deleteRecords_args struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TField schemeField;
-        iprot.readStructBegin();
-        while (true)
-        {
-          schemeField = iprot.readFieldBegin();
-          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
-            break;
-          }
-          switch (schemeField.id) {
-            case 1: // TABLE_NAME
-              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-                struct.tableName = iprot.readString();
-                struct.setTableNameIsSet(true);
-              } else { 
-                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-              }
-              break;
-            case 2: // CONDITIONS
-              if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
-                struct.conditions = new ConditionNode();
-                struct.conditions.read(iprot);
-                struct.setConditionsIsSet(true);
-              } else { 
-                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-              }
-              break;
-            default:
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-          }
-          iprot.readFieldEnd();
-        }
-        iprot.readStructEnd();
-
-        // check for required fields of primitive type, which can't be checked in the validate method
-        struct.validate();
-      }
-
-      public void write(org.apache.thrift.protocol.TProtocol oprot, deleteRecords_args struct) throws org.apache.thrift.TException {
-        struct.validate();
-
-        oprot.writeStructBegin(STRUCT_DESC);
-        if (struct.tableName != null) {
-          oprot.writeFieldBegin(TABLE_NAME_FIELD_DESC);
-          oprot.writeString(struct.tableName);
-          oprot.writeFieldEnd();
-        }
-        if (struct.conditions != null) {
-          oprot.writeFieldBegin(CONDITIONS_FIELD_DESC);
-          struct.conditions.write(oprot);
-          oprot.writeFieldEnd();
-        }
-        oprot.writeFieldStop();
-        oprot.writeStructEnd();
-      }
-
-    }
-
-    private static class deleteRecords_argsTupleSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
-      public deleteRecords_argsTupleScheme getScheme() {
-        return new deleteRecords_argsTupleScheme();
-      }
-    }
-
-    private static class deleteRecords_argsTupleScheme extends org.apache.thrift.scheme.TupleScheme<deleteRecords_args> {
-
-      @Override
-      public void write(org.apache.thrift.protocol.TProtocol prot, deleteRecords_args struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TTupleProtocol oprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-        java.util.BitSet optionals = new java.util.BitSet();
-        if (struct.isSetTableName()) {
-          optionals.set(0);
-        }
-        if (struct.isSetConditions()) {
-          optionals.set(1);
-        }
-        oprot.writeBitSet(optionals, 2);
-        if (struct.isSetTableName()) {
-          oprot.writeString(struct.tableName);
-        }
-        if (struct.isSetConditions()) {
-          struct.conditions.write(oprot);
-        }
-      }
-
-      @Override
-      public void read(org.apache.thrift.protocol.TProtocol prot, deleteRecords_args struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TTupleProtocol iprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-        java.util.BitSet incoming = iprot.readBitSet(2);
-        if (incoming.get(0)) {
-          struct.tableName = iprot.readString();
-          struct.setTableNameIsSet(true);
-        }
-        if (incoming.get(1)) {
-          struct.conditions = new ConditionNode();
-          struct.conditions.read(iprot);
-          struct.setConditionsIsSet(true);
-        }
-      }
-    }
-
-    private static <S extends org.apache.thrift.scheme.IScheme> S scheme(org.apache.thrift.protocol.TProtocol proto) {
-      return (org.apache.thrift.scheme.StandardScheme.class.equals(proto.getScheme()) ? STANDARD_SCHEME_FACTORY : TUPLE_SCHEME_FACTORY).getScheme();
-    }
-  }
-
-  public static class deleteRecords_result implements org.apache.thrift.TBase<deleteRecords_result, deleteRecords_result._Fields>, java.io.Serializable, Cloneable, Comparable<deleteRecords_result>   {
-    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("deleteRecords_result");
-
-    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.I32, (short)0);
-
-    private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new deleteRecords_resultStandardSchemeFactory();
-    private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new deleteRecords_resultTupleSchemeFactory();
-
-    public int success; // required
-
-    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-      SUCCESS((short)0, "success");
-
-      private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
-
-      static {
-        for (_Fields field : java.util.EnumSet.allOf(_Fields.class)) {
-          byName.put(field.getFieldName(), field);
-        }
-      }
-
-      /**
-       * Find the _Fields constant that matches fieldId, or null if its not found.
-       */
-      @org.apache.thrift.annotation.Nullable
-      public static _Fields findByThriftId(int fieldId) {
-        switch(fieldId) {
-          case 0: // SUCCESS
-            return SUCCESS;
-          default:
-            return null;
-        }
-      }
-
-      /**
-       * Find the _Fields constant that matches fieldId, throwing an exception
-       * if it is not found.
-       */
-      public static _Fields findByThriftIdOrThrow(int fieldId) {
-        _Fields fields = findByThriftId(fieldId);
-        if (fields == null) throw new java.lang.IllegalArgumentException("Field " + fieldId + " doesn't exist!");
-        return fields;
-      }
-
-      /**
-       * Find the _Fields constant that matches name, or null if its not found.
-       */
-      @org.apache.thrift.annotation.Nullable
-      public static _Fields findByName(java.lang.String name) {
-        return byName.get(name);
-      }
-
-      private final short _thriftId;
-      private final java.lang.String _fieldName;
-
-      _Fields(short thriftId, java.lang.String fieldName) {
-        _thriftId = thriftId;
-        _fieldName = fieldName;
-      }
-
-      public short getThriftFieldId() {
-        return _thriftId;
-      }
-
-      public java.lang.String getFieldName() {
-        return _fieldName;
-      }
-    }
-
-    // isset id assignments
-    private static final int __SUCCESS_ISSET_ID = 0;
-    private byte __isset_bitfield = 0;
-    public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
-    static {
-      java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32          , "int")));
-      metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
-      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(deleteRecords_result.class, metaDataMap);
-    }
-
-    public deleteRecords_result() {
-    }
-
-    public deleteRecords_result(
-      int success)
-    {
-      this();
-      this.success = success;
-      setSuccessIsSet(true);
-    }
-
-    /**
-     * Performs a deep copy on <i>other</i>.
-     */
-    public deleteRecords_result(deleteRecords_result other) {
-      __isset_bitfield = other.__isset_bitfield;
-      this.success = other.success;
-    }
-
-    public deleteRecords_result deepCopy() {
-      return new deleteRecords_result(this);
-    }
-
-    @Override
-    public void clear() {
-      setSuccessIsSet(false);
-      this.success = 0;
-    }
-
-    public int getSuccess() {
-      return this.success;
-    }
-
-    public deleteRecords_result setSuccess(int success) {
-      this.success = success;
-      setSuccessIsSet(true);
-      return this;
-    }
-
-    public void unsetSuccess() {
-      __isset_bitfield = org.apache.thrift.EncodingUtils.clearBit(__isset_bitfield, __SUCCESS_ISSET_ID);
-    }
-
-    /** Returns true if field success is set (has been assigned a value) and false otherwise */
-    public boolean isSetSuccess() {
-      return org.apache.thrift.EncodingUtils.testBit(__isset_bitfield, __SUCCESS_ISSET_ID);
-    }
-
-    public void setSuccessIsSet(boolean value) {
-      __isset_bitfield = org.apache.thrift.EncodingUtils.setBit(__isset_bitfield, __SUCCESS_ISSET_ID, value);
-    }
-
-    public void setFieldValue(_Fields field, @org.apache.thrift.annotation.Nullable java.lang.Object value) {
-      switch (field) {
-      case SUCCESS:
-        if (value == null) {
-          unsetSuccess();
-        } else {
-          setSuccess((java.lang.Integer)value);
-        }
-        break;
-
-      }
-    }
-
-    @org.apache.thrift.annotation.Nullable
-    public java.lang.Object getFieldValue(_Fields field) {
-      switch (field) {
-      case SUCCESS:
-        return getSuccess();
-
-      }
-      throw new java.lang.IllegalStateException();
-    }
-
-    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
-    public boolean isSet(_Fields field) {
-      if (field == null) {
-        throw new java.lang.IllegalArgumentException();
-      }
-
-      switch (field) {
-      case SUCCESS:
-        return isSetSuccess();
-      }
-      throw new java.lang.IllegalStateException();
-    }
-
-    @Override
-    public boolean equals(java.lang.Object that) {
-      if (that instanceof deleteRecords_result)
-        return this.equals((deleteRecords_result)that);
-      return false;
-    }
-
-    public boolean equals(deleteRecords_result that) {
-      if (that == null)
-        return false;
-      if (this == that)
-        return true;
-
-      boolean this_present_success = true;
-      boolean that_present_success = true;
-      if (this_present_success || that_present_success) {
-        if (!(this_present_success && that_present_success))
-          return false;
-        if (this.success != that.success)
-          return false;
-      }
-
-      return true;
-    }
-
-    @Override
-    public int hashCode() {
-      int hashCode = 1;
-
-      hashCode = hashCode * 8191 + success;
-
-      return hashCode;
-    }
-
-    @Override
-    public int compareTo(deleteRecords_result other) {
-      if (!getClass().equals(other.getClass())) {
-        return getClass().getName().compareTo(other.getClass().getName());
-      }
-
-      int lastComparison = 0;
-
-      lastComparison = java.lang.Boolean.compare(isSetSuccess(), other.isSetSuccess());
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-      if (isSetSuccess()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.success, other.success);
-        if (lastComparison != 0) {
-          return lastComparison;
-        }
-      }
-      return 0;
-    }
-
-    @org.apache.thrift.annotation.Nullable
-    public _Fields fieldForId(int fieldId) {
-      return _Fields.findByThriftId(fieldId);
-    }
-
-    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
-      scheme(iprot).read(iprot, this);
-    }
-
-    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
-      scheme(oprot).write(oprot, this);
-      }
-
-    @Override
-    public java.lang.String toString() {
-      java.lang.StringBuilder sb = new java.lang.StringBuilder("deleteRecords_result(");
-      boolean first = true;
-
-      sb.append("success:");
-      sb.append(this.success);
-      first = false;
-      sb.append(")");
-      return sb.toString();
-    }
-
-    public void validate() throws org.apache.thrift.TException {
-      // check for required fields
-      // check for sub-struct validity
-    }
-
-    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
-      try {
-        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
-      } catch (org.apache.thrift.TException te) {
-        throw new java.io.IOException(te);
-      }
-    }
-
-    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, java.lang.ClassNotFoundException {
-      try {
-        // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
-        __isset_bitfield = 0;
-        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
-      } catch (org.apache.thrift.TException te) {
-        throw new java.io.IOException(te);
-      }
-    }
-
-    private static class deleteRecords_resultStandardSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
-      public deleteRecords_resultStandardScheme getScheme() {
-        return new deleteRecords_resultStandardScheme();
-      }
-    }
-
-    private static class deleteRecords_resultStandardScheme extends org.apache.thrift.scheme.StandardScheme<deleteRecords_result> {
-
-      public void read(org.apache.thrift.protocol.TProtocol iprot, deleteRecords_result struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TField schemeField;
-        iprot.readStructBegin();
-        while (true)
-        {
-          schemeField = iprot.readFieldBegin();
-          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
-            break;
-          }
-          switch (schemeField.id) {
-            case 0: // SUCCESS
-              if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
-                struct.success = iprot.readI32();
-                struct.setSuccessIsSet(true);
-              } else { 
-                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-              }
-              break;
-            default:
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-          }
-          iprot.readFieldEnd();
-        }
-        iprot.readStructEnd();
-
-        // check for required fields of primitive type, which can't be checked in the validate method
-        struct.validate();
-      }
-
-      public void write(org.apache.thrift.protocol.TProtocol oprot, deleteRecords_result struct) throws org.apache.thrift.TException {
-        struct.validate();
-
-        oprot.writeStructBegin(STRUCT_DESC);
-        if (struct.isSetSuccess()) {
-          oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
-          oprot.writeI32(struct.success);
-          oprot.writeFieldEnd();
-        }
-        oprot.writeFieldStop();
-        oprot.writeStructEnd();
-      }
-
-    }
-
-    private static class deleteRecords_resultTupleSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
-      public deleteRecords_resultTupleScheme getScheme() {
-        return new deleteRecords_resultTupleScheme();
-      }
-    }
-
-    private static class deleteRecords_resultTupleScheme extends org.apache.thrift.scheme.TupleScheme<deleteRecords_result> {
-
-      @Override
-      public void write(org.apache.thrift.protocol.TProtocol prot, deleteRecords_result struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TTupleProtocol oprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-        java.util.BitSet optionals = new java.util.BitSet();
-        if (struct.isSetSuccess()) {
-          optionals.set(0);
-        }
-        oprot.writeBitSet(optionals, 1);
-        if (struct.isSetSuccess()) {
-          oprot.writeI32(struct.success);
-        }
-      }
-
-      @Override
-      public void read(org.apache.thrift.protocol.TProtocol prot, deleteRecords_result struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TTupleProtocol iprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-        java.util.BitSet incoming = iprot.readBitSet(1);
-        if (incoming.get(0)) {
-          struct.success = iprot.readI32();
-          struct.setSuccessIsSet(true);
-        }
-      }
-    }
-
-    private static <S extends org.apache.thrift.scheme.IScheme> S scheme(org.apache.thrift.protocol.TProtocol proto) {
-      return (org.apache.thrift.scheme.StandardScheme.class.equals(proto.getScheme()) ? STANDARD_SCHEME_FACTORY : TUPLE_SCHEME_FACTORY).getScheme();
-    }
-  }
-
-  public static class createIndex_args implements org.apache.thrift.TBase<createIndex_args, createIndex_args._Fields>, java.io.Serializable, Cloneable, Comparable<createIndex_args>   {
-    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("createIndex_args");
-
-    private static final org.apache.thrift.protocol.TField INDEX_FIELD_DESC = new org.apache.thrift.protocol.TField("index", org.apache.thrift.protocol.TType.STRUCT, (short)1);
-
-    private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new createIndex_argsStandardSchemeFactory();
-    private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new createIndex_argsTupleSchemeFactory();
-
-    public @org.apache.thrift.annotation.Nullable Index index; // required
-
-    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-      INDEX((short)1, "index");
-
-      private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
-
-      static {
-        for (_Fields field : java.util.EnumSet.allOf(_Fields.class)) {
-          byName.put(field.getFieldName(), field);
-        }
-      }
-
-      /**
-       * Find the _Fields constant that matches fieldId, or null if its not found.
-       */
-      @org.apache.thrift.annotation.Nullable
-      public static _Fields findByThriftId(int fieldId) {
-        switch(fieldId) {
-          case 1: // INDEX
-            return INDEX;
-          default:
-            return null;
-        }
-      }
-
-      /**
-       * Find the _Fields constant that matches fieldId, throwing an exception
-       * if it is not found.
-       */
-      public static _Fields findByThriftIdOrThrow(int fieldId) {
-        _Fields fields = findByThriftId(fieldId);
-        if (fields == null) throw new java.lang.IllegalArgumentException("Field " + fieldId + " doesn't exist!");
-        return fields;
-      }
-
-      /**
-       * Find the _Fields constant that matches name, or null if its not found.
-       */
-      @org.apache.thrift.annotation.Nullable
-      public static _Fields findByName(java.lang.String name) {
-        return byName.get(name);
-      }
-
-      private final short _thriftId;
-      private final java.lang.String _fieldName;
-
-      _Fields(short thriftId, java.lang.String fieldName) {
-        _thriftId = thriftId;
-        _fieldName = fieldName;
-      }
-
-      public short getThriftFieldId() {
-        return _thriftId;
-      }
-
-      public java.lang.String getFieldName() {
-        return _fieldName;
-      }
-    }
-
-    // isset id assignments
-    public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
-    static {
-      java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.INDEX, new org.apache.thrift.meta_data.FieldMetaData("index", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, Index.class)));
-      metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
-      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(createIndex_args.class, metaDataMap);
-    }
-
-    public createIndex_args() {
-    }
-
-    public createIndex_args(
-      Index index)
-    {
-      this();
-      this.index = index;
-    }
-
-    /**
-     * Performs a deep copy on <i>other</i>.
-     */
-    public createIndex_args(createIndex_args other) {
-      if (other.isSetIndex()) {
-        this.index = new Index(other.index);
-      }
-    }
-
-    public createIndex_args deepCopy() {
-      return new createIndex_args(this);
-    }
-
-    @Override
-    public void clear() {
-      this.index = null;
-    }
-
-    @org.apache.thrift.annotation.Nullable
-    public Index getIndex() {
-      return this.index;
-    }
-
-    public createIndex_args setIndex(@org.apache.thrift.annotation.Nullable Index index) {
-      this.index = index;
-      return this;
-    }
-
-    public void unsetIndex() {
-      this.index = null;
-    }
-
-    /** Returns true if field index is set (has been assigned a value) and false otherwise */
-    public boolean isSetIndex() {
-      return this.index != null;
-    }
-
-    public void setIndexIsSet(boolean value) {
-      if (!value) {
-        this.index = null;
-      }
-    }
-
-    public void setFieldValue(_Fields field, @org.apache.thrift.annotation.Nullable java.lang.Object value) {
-      switch (field) {
-      case INDEX:
-        if (value == null) {
-          unsetIndex();
-        } else {
-          setIndex((Index)value);
-        }
-        break;
-
-      }
-    }
-
-    @org.apache.thrift.annotation.Nullable
-    public java.lang.Object getFieldValue(_Fields field) {
-      switch (field) {
-      case INDEX:
-        return getIndex();
-
-      }
-      throw new java.lang.IllegalStateException();
-    }
-
-    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
-    public boolean isSet(_Fields field) {
-      if (field == null) {
-        throw new java.lang.IllegalArgumentException();
-      }
-
-      switch (field) {
-      case INDEX:
-        return isSetIndex();
-      }
-      throw new java.lang.IllegalStateException();
-    }
-
-    @Override
-    public boolean equals(java.lang.Object that) {
-      if (that instanceof createIndex_args)
-        return this.equals((createIndex_args)that);
-      return false;
-    }
-
-    public boolean equals(createIndex_args that) {
-      if (that == null)
-        return false;
-      if (this == that)
-        return true;
-
-      boolean this_present_index = true && this.isSetIndex();
-      boolean that_present_index = true && that.isSetIndex();
-      if (this_present_index || that_present_index) {
-        if (!(this_present_index && that_present_index))
-          return false;
-        if (!this.index.equals(that.index))
-          return false;
-      }
-
-      return true;
-    }
-
-    @Override
-    public int hashCode() {
-      int hashCode = 1;
-
-      hashCode = hashCode * 8191 + ((isSetIndex()) ? 131071 : 524287);
-      if (isSetIndex())
-        hashCode = hashCode * 8191 + index.hashCode();
-
-      return hashCode;
-    }
-
-    @Override
-    public int compareTo(createIndex_args other) {
-      if (!getClass().equals(other.getClass())) {
-        return getClass().getName().compareTo(other.getClass().getName());
-      }
-
-      int lastComparison = 0;
-
-      lastComparison = java.lang.Boolean.compare(isSetIndex(), other.isSetIndex());
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-      if (isSetIndex()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.index, other.index);
-        if (lastComparison != 0) {
-          return lastComparison;
-        }
-      }
-      return 0;
-    }
-
-    @org.apache.thrift.annotation.Nullable
-    public _Fields fieldForId(int fieldId) {
-      return _Fields.findByThriftId(fieldId);
-    }
-
-    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
-      scheme(iprot).read(iprot, this);
-    }
-
-    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
-      scheme(oprot).write(oprot, this);
-    }
-
-    @Override
-    public java.lang.String toString() {
-      java.lang.StringBuilder sb = new java.lang.StringBuilder("createIndex_args(");
-      boolean first = true;
-
-      sb.append("index:");
-      if (this.index == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.index);
-      }
-      first = false;
-      sb.append(")");
-      return sb.toString();
-    }
-
-    public void validate() throws org.apache.thrift.TException {
-      // check for required fields
-      // check for sub-struct validity
-      if (index != null) {
-        index.validate();
-      }
-    }
-
-    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
-      try {
-        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
-      } catch (org.apache.thrift.TException te) {
-        throw new java.io.IOException(te);
-      }
-    }
-
-    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, java.lang.ClassNotFoundException {
-      try {
-        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
-      } catch (org.apache.thrift.TException te) {
-        throw new java.io.IOException(te);
-      }
-    }
-
-    private static class createIndex_argsStandardSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
-      public createIndex_argsStandardScheme getScheme() {
-        return new createIndex_argsStandardScheme();
-      }
-    }
-
-    private static class createIndex_argsStandardScheme extends org.apache.thrift.scheme.StandardScheme<createIndex_args> {
-
-      public void read(org.apache.thrift.protocol.TProtocol iprot, createIndex_args struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TField schemeField;
-        iprot.readStructBegin();
-        while (true)
-        {
-          schemeField = iprot.readFieldBegin();
-          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
-            break;
-          }
-          switch (schemeField.id) {
-            case 1: // INDEX
-              if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
-                struct.index = new Index();
-                struct.index.read(iprot);
-                struct.setIndexIsSet(true);
-              } else { 
-                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-              }
-              break;
-            default:
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-          }
-          iprot.readFieldEnd();
-        }
-        iprot.readStructEnd();
-
-        // check for required fields of primitive type, which can't be checked in the validate method
-        struct.validate();
-      }
-
-      public void write(org.apache.thrift.protocol.TProtocol oprot, createIndex_args struct) throws org.apache.thrift.TException {
-        struct.validate();
-
-        oprot.writeStructBegin(STRUCT_DESC);
-        if (struct.index != null) {
-          oprot.writeFieldBegin(INDEX_FIELD_DESC);
-          struct.index.write(oprot);
-          oprot.writeFieldEnd();
-        }
-        oprot.writeFieldStop();
-        oprot.writeStructEnd();
-      }
-
-    }
-
-    private static class createIndex_argsTupleSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
-      public createIndex_argsTupleScheme getScheme() {
-        return new createIndex_argsTupleScheme();
-      }
-    }
-
-    private static class createIndex_argsTupleScheme extends org.apache.thrift.scheme.TupleScheme<createIndex_args> {
-
-      @Override
-      public void write(org.apache.thrift.protocol.TProtocol prot, createIndex_args struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TTupleProtocol oprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-        java.util.BitSet optionals = new java.util.BitSet();
-        if (struct.isSetIndex()) {
-          optionals.set(0);
-        }
-        oprot.writeBitSet(optionals, 1);
-        if (struct.isSetIndex()) {
-          struct.index.write(oprot);
-        }
-      }
-
-      @Override
-      public void read(org.apache.thrift.protocol.TProtocol prot, createIndex_args struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TTupleProtocol iprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-        java.util.BitSet incoming = iprot.readBitSet(1);
-        if (incoming.get(0)) {
-          struct.index = new Index();
-          struct.index.read(iprot);
-          struct.setIndexIsSet(true);
-        }
-      }
-    }
-
-    private static <S extends org.apache.thrift.scheme.IScheme> S scheme(org.apache.thrift.protocol.TProtocol proto) {
-      return (org.apache.thrift.scheme.StandardScheme.class.equals(proto.getScheme()) ? STANDARD_SCHEME_FACTORY : TUPLE_SCHEME_FACTORY).getScheme();
-    }
-  }
-
-  public static class createIndex_result implements org.apache.thrift.TBase<createIndex_result, createIndex_result._Fields>, java.io.Serializable, Cloneable, Comparable<createIndex_result>   {
-    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("createIndex_result");
-
-    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.BOOL, (short)0);
-
-    private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new createIndex_resultStandardSchemeFactory();
-    private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new createIndex_resultTupleSchemeFactory();
-
-    public boolean success; // required
-
-    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-      SUCCESS((short)0, "success");
-
-      private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
-
-      static {
-        for (_Fields field : java.util.EnumSet.allOf(_Fields.class)) {
-          byName.put(field.getFieldName(), field);
-        }
-      }
-
-      /**
-       * Find the _Fields constant that matches fieldId, or null if its not found.
-       */
-      @org.apache.thrift.annotation.Nullable
-      public static _Fields findByThriftId(int fieldId) {
-        switch(fieldId) {
-          case 0: // SUCCESS
-            return SUCCESS;
-          default:
-            return null;
-        }
-      }
-
-      /**
-       * Find the _Fields constant that matches fieldId, throwing an exception
-       * if it is not found.
-       */
-      public static _Fields findByThriftIdOrThrow(int fieldId) {
-        _Fields fields = findByThriftId(fieldId);
-        if (fields == null) throw new java.lang.IllegalArgumentException("Field " + fieldId + " doesn't exist!");
-        return fields;
-      }
-
-      /**
-       * Find the _Fields constant that matches name, or null if its not found.
-       */
-      @org.apache.thrift.annotation.Nullable
-      public static _Fields findByName(java.lang.String name) {
-        return byName.get(name);
-      }
-
-      private final short _thriftId;
-      private final java.lang.String _fieldName;
-
-      _Fields(short thriftId, java.lang.String fieldName) {
-        _thriftId = thriftId;
-        _fieldName = fieldName;
-      }
-
-      public short getThriftFieldId() {
-        return _thriftId;
-      }
-
-      public java.lang.String getFieldName() {
-        return _fieldName;
-      }
-    }
-
-    // isset id assignments
-    private static final int __SUCCESS_ISSET_ID = 0;
-    private byte __isset_bitfield = 0;
-    public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
-    static {
-      java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.BOOL)));
-      metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
-      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(createIndex_result.class, metaDataMap);
-    }
-
-    public createIndex_result() {
-    }
-
-    public createIndex_result(
-      boolean success)
-    {
-      this();
-      this.success = success;
-      setSuccessIsSet(true);
-    }
-
-    /**
-     * Performs a deep copy on <i>other</i>.
-     */
-    public createIndex_result(createIndex_result other) {
-      __isset_bitfield = other.__isset_bitfield;
-      this.success = other.success;
-    }
-
-    public createIndex_result deepCopy() {
-      return new createIndex_result(this);
-    }
-
-    @Override
-    public void clear() {
-      setSuccessIsSet(false);
-      this.success = false;
-    }
-
-    public boolean isSuccess() {
-      return this.success;
-    }
-
-    public createIndex_result setSuccess(boolean success) {
-      this.success = success;
-      setSuccessIsSet(true);
-      return this;
-    }
-
-    public void unsetSuccess() {
-      __isset_bitfield = org.apache.thrift.EncodingUtils.clearBit(__isset_bitfield, __SUCCESS_ISSET_ID);
-    }
-
-    /** Returns true if field success is set (has been assigned a value) and false otherwise */
-    public boolean isSetSuccess() {
-      return org.apache.thrift.EncodingUtils.testBit(__isset_bitfield, __SUCCESS_ISSET_ID);
-    }
-
-    public void setSuccessIsSet(boolean value) {
-      __isset_bitfield = org.apache.thrift.EncodingUtils.setBit(__isset_bitfield, __SUCCESS_ISSET_ID, value);
-    }
-
-    public void setFieldValue(_Fields field, @org.apache.thrift.annotation.Nullable java.lang.Object value) {
-      switch (field) {
-      case SUCCESS:
-        if (value == null) {
-          unsetSuccess();
-        } else {
-          setSuccess((java.lang.Boolean)value);
-        }
-        break;
-
-      }
-    }
-
-    @org.apache.thrift.annotation.Nullable
-    public java.lang.Object getFieldValue(_Fields field) {
-      switch (field) {
-      case SUCCESS:
-        return isSuccess();
-
-      }
-      throw new java.lang.IllegalStateException();
-    }
-
-    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
-    public boolean isSet(_Fields field) {
-      if (field == null) {
-        throw new java.lang.IllegalArgumentException();
-      }
-
-      switch (field) {
-      case SUCCESS:
-        return isSetSuccess();
-      }
-      throw new java.lang.IllegalStateException();
-    }
-
-    @Override
-    public boolean equals(java.lang.Object that) {
-      if (that instanceof createIndex_result)
-        return this.equals((createIndex_result)that);
-      return false;
-    }
-
-    public boolean equals(createIndex_result that) {
-      if (that == null)
-        return false;
-      if (this == that)
-        return true;
-
-      boolean this_present_success = true;
-      boolean that_present_success = true;
-      if (this_present_success || that_present_success) {
-        if (!(this_present_success && that_present_success))
-          return false;
-        if (this.success != that.success)
-          return false;
-      }
-
-      return true;
-    }
-
-    @Override
-    public int hashCode() {
-      int hashCode = 1;
-
-      hashCode = hashCode * 8191 + ((success) ? 131071 : 524287);
-
-      return hashCode;
-    }
-
-    @Override
-    public int compareTo(createIndex_result other) {
-      if (!getClass().equals(other.getClass())) {
-        return getClass().getName().compareTo(other.getClass().getName());
-      }
-
-      int lastComparison = 0;
-
-      lastComparison = java.lang.Boolean.compare(isSetSuccess(), other.isSetSuccess());
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-      if (isSetSuccess()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.success, other.success);
-        if (lastComparison != 0) {
-          return lastComparison;
-        }
-      }
-      return 0;
-    }
-
-    @org.apache.thrift.annotation.Nullable
-    public _Fields fieldForId(int fieldId) {
-      return _Fields.findByThriftId(fieldId);
-    }
-
-    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
-      scheme(iprot).read(iprot, this);
-    }
-
-    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
-      scheme(oprot).write(oprot, this);
-      }
-
-    @Override
-    public java.lang.String toString() {
-      java.lang.StringBuilder sb = new java.lang.StringBuilder("createIndex_result(");
-      boolean first = true;
-
-      sb.append("success:");
-      sb.append(this.success);
-      first = false;
-      sb.append(")");
-      return sb.toString();
-    }
-
-    public void validate() throws org.apache.thrift.TException {
-      // check for required fields
-      // check for sub-struct validity
-    }
-
-    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
-      try {
-        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
-      } catch (org.apache.thrift.TException te) {
-        throw new java.io.IOException(te);
-      }
-    }
-
-    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, java.lang.ClassNotFoundException {
-      try {
-        // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
-        __isset_bitfield = 0;
-        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
-      } catch (org.apache.thrift.TException te) {
-        throw new java.io.IOException(te);
-      }
-    }
-
-    private static class createIndex_resultStandardSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
-      public createIndex_resultStandardScheme getScheme() {
-        return new createIndex_resultStandardScheme();
-      }
-    }
-
-    private static class createIndex_resultStandardScheme extends org.apache.thrift.scheme.StandardScheme<createIndex_result> {
-
-      public void read(org.apache.thrift.protocol.TProtocol iprot, createIndex_result struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TField schemeField;
-        iprot.readStructBegin();
-        while (true)
-        {
-          schemeField = iprot.readFieldBegin();
-          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
-            break;
-          }
-          switch (schemeField.id) {
-            case 0: // SUCCESS
-              if (schemeField.type == org.apache.thrift.protocol.TType.BOOL) {
-                struct.success = iprot.readBool();
-                struct.setSuccessIsSet(true);
-              } else { 
-                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-              }
-              break;
-            default:
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-          }
-          iprot.readFieldEnd();
-        }
-        iprot.readStructEnd();
-
-        // check for required fields of primitive type, which can't be checked in the validate method
-        struct.validate();
-      }
-
-      public void write(org.apache.thrift.protocol.TProtocol oprot, createIndex_result struct) throws org.apache.thrift.TException {
-        struct.validate();
-
-        oprot.writeStructBegin(STRUCT_DESC);
-        if (struct.isSetSuccess()) {
-          oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
-          oprot.writeBool(struct.success);
-          oprot.writeFieldEnd();
-        }
-        oprot.writeFieldStop();
-        oprot.writeStructEnd();
-      }
-
-    }
-
-    private static class createIndex_resultTupleSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
-      public createIndex_resultTupleScheme getScheme() {
-        return new createIndex_resultTupleScheme();
-      }
-    }
-
-    private static class createIndex_resultTupleScheme extends org.apache.thrift.scheme.TupleScheme<createIndex_result> {
-
-      @Override
-      public void write(org.apache.thrift.protocol.TProtocol prot, createIndex_result struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TTupleProtocol oprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-        java.util.BitSet optionals = new java.util.BitSet();
-        if (struct.isSetSuccess()) {
-          optionals.set(0);
-        }
-        oprot.writeBitSet(optionals, 1);
-        if (struct.isSetSuccess()) {
-          oprot.writeBool(struct.success);
-        }
-      }
-
-      @Override
-      public void read(org.apache.thrift.protocol.TProtocol prot, createIndex_result struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TTupleProtocol iprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-        java.util.BitSet incoming = iprot.readBitSet(1);
-        if (incoming.get(0)) {
-          struct.success = iprot.readBool();
-          struct.setSuccessIsSet(true);
-        }
-      }
-    }
-
-    private static <S extends org.apache.thrift.scheme.IScheme> S scheme(org.apache.thrift.protocol.TProtocol proto) {
-      return (org.apache.thrift.scheme.StandardScheme.class.equals(proto.getScheme()) ? STANDARD_SCHEME_FACTORY : TUPLE_SCHEME_FACTORY).getScheme();
-    }
-  }
-
-  public static class dropIndex_args implements org.apache.thrift.TBase<dropIndex_args, dropIndex_args._Fields>, java.io.Serializable, Cloneable, Comparable<dropIndex_args>   {
-    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("dropIndex_args");
-
-    private static final org.apache.thrift.protocol.TField INDEX_NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("indexName", org.apache.thrift.protocol.TType.STRING, (short)1);
-
-    private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new dropIndex_argsStandardSchemeFactory();
-    private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new dropIndex_argsTupleSchemeFactory();
-
-    public @org.apache.thrift.annotation.Nullable java.lang.String indexName; // required
-
-    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-      INDEX_NAME((short)1, "indexName");
-
-      private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
-
-      static {
-        for (_Fields field : java.util.EnumSet.allOf(_Fields.class)) {
-          byName.put(field.getFieldName(), field);
-        }
-      }
-
-      /**
-       * Find the _Fields constant that matches fieldId, or null if its not found.
-       */
-      @org.apache.thrift.annotation.Nullable
-      public static _Fields findByThriftId(int fieldId) {
-        switch(fieldId) {
-          case 1: // INDEX_NAME
-            return INDEX_NAME;
-          default:
-            return null;
-        }
-      }
-
-      /**
-       * Find the _Fields constant that matches fieldId, throwing an exception
-       * if it is not found.
-       */
-      public static _Fields findByThriftIdOrThrow(int fieldId) {
-        _Fields fields = findByThriftId(fieldId);
-        if (fields == null) throw new java.lang.IllegalArgumentException("Field " + fieldId + " doesn't exist!");
-        return fields;
-      }
-
-      /**
-       * Find the _Fields constant that matches name, or null if its not found.
-       */
-      @org.apache.thrift.annotation.Nullable
-      public static _Fields findByName(java.lang.String name) {
-        return byName.get(name);
-      }
-
-      private final short _thriftId;
-      private final java.lang.String _fieldName;
-
-      _Fields(short thriftId, java.lang.String fieldName) {
-        _thriftId = thriftId;
-        _fieldName = fieldName;
-      }
-
-      public short getThriftFieldId() {
-        return _thriftId;
-      }
-
-      public java.lang.String getFieldName() {
-        return _fieldName;
-      }
-    }
-
-    // isset id assignments
-    public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
-    static {
-      java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.INDEX_NAME, new org.apache.thrift.meta_data.FieldMetaData("indexName", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-      metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
-      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(dropIndex_args.class, metaDataMap);
-    }
-
-    public dropIndex_args() {
-    }
-
-    public dropIndex_args(
-      java.lang.String indexName)
-    {
-      this();
-      this.indexName = indexName;
-    }
-
-    /**
-     * Performs a deep copy on <i>other</i>.
-     */
-    public dropIndex_args(dropIndex_args other) {
-      if (other.isSetIndexName()) {
-        this.indexName = other.indexName;
-      }
-    }
-
-    public dropIndex_args deepCopy() {
-      return new dropIndex_args(this);
-    }
-
-    @Override
-    public void clear() {
-      this.indexName = null;
-    }
-
-    @org.apache.thrift.annotation.Nullable
-    public java.lang.String getIndexName() {
-      return this.indexName;
-    }
-
-    public dropIndex_args setIndexName(@org.apache.thrift.annotation.Nullable java.lang.String indexName) {
-      this.indexName = indexName;
-      return this;
-    }
-
-    public void unsetIndexName() {
-      this.indexName = null;
-    }
-
-    /** Returns true if field indexName is set (has been assigned a value) and false otherwise */
-    public boolean isSetIndexName() {
-      return this.indexName != null;
-    }
-
-    public void setIndexNameIsSet(boolean value) {
-      if (!value) {
-        this.indexName = null;
-      }
-    }
-
-    public void setFieldValue(_Fields field, @org.apache.thrift.annotation.Nullable java.lang.Object value) {
-      switch (field) {
-      case INDEX_NAME:
-        if (value == null) {
-          unsetIndexName();
-        } else {
-          setIndexName((java.lang.String)value);
-        }
-        break;
-
-      }
-    }
-
-    @org.apache.thrift.annotation.Nullable
-    public java.lang.Object getFieldValue(_Fields field) {
-      switch (field) {
-      case INDEX_NAME:
-        return getIndexName();
-
-      }
-      throw new java.lang.IllegalStateException();
-    }
-
-    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
-    public boolean isSet(_Fields field) {
-      if (field == null) {
-        throw new java.lang.IllegalArgumentException();
-      }
-
-      switch (field) {
-      case INDEX_NAME:
-        return isSetIndexName();
-      }
-      throw new java.lang.IllegalStateException();
-    }
-
-    @Override
-    public boolean equals(java.lang.Object that) {
-      if (that instanceof dropIndex_args)
-        return this.equals((dropIndex_args)that);
-      return false;
-    }
-
-    public boolean equals(dropIndex_args that) {
-      if (that == null)
-        return false;
-      if (this == that)
-        return true;
-
-      boolean this_present_indexName = true && this.isSetIndexName();
-      boolean that_present_indexName = true && that.isSetIndexName();
-      if (this_present_indexName || that_present_indexName) {
-        if (!(this_present_indexName && that_present_indexName))
-          return false;
-        if (!this.indexName.equals(that.indexName))
-          return false;
-      }
-
-      return true;
-    }
-
-    @Override
-    public int hashCode() {
-      int hashCode = 1;
-
-      hashCode = hashCode * 8191 + ((isSetIndexName()) ? 131071 : 524287);
-      if (isSetIndexName())
-        hashCode = hashCode * 8191 + indexName.hashCode();
-
-      return hashCode;
-    }
-
-    @Override
-    public int compareTo(dropIndex_args other) {
-      if (!getClass().equals(other.getClass())) {
-        return getClass().getName().compareTo(other.getClass().getName());
-      }
-
-      int lastComparison = 0;
-
-      lastComparison = java.lang.Boolean.compare(isSetIndexName(), other.isSetIndexName());
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-      if (isSetIndexName()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.indexName, other.indexName);
-        if (lastComparison != 0) {
-          return lastComparison;
-        }
-      }
-      return 0;
-    }
-
-    @org.apache.thrift.annotation.Nullable
-    public _Fields fieldForId(int fieldId) {
-      return _Fields.findByThriftId(fieldId);
-    }
-
-    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
-      scheme(iprot).read(iprot, this);
-    }
-
-    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
-      scheme(oprot).write(oprot, this);
-    }
-
-    @Override
-    public java.lang.String toString() {
-      java.lang.StringBuilder sb = new java.lang.StringBuilder("dropIndex_args(");
-      boolean first = true;
-
-      sb.append("indexName:");
-      if (this.indexName == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.indexName);
-      }
-      first = false;
-      sb.append(")");
-      return sb.toString();
-    }
-
-    public void validate() throws org.apache.thrift.TException {
-      // check for required fields
-      // check for sub-struct validity
-    }
-
-    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
-      try {
-        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
-      } catch (org.apache.thrift.TException te) {
-        throw new java.io.IOException(te);
-      }
-    }
-
-    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, java.lang.ClassNotFoundException {
-      try {
-        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
-      } catch (org.apache.thrift.TException te) {
-        throw new java.io.IOException(te);
-      }
-    }
-
-    private static class dropIndex_argsStandardSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
-      public dropIndex_argsStandardScheme getScheme() {
-        return new dropIndex_argsStandardScheme();
-      }
-    }
-
-    private static class dropIndex_argsStandardScheme extends org.apache.thrift.scheme.StandardScheme<dropIndex_args> {
-
-      public void read(org.apache.thrift.protocol.TProtocol iprot, dropIndex_args struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TField schemeField;
-        iprot.readStructBegin();
-        while (true)
-        {
-          schemeField = iprot.readFieldBegin();
-          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
-            break;
-          }
-          switch (schemeField.id) {
-            case 1: // INDEX_NAME
-              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-                struct.indexName = iprot.readString();
-                struct.setIndexNameIsSet(true);
-              } else { 
-                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-              }
-              break;
-            default:
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-          }
-          iprot.readFieldEnd();
-        }
-        iprot.readStructEnd();
-
-        // check for required fields of primitive type, which can't be checked in the validate method
-        struct.validate();
-      }
-
-      public void write(org.apache.thrift.protocol.TProtocol oprot, dropIndex_args struct) throws org.apache.thrift.TException {
-        struct.validate();
-
-        oprot.writeStructBegin(STRUCT_DESC);
-        if (struct.indexName != null) {
-          oprot.writeFieldBegin(INDEX_NAME_FIELD_DESC);
-          oprot.writeString(struct.indexName);
-          oprot.writeFieldEnd();
-        }
-        oprot.writeFieldStop();
-        oprot.writeStructEnd();
-      }
-
-    }
-
-    private static class dropIndex_argsTupleSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
-      public dropIndex_argsTupleScheme getScheme() {
-        return new dropIndex_argsTupleScheme();
-      }
-    }
-
-    private static class dropIndex_argsTupleScheme extends org.apache.thrift.scheme.TupleScheme<dropIndex_args> {
-
-      @Override
-      public void write(org.apache.thrift.protocol.TProtocol prot, dropIndex_args struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TTupleProtocol oprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-        java.util.BitSet optionals = new java.util.BitSet();
-        if (struct.isSetIndexName()) {
-          optionals.set(0);
-        }
-        oprot.writeBitSet(optionals, 1);
-        if (struct.isSetIndexName()) {
-          oprot.writeString(struct.indexName);
-        }
-      }
-
-      @Override
-      public void read(org.apache.thrift.protocol.TProtocol prot, dropIndex_args struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TTupleProtocol iprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-        java.util.BitSet incoming = iprot.readBitSet(1);
-        if (incoming.get(0)) {
-          struct.indexName = iprot.readString();
-          struct.setIndexNameIsSet(true);
-        }
-      }
-    }
-
-    private static <S extends org.apache.thrift.scheme.IScheme> S scheme(org.apache.thrift.protocol.TProtocol proto) {
-      return (org.apache.thrift.scheme.StandardScheme.class.equals(proto.getScheme()) ? STANDARD_SCHEME_FACTORY : TUPLE_SCHEME_FACTORY).getScheme();
-    }
-  }
-
-  public static class dropIndex_result implements org.apache.thrift.TBase<dropIndex_result, dropIndex_result._Fields>, java.io.Serializable, Cloneable, Comparable<dropIndex_result>   {
-    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("dropIndex_result");
-
-    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.BOOL, (short)0);
-
-    private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new dropIndex_resultStandardSchemeFactory();
-    private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new dropIndex_resultTupleSchemeFactory();
-
-    public boolean success; // required
-
-    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-      SUCCESS((short)0, "success");
-
-      private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
-
-      static {
-        for (_Fields field : java.util.EnumSet.allOf(_Fields.class)) {
-          byName.put(field.getFieldName(), field);
-        }
-      }
-
-      /**
-       * Find the _Fields constant that matches fieldId, or null if its not found.
-       */
-      @org.apache.thrift.annotation.Nullable
-      public static _Fields findByThriftId(int fieldId) {
-        switch(fieldId) {
-          case 0: // SUCCESS
-            return SUCCESS;
-          default:
-            return null;
-        }
-      }
-
-      /**
-       * Find the _Fields constant that matches fieldId, throwing an exception
-       * if it is not found.
-       */
-      public static _Fields findByThriftIdOrThrow(int fieldId) {
-        _Fields fields = findByThriftId(fieldId);
-        if (fields == null) throw new java.lang.IllegalArgumentException("Field " + fieldId + " doesn't exist!");
-        return fields;
-      }
-
-      /**
-       * Find the _Fields constant that matches name, or null if its not found.
-       */
-      @org.apache.thrift.annotation.Nullable
-      public static _Fields findByName(java.lang.String name) {
-        return byName.get(name);
-      }
-
-      private final short _thriftId;
-      private final java.lang.String _fieldName;
-
-      _Fields(short thriftId, java.lang.String fieldName) {
-        _thriftId = thriftId;
-        _fieldName = fieldName;
-      }
-
-      public short getThriftFieldId() {
-        return _thriftId;
-      }
-
-      public java.lang.String getFieldName() {
-        return _fieldName;
-      }
-    }
-
-    // isset id assignments
-    private static final int __SUCCESS_ISSET_ID = 0;
-    private byte __isset_bitfield = 0;
-    public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
-    static {
-      java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.BOOL)));
-      metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
-      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(dropIndex_result.class, metaDataMap);
-    }
-
-    public dropIndex_result() {
-    }
-
-    public dropIndex_result(
-      boolean success)
-    {
-      this();
-      this.success = success;
-      setSuccessIsSet(true);
-    }
-
-    /**
-     * Performs a deep copy on <i>other</i>.
-     */
-    public dropIndex_result(dropIndex_result other) {
-      __isset_bitfield = other.__isset_bitfield;
-      this.success = other.success;
-    }
-
-    public dropIndex_result deepCopy() {
-      return new dropIndex_result(this);
-    }
-
-    @Override
-    public void clear() {
-      setSuccessIsSet(false);
-      this.success = false;
-    }
-
-    public boolean isSuccess() {
-      return this.success;
-    }
-
-    public dropIndex_result setSuccess(boolean success) {
-      this.success = success;
-      setSuccessIsSet(true);
-      return this;
-    }
-
-    public void unsetSuccess() {
-      __isset_bitfield = org.apache.thrift.EncodingUtils.clearBit(__isset_bitfield, __SUCCESS_ISSET_ID);
-    }
-
-    /** Returns true if field success is set (has been assigned a value) and false otherwise */
-    public boolean isSetSuccess() {
-      return org.apache.thrift.EncodingUtils.testBit(__isset_bitfield, __SUCCESS_ISSET_ID);
-    }
-
-    public void setSuccessIsSet(boolean value) {
-      __isset_bitfield = org.apache.thrift.EncodingUtils.setBit(__isset_bitfield, __SUCCESS_ISSET_ID, value);
-    }
-
-    public void setFieldValue(_Fields field, @org.apache.thrift.annotation.Nullable java.lang.Object value) {
-      switch (field) {
-      case SUCCESS:
-        if (value == null) {
-          unsetSuccess();
-        } else {
-          setSuccess((java.lang.Boolean)value);
-        }
-        break;
-
-      }
-    }
-
-    @org.apache.thrift.annotation.Nullable
-    public java.lang.Object getFieldValue(_Fields field) {
-      switch (field) {
-      case SUCCESS:
-        return isSuccess();
-
-      }
-      throw new java.lang.IllegalStateException();
-    }
-
-    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
-    public boolean isSet(_Fields field) {
-      if (field == null) {
-        throw new java.lang.IllegalArgumentException();
-      }
-
-      switch (field) {
-      case SUCCESS:
-        return isSetSuccess();
-      }
-      throw new java.lang.IllegalStateException();
-    }
-
-    @Override
-    public boolean equals(java.lang.Object that) {
-      if (that instanceof dropIndex_result)
-        return this.equals((dropIndex_result)that);
-      return false;
-    }
-
-    public boolean equals(dropIndex_result that) {
-      if (that == null)
-        return false;
-      if (this == that)
-        return true;
-
-      boolean this_present_success = true;
-      boolean that_present_success = true;
-      if (this_present_success || that_present_success) {
-        if (!(this_present_success && that_present_success))
-          return false;
-        if (this.success != that.success)
-          return false;
-      }
-
-      return true;
-    }
-
-    @Override
-    public int hashCode() {
-      int hashCode = 1;
-
-      hashCode = hashCode * 8191 + ((success) ? 131071 : 524287);
-
-      return hashCode;
-    }
-
-    @Override
-    public int compareTo(dropIndex_result other) {
-      if (!getClass().equals(other.getClass())) {
-        return getClass().getName().compareTo(other.getClass().getName());
-      }
-
-      int lastComparison = 0;
-
-      lastComparison = java.lang.Boolean.compare(isSetSuccess(), other.isSetSuccess());
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-      if (isSetSuccess()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.success, other.success);
-        if (lastComparison != 0) {
-          return lastComparison;
-        }
-      }
-      return 0;
-    }
-
-    @org.apache.thrift.annotation.Nullable
-    public _Fields fieldForId(int fieldId) {
-      return _Fields.findByThriftId(fieldId);
-    }
-
-    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
-      scheme(iprot).read(iprot, this);
-    }
-
-    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
-      scheme(oprot).write(oprot, this);
-      }
-
-    @Override
-    public java.lang.String toString() {
-      java.lang.StringBuilder sb = new java.lang.StringBuilder("dropIndex_result(");
-      boolean first = true;
-
-      sb.append("success:");
-      sb.append(this.success);
-      first = false;
-      sb.append(")");
-      return sb.toString();
-    }
-
-    public void validate() throws org.apache.thrift.TException {
-      // check for required fields
-      // check for sub-struct validity
-    }
-
-    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
-      try {
-        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
-      } catch (org.apache.thrift.TException te) {
-        throw new java.io.IOException(te);
-      }
-    }
-
-    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, java.lang.ClassNotFoundException {
-      try {
-        // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
-        __isset_bitfield = 0;
-        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
-      } catch (org.apache.thrift.TException te) {
-        throw new java.io.IOException(te);
-      }
-    }
-
-    private static class dropIndex_resultStandardSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
-      public dropIndex_resultStandardScheme getScheme() {
-        return new dropIndex_resultStandardScheme();
-      }
-    }
-
-    private static class dropIndex_resultStandardScheme extends org.apache.thrift.scheme.StandardScheme<dropIndex_result> {
-
-      public void read(org.apache.thrift.protocol.TProtocol iprot, dropIndex_result struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TField schemeField;
-        iprot.readStructBegin();
-        while (true)
-        {
-          schemeField = iprot.readFieldBegin();
-          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
-            break;
-          }
-          switch (schemeField.id) {
-            case 0: // SUCCESS
-              if (schemeField.type == org.apache.thrift.protocol.TType.BOOL) {
-                struct.success = iprot.readBool();
-                struct.setSuccessIsSet(true);
-              } else { 
-                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-              }
-              break;
-            default:
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-          }
-          iprot.readFieldEnd();
-        }
-        iprot.readStructEnd();
-
-        // check for required fields of primitive type, which can't be checked in the validate method
-        struct.validate();
-      }
-
-      public void write(org.apache.thrift.protocol.TProtocol oprot, dropIndex_result struct) throws org.apache.thrift.TException {
-        struct.validate();
-
-        oprot.writeStructBegin(STRUCT_DESC);
-        if (struct.isSetSuccess()) {
-          oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
-          oprot.writeBool(struct.success);
-          oprot.writeFieldEnd();
-        }
-        oprot.writeFieldStop();
-        oprot.writeStructEnd();
-      }
-
-    }
-
-    private static class dropIndex_resultTupleSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
-      public dropIndex_resultTupleScheme getScheme() {
-        return new dropIndex_resultTupleScheme();
-      }
-    }
-
-    private static class dropIndex_resultTupleScheme extends org.apache.thrift.scheme.TupleScheme<dropIndex_result> {
-
-      @Override
-      public void write(org.apache.thrift.protocol.TProtocol prot, dropIndex_result struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TTupleProtocol oprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-        java.util.BitSet optionals = new java.util.BitSet();
-        if (struct.isSetSuccess()) {
-          optionals.set(0);
-        }
-        oprot.writeBitSet(optionals, 1);
-        if (struct.isSetSuccess()) {
-          oprot.writeBool(struct.success);
-        }
-      }
-
-      @Override
-      public void read(org.apache.thrift.protocol.TProtocol prot, dropIndex_result struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TTupleProtocol iprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-        java.util.BitSet incoming = iprot.readBitSet(1);
-        if (incoming.get(0)) {
-          struct.success = iprot.readBool();
+          struct.success = iprot.readString();
           struct.setSuccessIsSet(true);
         }
       }
