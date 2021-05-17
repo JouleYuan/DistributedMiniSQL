@@ -27,7 +27,9 @@ public class ThriftServiceImpl implements MasterService.Iface {
         for (String regionAddress : regionAddressList) {
             RegionServer regionServer = RegionManager.getRegionServer(regionAddress);
             try {
+                regionServer.openTransport();
                 regionServer.getServiceClient().createTable(table);
+                regionServer.closeTransport();
                 regionServer.getTables().add(table.getName());
             } catch (TException e) {
                 e.printStackTrace();
@@ -47,7 +49,9 @@ public class ThriftServiceImpl implements MasterService.Iface {
         for(String regionAddress: regionAddressList) {
             RegionServer regionServer = RegionManager.getRegionServer(regionAddress);
             try {
+                regionServer.openTransport();
                 regionServer.getServiceClient().dropTable(tableName);
+                regionServer.closeTransport();
                 regionServer.getTables().remove(tableName);
             } catch (TException e) {
                 e.printStackTrace();

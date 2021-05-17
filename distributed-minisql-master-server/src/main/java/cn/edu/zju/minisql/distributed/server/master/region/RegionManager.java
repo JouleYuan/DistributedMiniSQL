@@ -13,7 +13,6 @@ public class RegionManager {
     }
 
     public static void removeRegionServer(String address) {
-        addressRegionServerMap.get(address).transport.close();
         addressRegionServerMap.remove(address);
     }
 

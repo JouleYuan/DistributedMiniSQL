@@ -35,6 +35,7 @@ public class TableManager {
     }
 
     public static List<String> getRegions(String tableName) {
+
         return tableMap.get(tableName);
     }
 
@@ -50,10 +51,12 @@ public class TableManager {
             String sourceRegionAddress = tableRegionList.get(0);
             RegionServer sourceRegionServer = RegionManager.getRegionServer(sourceRegionAddress);
             try {
+                sourceRegionServer.openTransport();
                 sourceRegionServer.getServiceClient().duplicateTable(
                         tableName,
                         targetRegionAddress.split(":", 2)[0],
                         targetRegionServer.getPath());
+                sourceRegionServer.closeTransport();
                 /*targetRegionServer.getServiceClient().duplicateTable(
                         tableName,
                         sourceRegionAddress.split(":", 2)[0],

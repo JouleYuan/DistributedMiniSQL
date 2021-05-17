@@ -6,6 +6,7 @@ import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
+import org.apache.thrift.transport.layered.TFramedTransport;
 
 import java.util.HashMap;
 import java.util.List;
@@ -13,15 +14,13 @@ import java.util.List;
 public class API {
     private static TTransport masterTransport;
     private static MasterService.Client masterServiceClient;
-    private static HashMap<String,List<String>> tableToRegion = new HashMap<>(); // regionServer缓存
+    private static final HashMap<String,List<String>> tableToRegion = new HashMap<>(); // regionServer缓存
 
     public static void init(){
         try{
             Config.init();
             // connect to master server
-            masterTransport = new TSocket(Config.Master.ip, Config.Master.port);
-            masterTransport.open();
-
+            masterTransport = new TFramedTransport(new TSocket(Config.Master.ip, Config.Master.port));
             TProtocol protocol = new TBinaryProtocol(masterTransport);
             masterServiceClient = new MasterService.Client(protocol);
         } catch (TException e) {
@@ -36,6 +35,7 @@ public class API {
     public static void createTable(String tableName, Table newTable) {
         try{
             System.out.println("call master");
+            masterTransport.open();
             List<String> regions =  masterServiceClient.createTable(newTable);
             if(regions == null) System.out.println("ERROR: Table " + tableName + " already exists.");
             else {
@@ -49,12 +49,15 @@ public class API {
             }
         } catch (TException e) {
             e.printStackTrace();
+        } finally {
+            masterTransport.close();
         }
     }
 
     public static void dropTable(String tableName) {
         try{
             // 存在表
+            masterTransport.open();
             if(masterServiceClient.getRegionServers(tableName).size() > 0){
                 if(masterServiceClient.dropTable(tableName)){
                     System.out.println("Query OK, 0 rows affected");
@@ -68,6 +71,8 @@ public class API {
             }
         } catch (TException e) {
             e.printStackTrace();
+        } finally {
+            masterTransport.close();
         }
     }
 
@@ -75,11 +80,13 @@ public class API {
         List<String> regions;
         //System.out.println(sql);
         try{
+            masterTransport.open();
             if(isWrite){
                 regions = masterServiceClient.getRegionServers(tableName);
             }else{
                 regions = tableToRegion.containsKey(tableName)? tableToRegion.get(tableName) : masterServiceClient.getRegionServers(tableName);
             }
+            masterTransport.close();
 
             // 存在表
             if(regions.size() > 0){
@@ -100,6 +107,19 @@ public class API {
 //                    TProtocol protocol = new TBinaryProtocol(regionTransport);
 //                    regionServiceClient = new RegionService.Client(protocol);
 
+                    try (TTransport transport = new TFramedTransport(new TSocket(regionIP, regionPort))) {
+                        TProtocol protocol = new TBinaryProtocol(transport);
+                        RegionService.Client client = new RegionService.Client(protocol);
+                        transport.open();
+
+                        String result = client.sqlRequest(sql);
+                        System.out.println(result);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    /*
                     TTransport transport = new TSocket(regionIP, regionPort);
                     try{
                         transport.open();
@@ -113,7 +133,7 @@ public class API {
                         e.printStackTrace();
                     } finally {
                         transport.close();
-                    }
+                    }*/
 
 //                    response = regionServiceClient.sqlRequest(sql);
 //                    regionTransport.close();
@@ -128,17 +148,22 @@ public class API {
             }
         } catch (TException e) {
             e.printStackTrace();
+        } finally {
+            masterTransport.close();
         }
     }
 
     public static void showTables() {
         try{
+            masterTransport.open();
             List<String> regions = masterServiceClient.showTables();
             for(String table:regions){
                 System.out.println(table);
             }
         } catch (TException e) {
             e.printStackTrace();
+        } finally {
+            masterTransport.close();
         }
     }
 }
