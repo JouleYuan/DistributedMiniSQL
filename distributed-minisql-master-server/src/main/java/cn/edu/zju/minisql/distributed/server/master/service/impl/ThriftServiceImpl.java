@@ -7,6 +7,7 @@ import cn.edu.zju.minisql.distributed.service.MasterService;
 import cn.edu.zju.minisql.distributed.service.Table;
 import org.apache.thrift.TException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ThriftServiceImpl implements MasterService.Iface {
@@ -22,7 +23,7 @@ public class ThriftServiceImpl implements MasterService.Iface {
         System.out.println("createTable(" + table.getName() + ")");
 
         List<String> regionAddressList = TableManager.addTable(table.getName());
-        if(regionAddressList == null) return null;
+        if(regionAddressList == null) return new ArrayList<>();
 
         for (String regionAddress : regionAddressList) {
             RegionServer regionServer = RegionManager.getRegionServer(regionAddress);
@@ -65,6 +66,9 @@ public class ThriftServiceImpl implements MasterService.Iface {
     public List<String> getRegionServers(String tableName){
         System.out.println("getRegionServers(" + tableName + ")");
 
-        return TableManager.getRegions(tableName);
+        List<String> regions = TableManager.getRegions(tableName);
+
+        if(regions != null) return regions;
+        else return new ArrayList<>();
     }
 }

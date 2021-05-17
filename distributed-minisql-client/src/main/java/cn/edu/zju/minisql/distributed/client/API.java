@@ -36,9 +36,9 @@ public class API {
         try{
             System.out.println("call master");
             masterTransport.open();
-            List<String> regions =  masterServiceClient.createTable(newTable);
-            if(regions == null) System.out.println("ERROR: Table " + tableName + " already exists.");
-            else {
+            if(masterServiceClient.getRegionServers(tableName).isEmpty()){
+                System.out.println("call master");
+                List<String> regions =  masterServiceClient.createTable(newTable);
                 if(regions.size() > 0){
                     tableToRegion.put(tableName, regions);
                     System.out.println("Query OK, 0 rows affected");
@@ -46,6 +46,9 @@ public class API {
                 else{
                     System.out.println("ERROR: Fail to create table " + tableName);
                 }
+            }
+            else{
+                System.out.println("ERROR: Table " + tableName + " already exists.");
             }
         } catch (TException e) {
             e.printStackTrace();
