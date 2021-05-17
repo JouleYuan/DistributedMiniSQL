@@ -8,9 +8,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class RegionManager {
     private static final Map<String, RegionServer> addressRegionServerMap = new ConcurrentHashMap<>();
 
-    public static void addRegionServer(String info) {
-        String[] str = info.split("&", 2);
-        addressRegionServerMap.put(str[0], new RegionServer(str[0], str[1]));
+    public static void addRegionServer(String address, String path) {
+        addressRegionServerMap.put(address, new RegionServer(address, path));
     }
 
     public static void removeRegionServer(String address) {

@@ -12,7 +12,7 @@ public class Config {
 
     static void init() {
         Properties properties = new Properties();
-        InputStream inputStream = Object.class.getResourceAsStream("/config.properties");
+        InputStream inputStream = Client.class.getResourceAsStream("/config.properties");
         try {
             properties.load(inputStream);
 

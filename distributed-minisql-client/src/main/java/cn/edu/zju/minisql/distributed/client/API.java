@@ -9,7 +9,6 @@ import org.apache.thrift.transport.TTransport;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Vector;
 
 public class API {
     private static TTransport masterTransport;
@@ -19,7 +18,6 @@ public class API {
     public static void init(){
         try{
             Config.init();
-
             // connect to master server
             masterTransport = new TSocket(Config.Master.ip, Config.Master.port);
             masterTransport.open();
@@ -37,9 +35,10 @@ public class API {
 
     public static void createTable(String tableName, Table newTable) {
         try{
-            // 没有同名表
-            if(masterServiceClient.getRegionServers(tableName).size() == 0){
-                List<String> regions =  masterServiceClient.createTable(newTable);
+            System.out.println("call master");
+            List<String> regions =  masterServiceClient.createTable(newTable);
+            if(regions == null) System.out.println("ERROR: Table " + tableName + " already exists.");
+            else {
                 if(regions.size() > 0){
                     tableToRegion.put(tableName, regions);
                     System.out.println("Query OK, 0 rows affected");
@@ -47,9 +46,6 @@ public class API {
                 else{
                     System.out.println("ERROR: Fail to create table " + tableName);
                 }
-            }
-            else{
-                System.out.println("ERROR: Table " + tableName + " already exists.");
             }
         } catch (TException e) {
             e.printStackTrace();
@@ -75,172 +71,57 @@ public class API {
         }
     }
 
-    public static void createIndex(String indexName, String tableName, String attrName) {
+    public static void regionSQL(String tableName, String sql, boolean isWrite){
+        List<String> regions;
+        //System.out.println(sql);
         try{
-            List<String> regions = tableToRegion.containsKey(tableName)? tableToRegion.get(tableName) : masterServiceClient.getRegionServers(tableName);
+            if(isWrite){
+                regions = masterServiceClient.getRegionServers(tableName);
+            }else{
+                regions = tableToRegion.containsKey(tableName)? tableToRegion.get(tableName) : masterServiceClient.getRegionServers(tableName);
+            }
 
             // 存在表
             if(regions.size() > 0){
+                String response = "ERROR: Region servers failed.";
                 tableToRegion.put(tableName, regions);
 
                 for(String regionServer: regions){
-                    TTransport regionTransport;
-                    RegionService.Client regionServiceClient;
-                    regionTransport = new TSocket(regionServer.split(":")[0], Integer.parseInt(regionServer.split(":")[1]));
-                    regionTransport.open();
 
-                    TProtocol protocol = new TBinaryProtocol(regionTransport);
-                    regionServiceClient = new RegionService.Client(protocol);
+                    System.out.println(regionServer);
+                    String regionIP = regionServer.split(":")[0];
+                    int regionPort = Integer.parseInt(regionServer.split(":")[1]);
 
-                    //todo:attrIndex获取 或者 传入String indexName, String tableName, String attrName而不是Index
-                    if(!regionServiceClient.createIndex(new Index())){
-                        System.out.println("ERROR: " + regionServer + " fails to create index.");
+//                    TTransport regionTransport;
+//                    RegionService.Client regionServiceClient;
+//                    regionTransport = new TSocket(regionServer.split(":")[0], Integer.parseInt(regionServer.split(":")[1]));
+//                    regionTransport.open();
+//
+//                    TProtocol protocol = new TBinaryProtocol(regionTransport);
+//                    regionServiceClient = new RegionService.Client(protocol);
+
+                    TTransport transport = new TSocket(regionIP, regionPort);
+                    try{
+                        transport.open();
+                        TProtocol protocol = new TBinaryProtocol(transport);
+                        RegionService.Client client = new RegionService.Client(protocol);
+
+                        String result = client.sqlRequest(sql);
+                        System.out.println(result);
+
+                    } catch (TException e) {
+                        e.printStackTrace();
+                    } finally {
+                        transport.close();
                     }
-                    regionTransport.close();
+
+//                    response = regionServiceClient.sqlRequest(sql);
+//                    regionTransport.close();
+
+                    if(!isWrite) break;
                 }
-                System.out.println("Query OK, 0 rows affected");
-            }
-            else{
-                System.out.println("ERROR: Table " + tableName + " doesn't exist");
-            }
-        } catch (TException e) {
-            e.printStackTrace();
-        }
-    }
 
-    public static void dropIndex(String tableName, String indexName) {
-        try{
-            List<String> regions = tableToRegion.containsKey(tableName)? tableToRegion.get(tableName) : masterServiceClient.getRegionServers(tableName);
-
-            // 存在表
-            if(regions.size() > 0){
-                tableToRegion.put(tableName, regions);
-
-                for(String regionServer: regions){
-                    TTransport regionTransport;
-                    RegionService.Client regionServiceClient;
-                    regionTransport = new TSocket(regionServer.split(":")[0], Integer.parseInt(regionServer.split(":")[1]));
-                    regionTransport.open();
-
-                    TProtocol protocol = new TBinaryProtocol(regionTransport);
-                    regionServiceClient = new RegionService.Client(protocol);
-
-                    //todo:dropIndex(tableName, indexName)
-                    if(!regionServiceClient.dropIndex(indexName)){
-                        System.out.println("ERROR: " + regionServer + " fails to create index.");
-                    }
-                    regionTransport.close();
-                }
-                System.out.println("Query OK, 0 rows affected");
-            }
-            else{
-                System.out.println("ERROR: Table " + tableName + " doesn't exist");
-            }
-        } catch (TException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void insertTuple(String tableName, List<String> tuples) {
-        try{
-            List<String> regions = tableToRegion.containsKey(tableName)? tableToRegion.get(tableName) : masterServiceClient.getRegionServers(tableName);
-
-            // 存在表
-            if(regions.size() > 0){
-                tableToRegion.put(tableName, regions);
-
-                for(String regionServer: regions){
-                    TTransport regionTransport;
-                    RegionService.Client regionServiceClient;
-                    regionTransport = new TSocket(regionServer.split(":")[0], Integer.parseInt(regionServer.split(":")[1]));
-                    regionTransport.open();
-
-                    TProtocol protocol = new TBinaryProtocol(regionTransport);
-                    regionServiceClient = new RegionService.Client(protocol);
-
-                    if(!regionServiceClient.insert(tableName, tuples)){
-                        System.out.println("ERROR: " + regionServer + " fails to insert.");
-                    }
-                    regionTransport.close();
-                }
-                System.out.println("Query OK, 1 rows affected");
-            }
-            else{
-                System.out.println("ERROR: Table " + tableName + " doesn't exist");
-            }
-        } catch (TException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void deleteTuples(String tableName, ConditionNode conditionNodes) {
-        try{
-            List<String> regions = tableToRegion.containsKey(tableName)? tableToRegion.get(tableName) : masterServiceClient.getRegionServers(tableName);
-
-            // 存在表
-            if(regions.size() > 0){
-                tableToRegion.put(tableName, regions);
-                int counts = 0;
-
-                for(String regionServer: regions){
-                    TTransport regionTransport;
-                    RegionService.Client regionServiceClient;
-                    regionTransport = new TSocket(regionServer.split(":")[0], Integer.parseInt(regionServer.split(":")[1]));
-                    regionTransport.open();
-
-                    TProtocol protocol = new TBinaryProtocol(regionTransport);
-                    regionServiceClient = new RegionService.Client(protocol);
-
-                    counts = regionServiceClient.deleteRecords(tableName,conditionNodes);
-
-                    regionTransport.close();
-                }
-                System.out.println("Query OK, " + counts + " rows affected");
-            }
-            else{
-                System.out.println("ERROR: Table " + tableName + " doesn't exist");
-            }
-        } catch (TException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void selectTuples(String tableName, Vector<String> attriNames, ConditionNode conditionNodes, String orderAttr, boolean ins) {
-        try{
-            List<String> regions = tableToRegion.containsKey(tableName)? tableToRegion.get(tableName) : masterServiceClient.getRegionServers(tableName);
-            Table resTable = null;
-            // 存在表
-            if(regions.size() > 0){
-                tableToRegion.put(tableName, regions);
-
-                for(String regionServer: regions){
-                    TTransport regionTransport;
-                    RegionService.Client regionServiceClient;
-                    regionTransport = new TSocket(regionServer.split(":")[0], Integer.parseInt(regionServer.split(":")[1]));
-                    regionTransport.open();
-
-                    TProtocol protocol = new TBinaryProtocol(regionTransport);
-                    regionServiceClient = new RegionService.Client(protocol);
-
-                    resTable = regionServiceClient.select(tableName, attriNames, conditionNodes, orderAttr, ins);
-                    regionTransport.close();
-
-                    if(resTable.getTuplesSize() > 0)
-                        break;
-                }
-                // 输出属性
-                for (Attribute attr : resTable.getAttributes()) {
-                    System.out.print("| " + attr.getName() + "\t");
-                }
-                System.out.println("|");
-                // 输出结果
-                for (List<String> selectTuple : resTable.getTuples()) {
-                    for(String value : selectTuple){
-                        System.out.print("| " + value + "\t");
-                    }
-                    System.out.println("|");
-                }
-                System.out.println("Query OK, " + resTable.getTuplesSize() + " rows in set");
+                System.out.println(response);
             }
             else{
                 System.out.println("ERROR: Table " + tableName + " doesn't exist");
@@ -261,29 +142,3 @@ public class API {
         }
     }
 }
-/* thrift demo
-        try{
-            Config.init();
-
-            TTransport transport;
-
-            transport = new TSocket(Config.Master.ip, Config.Master.port);
-            transport.open();
-
-            TProtocol protocol = new TBinaryProtocol(transport);
-            MasterService.Client masterServiceClient = new MasterService.Client(protocol);
-
-            String tableName = "student";
-            List<Attribute> attributes = new ArrayList<>();
-            for(int i = 0; i < 2; i++) attributes.add(
-                    new Attribute("attribute" + i, AttributeType.INT, 4, false));
-            Table table = new Table(tableName, attributes, 1, null);
-
-            for(String regionServer: masterServiceClient.createTable(table)) System.out.println(regionServer);
-            for(String regionServer: masterServiceClient.getRegionServers(tableName)) System.out.println(regionServer);
-            for(String str: masterServiceClient.showTables()) System.out.println(str);
-
-            transport.close();
-        } catch (TException e) {
-            e.printStackTrace();
-        }*/

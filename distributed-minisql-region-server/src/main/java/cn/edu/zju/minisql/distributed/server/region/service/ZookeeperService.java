@@ -19,8 +19,9 @@ public class ZookeeperService {
                     .build();
             client.start();
 
-            client.create().withMode(CreateMode.EPHEMERAL)
-                    .forPath("/" + InetAddress.getLocalHost().getHostAddress() + ":" + thriftPort + "&" + path, null);
+            client.create().withMode(CreateMode.EPHEMERAL).forPath(
+                    "/" + InetAddress.getLocalHost().getHostAddress() + ":" + thriftPort, path.getBytes());
+
         } catch (Exception e) {
             e.printStackTrace();
         }

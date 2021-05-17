@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 public class Client {
     public static void main(String[] args) {
         System.out.println("Welcome to MiniSql.");
-        System.out.print("miniSQL> ");
+
         API.init();
         try{
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));

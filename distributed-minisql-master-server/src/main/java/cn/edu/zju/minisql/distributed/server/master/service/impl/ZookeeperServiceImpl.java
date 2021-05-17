@@ -11,25 +11,25 @@ public class ZookeeperServiceImpl {
 
     public static void onCreation(ChildData node) {
         if(node.getPath().equals("/")) return;
-        String info = node.getPath().substring(1);
-        System.out.println("Node created: " + info);
+        String address = node.getPath().substring(1);
+        String path = new String(node.getData());
+        System.out.println("Node created: " + address + " (data path: " + path + ")");
 
-        RegionManager.addRegionServer(info);
+        RegionManager.addRegionServer(address, path);
         checkStatus();
     }
 
     public static void onDeletion(ChildData oldNode) {
-        String info = oldNode.getPath().substring(1);
-        System.out.println("Node deleted: " + info);
+        String address = oldNode.getPath().substring(1);
+        String path = new String(oldNode.getData());
+        System.out.println("Node deleted: " + address + " (data path: " + path + ")");
 
-        String[] str = info.split("&", 2);
+        List<String> tables = RegionManager.getRegionServer(address).getTables();
 
-        List<String> tables = RegionManager.getRegionServer(str[0]).getTables();
-
-        RegionManager.removeRegionServer(str[0]);
+        RegionManager.removeRegionServer(address);
         checkStatus();
 
-        for(String table: tables) TableManager.replaceRegion(table, str[0]);
+        for(String table: tables) TableManager.replaceRegion(table, address);
     }
 
     private static void checkStatus() {

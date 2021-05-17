@@ -1,13 +1,15 @@
-package cn.edu.zju.minisql.distributed.client.lexer;
+package cn.edu.zju.minisql.distributed.server.region.lib.lexer;
+import java.io.*;
+import java.util.*;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.Hashtable;
+//import symbols.*;  
 
 public class Lexer {
     char peek = ' ';        /* 下一个读入字符 */
-    Hashtable<String, Word> words = new Hashtable<String, Word>();
-    BufferedReader reader = null;
+    Hashtable<String, Word> words =
+            new Hashtable<>();
+
+    BufferedReader reader;
     /* 保存当前是否读取到了文件的结尾  */
     private Boolean isReaderEnd = false;
 
@@ -15,6 +17,8 @@ public class Lexer {
     public Boolean getReaderState() {
         return this.isReaderEnd;
     }
+
+
     private void reserve(Word w) {
         words.put(w.lexme, w);
     }
@@ -24,6 +28,15 @@ public class Lexer {
      */
     public Lexer(BufferedReader reader) {
         this.reader=reader;
+        /* 初始化读取文件变量
+
+        try {
+            reader = new BufferedReader(new FileReader("输入.txt"));
+        }
+        catch(IOException e) {
+            System.out.print(e);
+        }  */
+
 
         /* 关键字 */
         this.reserve(new Word("create",Tag.CREATE));
@@ -54,9 +67,11 @@ public class Lexer {
         this.reserve(new Word("int", Tag.TYPE));
         this.reserve(new Word("float", Tag.TYPE));
         this.reserve(new Word("char", Tag.TYPE));
+        /* 类型 */
+
     }
 
-    private void readch() throws IOException  {
+    private void readChar() throws IOException  {
         /* 这里应该是使用的是 */
         peek = (char)reader.read();
         if((int)peek == 0xffff){
@@ -64,8 +79,9 @@ public class Lexer {
         }
     }
 
-    private Boolean readch(char ch) throws IOException {
-        readch();
+
+    private Boolean readChar(char ch) throws IOException {
+        readChar();
         if (this.peek != ch) {
             return false;
         }
@@ -76,26 +92,27 @@ public class Lexer {
 
     public Token scan() throws IOException {
         /* 消除空白 */
-        for( ; ; readch() ) {
-            if(peek != ' ' && peek != '\t'&& peek !='\r' && peek != '\n')
-                break;
+        for(; ; readChar() ) {
+            if(peek == ' ' || peek == '\t'||peek=='\r' || peek=='\n'){
+                continue;
+            }
+            else break;
         }
 
         /* 下面开始分割关键字，标识符等信息  */
         switch (peek) {
             /* 对于 ==, >=, <=, !=的区分使用状态机实现 */
             case '=' :
-                readch('=');
                 return Comparison.eq;
             case '>' :
-                if (readch('=')) {
+                if (readChar('=')) {
                     return Comparison.ge;
                 }
                 else {
                     return Comparison.gt;
                 }
             case '<' :
-                if (readch('=')) {
+                if (readChar('=')) {
                     return Comparison.le;
                 }
                 else if(this.peek=='>'){
@@ -106,7 +123,7 @@ public class Lexer {
                     return Comparison.lt;
                 }
             case '!' :
-                if (readch('=')) {
+                if (readChar('=')) {
                     return Comparison.ne;
                 }
                 else {
@@ -120,15 +137,18 @@ public class Lexer {
         if(Character.isDigit(peek)) {
             double value = 0;  Num n;
             do {
+
                 value = 10 * value + Character.digit(peek, 10);
-                readch();
+                readChar();
+
             } while (Character.isDigit(peek));
             if(peek=='.'){
-                readch();
-                int i=1;
+                readChar();int i=1;
                 do {
+
                     value = value + Character.digit(peek, 10)*Math.pow(0.1, i++);
-                    readch();
+                    readChar();
+
                 } while (Character.isDigit(peek));
                 n = new Num((float)value);
             }
@@ -136,39 +156,43 @@ public class Lexer {
                 n = new Num((int)value);
             }
 
+            //table.put(n, "Num");
             return n;
         }
         /*
          * 对字符串进行识别
          */
-        if(peek == '\''){
-            StringBuffer sb = new StringBuffer();
-            readch();
+        if(peek=='\''){
+            StringBuilder sb = new StringBuilder();
+            //	sb.append(peek);
+            readChar();
 
-            while (peek!='\'' && peek!=';'){
+            while (peek!='\''&&peek!=';'){
                 sb.append(peek);
-                readch();
+                readChar();
             }
 
+            //	sb.append(peek);
             Token w;
             if(peek==';') {
                 w  = new Token(peek);
             }
             else
                 w = new Word(sb.toString(), Tag.STR);
-            readch();
+            readChar();
             return w;
         }
         /*
          * 关键字或者是标识符的识别
          */
         if(Character.isLetter(peek)) {
-            StringBuffer sb = new StringBuffer();
+
+            StringBuilder sb = new StringBuilder();
 
             /* 首先得到整个的一个分割 */
             do {
                 sb.append(peek);
-                readch();
+                readChar();
             } while (Character.isLetterOrDigit(peek)||peek=='_'||peek=='.'||peek=='&');
 
             /* 判断是关键字还是标识符 */
@@ -181,13 +205,17 @@ public class Lexer {
             }
 
             /* 否则就是一个标识符id */
+
             w = new Word(s, Tag.ID);
+
             return w;
         }
 
         /* peek中的任意字符都被认为是词法单元返回 */
+
         Token tok  = new Token(peek);
         peek = ' ';
+
         return tok;
     }
 }
