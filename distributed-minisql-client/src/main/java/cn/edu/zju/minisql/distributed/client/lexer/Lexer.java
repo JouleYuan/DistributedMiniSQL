@@ -6,8 +6,8 @@ import java.util.Hashtable;
 
 public class Lexer {
     char peek = ' ';        /* 下一个读入字符 */
-    Hashtable<String, Word> words = new Hashtable<String, Word>();
-    BufferedReader reader = null;
+    Hashtable<String, Word> words = new Hashtable<>();
+    BufferedReader reader;
     /* 保存当前是否读取到了文件的结尾  */
     private Boolean isReaderEnd = false;
 
@@ -72,6 +72,10 @@ public class Lexer {
 
         this.peek = ' ';
         return true;
+    }
+
+    public String readLine() throws IOException {
+        return reader.readLine();
     }
 
     public Token scan() throws IOException {

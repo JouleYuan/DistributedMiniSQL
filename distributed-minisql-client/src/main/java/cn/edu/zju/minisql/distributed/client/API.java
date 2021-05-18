@@ -19,10 +19,11 @@ public class API {
     public static void init(){
         try{
             Config.init();
-            // connect to master server
+
             masterTransport = new TFramedTransport(new TSocket(Config.Master.ip, Config.Master.port));
             TProtocol protocol = new TBinaryProtocol(masterTransport);
             masterServiceClient = new MasterService.Client(protocol);
+            masterTransport.close();
         } catch (TException e) {
             e.printStackTrace();
         }
@@ -34,10 +35,8 @@ public class API {
 
     public static void createTable(String tableName, Table newTable) {
         try{
-            System.out.println("call master");
             masterTransport.open();
             if(masterServiceClient.getRegionServers(tableName).isEmpty()){
-                System.out.println("call master");
                 List<String> regions =  masterServiceClient.createTable(newTable);
                 if(regions.size() > 0){
                     tableToRegion.put(tableName, regions);
@@ -61,7 +60,7 @@ public class API {
         try{
             // 存在表
             masterTransport.open();
-            if(masterServiceClient.getRegionServers(tableName).size() > 0){
+            if(!masterServiceClient.getRegionServers(tableName).isEmpty()){
                 if(masterServiceClient.dropTable(tableName)){
                     System.out.println("Query OK, 0 rows affected");
                 }
@@ -81,7 +80,7 @@ public class API {
 
     public static void regionSQL(String tableName, String sql, boolean isWrite){
         List<String> regions;
-        //System.out.println(sql);
+        System.out.println(sql);
         try{
             masterTransport.open();
             if(isWrite){
@@ -92,58 +91,26 @@ public class API {
             masterTransport.close();
 
             // 存在表
-            if(regions.size() > 0){
+            if(!regions.isEmpty()){
                 String response = "ERROR: Region servers failed.";
-                tableToRegion.put(tableName, regions);
 
-                for(String regionServer: regions){
-
-                    System.out.println(regionServer);
+                for(String regionServer: regions) {
                     String regionIP = regionServer.split(":")[0];
                     int regionPort = Integer.parseInt(regionServer.split(":")[1]);
-
-//                    TTransport regionTransport;
-//                    RegionService.Client regionServiceClient;
-//                    regionTransport = new TSocket(regionServer.split(":")[0], Integer.parseInt(regionServer.split(":")[1]));
-//                    regionTransport.open();
-//
-//                    TProtocol protocol = new TBinaryProtocol(regionTransport);
-//                    regionServiceClient = new RegionService.Client(protocol);
 
                     try (TTransport transport = new TFramedTransport(new TSocket(regionIP, regionPort))) {
                         TProtocol protocol = new TBinaryProtocol(transport);
                         RegionService.Client client = new RegionService.Client(protocol);
                         transport.open();
 
-                        String result = client.sqlRequest(sql);
-                        System.out.println(result);
-
+                        response = client.sqlRequest(sql);
                     } catch (Exception e) {
+                        regions.remove(regionServer);
                         e.printStackTrace();
                     }
-
-                    /*
-                    TTransport transport = new TSocket(regionIP, regionPort);
-                    try{
-                        transport.open();
-                        TProtocol protocol = new TBinaryProtocol(transport);
-                        RegionService.Client client = new RegionService.Client(protocol);
-
-                        String result = client.sqlRequest(sql);
-                        System.out.println(result);
-
-                    } catch (TException e) {
-                        e.printStackTrace();
-                    } finally {
-                        transport.close();
-                    }*/
-
-//                    response = regionServiceClient.sqlRequest(sql);
-//                    regionTransport.close();
-
                     if(!isWrite) break;
                 }
-
+                tableToRegion.put(tableName, regions);
                 System.out.println(response);
             }
             else{

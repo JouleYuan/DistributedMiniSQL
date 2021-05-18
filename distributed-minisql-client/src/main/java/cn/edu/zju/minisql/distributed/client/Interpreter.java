@@ -12,7 +12,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 public class Interpreter {
     private static Token currentToken;//记录当前token
@@ -50,7 +49,7 @@ public class Interpreter {
                     if (file.exists()) {
                         BufferedReader reader2 = new BufferedReader(new FileReader(file));
                         parsing(reader2);
-                        isSynCorrect = true;//为了奇怪的bug
+                        isSynCorrect = true;
                     } else {
                         synErrMsg = "The file " + file.getName() + " doesn't exist";
                         isSynCorrect = false;
@@ -263,14 +262,7 @@ public class Interpreter {
                     }
                 }
 
-                /*
-                 * create index 语义错误种类
-                 * 1 index name 已存在
-                 * 2 table name 不存在
-                 * 3 attribute 不存在
-                 * 4 attribute 已经是索引
-                 * 5 attribute 不是unique
-                 */
+                // create index
                 else if (currentToken.tag == Tag.INDEX) {
                     String tmpTableName;
 
@@ -361,7 +353,7 @@ public class Interpreter {
                         if (currentToken.toString().equals(";")) {//drop table a ;
                             /*
                              * 执行drop table
-                             * 操作*/
+                             */
                             if (isSemaCorrect) {
                                 API.dropTable(tmpTableName);
                             } else {
@@ -395,8 +387,7 @@ public class Interpreter {
 
                         if (currentToken.tag == Tag.ON) { // drop index a on
                             currentToken = lexer.scan();
-                            //sql.append(" ");
-                            //sql.append(currentToken);
+
                             String tmpTableName = currentToken.toString(); // drop index a on b
                             currentToken = lexer.scan();
                             sql.append(" ");
@@ -455,60 +446,25 @@ public class Interpreter {
                             currentToken = lexer.scan();
                             sql.append(" ");
                             sql.append(currentToken);
-                            if (currentToken.toString().equals("(")) {
-                                currentToken = lexer.scan();
+                            String str;
+                            do{
+                                str = lexer.readLine().trim();
                                 sql.append(" ");
-                                sql.append(currentToken);
+                                sql.append(str);
+                            } while(!str.endsWith(";"));
 
-                                while (!currentToken.toString().equals(")")) {    //insert into 表名 values()
-                                    if (isSemaCorrect) {
-                                        if (currentToken.tag != Tag.STR && currentToken.tag != Tag.INTNUM && currentToken.tag != Tag.FLOATNUM) {//字符类型
-                                            if (isSynCorrect)
-                                                synErrMsg = "Synthetic error near: " + currentToken.toString();
-                                            isSynCorrect = false;
-                                            break;
-                                        }
-                                    }
-
-                                    currentToken = lexer.scan();
-                                    sql.append(" ");
-                                    sql.append(currentToken);
-                                    if (currentToken.toString().equals(",")){
-                                        currentToken = lexer.scan();
-                                        sql.append(" ");
-                                        sql.append(currentToken);
-                                    }
-                                    else if (currentToken.toString().equals(")")) ;
-                                    else {
-                                        if (isSynCorrect)
-                                            synErrMsg = "Synthetic error near: " + currentToken.toString();
-                                        isSynCorrect = false;
-                                        break;
-                                    }
-                                }
-
-                                currentToken = lexer.scan();
-                                sql.append(" ");
-                                sql.append(currentToken);
-                                if (isSynCorrect && currentToken.toString().equals(";")) {
-                                    /*
-                                     * 执行insert 操作
-                                     * */
-                                    if (isSemaCorrect) {
-                                        API.regionSQL(tmpTableName, sql.toString(),true);
-                                    } else {
-                                        System.out.print(semaErrMsg);
-                                        System.out.println(", insert failed");
-                                        isSemaCorrect = true;
-                                    }
-                                    sql.delete(0, sql.length());
+                            if (isSynCorrect) {
+                                /*
+                                 * 执行insert 操作
+                                 * */
+                                if (isSemaCorrect) {
+                                    API.regionSQL(tmpTableName, sql.toString(),true);
                                 } else {
-                                    if (isSynCorrect) synErrMsg = "Synthetic error near: " + currentToken.toString();
-                                    isSynCorrect = false;
+                                    System.out.print(semaErrMsg);
+                                    System.out.println(", insert failed");
+                                    isSemaCorrect = true;
                                 }
-                            } else {
-                                if (isSynCorrect) synErrMsg = "Synthetic error near: " + currentToken.toString();
-                                isSynCorrect = false;
+                                sql.delete(0, sql.length());
                             }
                         } else {
                             if (isSynCorrect) synErrMsg = "Synthetic error near: " + currentToken.toString();
@@ -544,20 +500,23 @@ public class Interpreter {
                         sql.append(currentToken);
                         if (currentToken.tag == Tag.WHERE) {//delete from 表名 where 条件；
                             // 添加搜索条件
-                            boolean tmpCondition = ParsingCondition(lexer, ";");
-                            if (currentToken.toString().equals(";") && tmpCondition) {//delete from 表名；
-                                if (isSemaCorrect && isSynCorrect) {
-                                    /*
-                                     * 执行delete where 操作
-                                     */
-                                    API.regionSQL(tmpTableName, sql.toString(), true);
-                                } else if (isSynCorrect && !isSemaCorrect) {
-                                    System.out.println(semaErrMsg + ", delete tuples failed");
-                                    isSemaCorrect = true;
-                                }
-                            } else {
-                                if (isSynCorrect) synErrMsg = "Synthetic error near: " + currentToken.toString();
-                                isSynCorrect = false;
+                            String str;
+                            do{
+                                str = lexer.readLine().trim();
+                                sql.append(str);
+                            } while(!str.endsWith(";"));
+
+                            /*
+                             * 执行delete 操作
+                             * */
+                            if (isSemaCorrect && isSynCorrect) {
+                                /*
+                                 * 执行delete where 操作
+                                 */
+                                API.regionSQL(tmpTableName, sql.toString(), true);
+                            } else if (isSynCorrect) {
+                                System.out.println(semaErrMsg + ", delete tuples failed");
+                                isSemaCorrect = true;
                             }
                             sql.delete(0, sql.length());
                         } else if (currentToken.toString().equals(";")) {//delete from 表名；
@@ -602,69 +561,22 @@ public class Interpreter {
                         sql.append(currentToken);
 
                         if (isSynCorrect && currentToken.tag == Tag.WHERE) {//select * from 表名 where 条件；
-                            boolean tmpCondition = ParsingCondition(lexer, ";");
-                            if (currentToken.toString().equals(";") && tmpCondition) {//select from 表名；
-                                if (isSemaCorrect && isSynCorrect) {
-                                    /*
-                                     * 执行select where 操作
-                                     * */
-                                    API.regionSQL(tmpTableName, sql.toString(), false);
-                                } else if (isSynCorrect && !isSemaCorrect) {
-                                    System.out.println(semaErrMsg + ", select tuples failed");
-                                    isSemaCorrect = true;
-                                }
-                                sql.delete(0, sql.length());
-                            } else if (isSynCorrect && currentToken.tag == Tag.ORDER) {
-                                currentToken = lexer.scan();
-                                sql.append(" ");
-                                sql.append(currentToken);
-                                if (currentToken.tag == Tag.BY) {
-                                    currentToken = lexer.scan();
-                                    sql.append(" ");
-                                    sql.append(currentToken);
-                                    if (currentToken.tag == Tag.ID) {
-                                        currentToken = lexer.scan();
-                                        sql.append(" ");
-                                        sql.append(currentToken);
-                                        if (currentToken.toString().equals(";") || currentToken.tag == Tag.ASC || currentToken.tag == Tag.DESC) {
+                            String str;
+                            do{
+                                str = lexer.readLine().trim();
+                                sql.append(str);
+                            } while(!str.endsWith(";"));
 
-                                            if (!currentToken.toString().equals(";")) {
-                                                currentToken = lexer.scan();
-                                                sql.append(" ");
-                                                sql.append(currentToken);
-                                                if (isSynCorrect && !currentToken.toString().equals(";")) {
-                                                    synErrMsg = "Synthetic error near: " + currentToken.toString();
-                                                    isSynCorrect = false;
-                                                    continue;
-                                                }
-                                            }
-                                            if (isSemaCorrect && tmpCondition) {
-                                                /*执行select where order操作*/
-                                                API.regionSQL(tmpTableName, sql.toString(), true);
-                                            } else {
-                                                System.out.println(semaErrMsg + ", select tuples failed");
-                                                isSemaCorrect = true;
-                                            }
-                                            sql.delete(0, sql.length());
-                                        } else {
-                                            if (isSynCorrect)
-                                                synErrMsg = "Synthetic error near: " + currentToken.toString();
-                                            isSynCorrect = false;
-                                        }
-
-                                    } else {
-                                        if (isSynCorrect)
-                                            synErrMsg = "Synthetic error near: " + currentToken.toString();
-                                        isSynCorrect = false;
-                                    }
-                                } else {
-                                    if (isSynCorrect) synErrMsg = "Synthetic error near: " + currentToken.toString();
-                                    isSynCorrect = false;
-                                }
-                            } else {
-                                if (isSynCorrect) synErrMsg = "Synthetic error near: " + currentToken.toString();
-                                isSynCorrect = false;
+                            if (isSemaCorrect && isSynCorrect) {
+                                /*
+                                 * 执行select where 操作
+                                 * */
+                                API.regionSQL(tmpTableName, sql.toString(), false);
+                            } else if (isSynCorrect) {
+                                System.out.println(semaErrMsg + ", select tuples failed");
+                                isSemaCorrect = true;
                             }
+                            sql.delete(0, sql.length());
                         } else if (currentToken.toString().equals(";")) {//select * from 表名；
                             if (isSemaCorrect) {
                                 /*执行select 操作*/
@@ -675,53 +587,23 @@ public class Interpreter {
                             }
                             sql.delete(0, sql.length());
                         } else if (currentToken.tag == Tag.ORDER) {
-                            currentToken = lexer.scan();
-                            sql.append(" ");
-                            sql.append(currentToken);
-                            if (currentToken.tag == Tag.BY) {
-                                currentToken = lexer.scan();
-                                sql.append(" ");
-                                sql.append(currentToken);
-                                if (currentToken.tag == Tag.ID) {
-                                    currentToken = lexer.scan();
-                                    sql.append(" ");
-                                    sql.append(currentToken);
-                                    if (currentToken.toString().equals(";") || currentToken.tag == Tag.ASC || currentToken.tag == Tag.DESC) {
-                                        if (!currentToken.toString().equals(";")){
-                                            currentToken = lexer.scan();
-                                            sql.append(" ");
-                                            sql.append(currentToken);
-                                            if (isSynCorrect && !currentToken.toString().equals(";")) {
-                                                synErrMsg = "Synthetic error near: " + currentToken.toString();
-                                                isSynCorrect = false;
-                                                continue;
-                                            }
-                                        }
-                                        if (isSemaCorrect) {
-                                            /*
-                                             * 执行select order操作
-                                             */
-                                            API.regionSQL(tmpTableName, sql.toString(), true);
-                                        } else {
-                                            System.out.println(semaErrMsg + ", select tuples failed");
-                                            isSemaCorrect = true;
-                                        }
-                                        sql.delete(0, sql.length());
-                                    } else {
-                                        if (isSynCorrect) synErrMsg = "Synthetic error near: " + currentToken.toString();
-                                        isSynCorrect = false;
-                                    }
+                            String str;
+                            do{
+                                str = lexer.readLine().trim();
+                                sql.append(str);
+                            } while(!str.endsWith(";"));
 
-                                } else {
-                                    if (isSynCorrect) synErrMsg = "Synthetic error near: " + currentToken.toString();
-                                    isSynCorrect = false;
-                                }
+                            if (isSemaCorrect) {
+                                /*
+                                 * 执行select order操作
+                                 */
+                                API.regionSQL(tmpTableName, sql.toString(), true);
                             } else {
-                                if (isSynCorrect) synErrMsg = "Synthetic error near: " + currentToken.toString();
-                                isSynCorrect = false;
+                                System.out.println(semaErrMsg + ", select tuples failed");
+                                isSemaCorrect = true;
                             }
+                            sql.delete(0, sql.length());
                         } else {
-
                             if (isSynCorrect) synErrMsg = "Synthetic error near: " + currentToken.toString();
                             isSynCorrect = false;
                         }
@@ -756,8 +638,7 @@ public class Interpreter {
     }
 
     //对project部分语句进行解析
-    private static Vector<String> ParsingProjection(Lexer lexer) throws IOException {
-        Vector<String> tmpAttrNames = new Vector<>();
+    private static void ParsingProjection(Lexer lexer) throws IOException {
         currentToken = lexer.scan();
         sql.append(" ");
         sql.append(currentToken);
@@ -765,11 +646,9 @@ public class Interpreter {
             currentToken = lexer.scan();
             sql.append(" ");
             sql.append(currentToken);
-            return null;
         } else {
             while (currentToken.tag != Tag.FROM) {
                 if (currentToken.tag == Tag.ID) {
-                    tmpAttrNames.add(currentToken.toString());
                     currentToken = lexer.scan();
                     sql.append(" ");
                     sql.append(currentToken);
@@ -777,7 +656,7 @@ public class Interpreter {
                         currentToken = lexer.scan();
                         sql.append(" ");
                         sql.append(currentToken);
-                    } else if (currentToken.tag == Tag.FROM) ;
+                    } else if (currentToken.tag == Tag.FROM) return;
                     else {
                         if (isSynCorrect) synErrMsg = "Synthetic error near: " + currentToken.toString();
                         isSynCorrect = false;
@@ -788,130 +667,7 @@ public class Interpreter {
                     isSynCorrect = false;
                     break;
                 }
-
-            }
-            return tmpAttrNames;
-        }
-    }
-
-    //对条件的每个表达式进行解析
-    private static boolean ParsingExpression(Lexer lexer) throws IOException{
-        if(currentToken.tag == Tag.ID){
-            currentToken = lexer.scan();
-            sql.append(" ");
-            sql.append(currentToken);
-            if(currentToken.tag == Tag.OP){
-                currentToken = lexer.scan();
-                sql.append(" ");
-                sql.append(currentToken);
-
-                if(isSemaCorrect){
-                    if(currentToken.tag == Tag.STR || currentToken.tag==Tag.INTNUM || currentToken.tag==Tag.FLOATNUM || currentToken.tag==Tag.ID){
-                        return true;
-                    }
-                    else{
-                        if(isSynCorrect)  synErrMsg="Synthetic error near: "+currentToken.toString();
-                        isSynCorrect=false;
-                    }
-                }
-            }
-            else{
-                if(isSynCorrect)  synErrMsg="Synthetic error near: "+currentToken.toString();
-                isSynCorrect=false;
             }
         }
-        else{
-            if(isSynCorrect)  synErrMsg="Synthetic error near: "+currentToken.toString();
-            isSynCorrect=false;
-        }
-        return  false;
-    }
-
-    //对条件部分字符串进行解析
-    private static boolean ParsingCondition(Lexer lexer,String endToken)throws IOException {
-        /*
-         * 语义错误种类
-         * 1 属性名不存在
-         * 2 value 格式不对
-         * 3 操作符不对 char只支持= <>
-         */
-        boolean tmpCondition = false, tmpExpression = false;
-
-        currentToken = lexer.scan();
-        sql.append(" ");
-        sql.append(currentToken);
-
-        if(currentToken.toString().equals("(")){
-            tmpCondition = ParsingCondition(lexer,")");
-        }
-        else if(currentToken.tag == Tag.ID){
-            tmpCondition = ParsingExpression(lexer);
-        }
-        else{
-            if(isSynCorrect)  synErrMsg="Synthetic error near: "+currentToken.toString();
-            isSynCorrect=false;
-        }
-
-        if(!tmpCondition||!isSynCorrect){
-            return false;
-        }
-
-        currentToken = lexer.scan();
-        sql.append(" ");
-        sql.append(currentToken);
-
-        while(!currentToken.toString().equals(endToken) && currentToken.tag != Tag.ORDER){
-            if(currentToken.tag == Tag.AND){
-                currentToken = lexer.scan();
-                sql.append(" ");
-                sql.append(currentToken);
-
-                if(currentToken.toString().equals("(")){
-                    tmpExpression = ParsingCondition(lexer,")");
-                }
-                else if(currentToken.tag==Tag.ID){
-                    tmpExpression = ParsingExpression(lexer);
-                }
-                else{
-                    if(isSynCorrect)  synErrMsg="Synthetic error near: "+currentToken.toString();
-                    isSynCorrect=false;
-                    return false;
-                }
-                if(!tmpExpression){
-                    return false;
-                }
-            }
-            else if(currentToken.tag == Tag.OR){
-                currentToken=lexer.scan();
-                sql.append(" ");
-                sql.append(currentToken);
-
-                if(currentToken.toString().equals("(")){
-                    tmpExpression = ParsingCondition(lexer,")");
-                }
-                else if(currentToken.tag==Tag.ID){
-                    tmpExpression=ParsingExpression(lexer);
-                }
-                else{
-                    if(isSynCorrect)  synErrMsg="Synthetic error near: "+currentToken.toString();
-                    isSynCorrect=false;
-                    return false;
-                }
-
-                if(!tmpExpression){
-                    return false;
-                }
-            }
-
-            else if(currentToken.toString().equals(endToken) || currentToken.tag == Tag.ORDER) break;
-            else{
-                if(isSynCorrect)  synErrMsg="Synthetic error near: "+currentToken.toString();isSynCorrect=false;
-                break;
-            }
-            currentToken=lexer.scan();
-            sql.append(" ");
-            sql.append(currentToken);
-        }
-        return true;
     }
 }
