@@ -58,13 +58,13 @@ public class TypesRedefinition {
 
     public static String type2str(cn.edu.zju.minisql.distributed.service.AttributeType t){
         if(t == cn.edu.zju.minisql.distributed.service.AttributeType.FLOAT){
-            return "FLOAT";
+            return "float";
         }
         if(t == cn.edu.zju.minisql.distributed.service.AttributeType.CHAR){
-            return "CHAR";
+            return "char";
         }
         if(t == cn.edu.zju.minisql.distributed.service.AttributeType.INT){
-            return "INT";
+            return "int";
         }
         return "";
     }

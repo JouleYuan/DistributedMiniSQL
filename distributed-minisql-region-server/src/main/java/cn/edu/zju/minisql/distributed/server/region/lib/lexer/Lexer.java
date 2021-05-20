@@ -92,9 +92,9 @@ public class Lexer {
 
     public Token scan() throws IOException {
         /* 消除空白 */
-        for(; ; readChar() ) {
+        while(true){
             if(peek == ' ' || peek == '\t'||peek=='\r' || peek=='\n'){
-                continue;
+                readChar();
             }
             else break;
         }
@@ -103,7 +103,13 @@ public class Lexer {
         switch (peek) {
             /* 对于 ==, >=, <=, !=的区分使用状态机实现 */
             case '=' :
-                return Comparison.eq;
+                // 不能改，否则输入 == 会死循环
+                if (readChar('=')) {
+                    return Comparison.eq;
+                }
+                else {
+                    return Comparison.eq;
+                }
             case '>' :
                 if (readChar('=')) {
                     return Comparison.ge;

@@ -116,8 +116,7 @@ public class ThriftServiceImpl implements RegionService.Iface {
             ioe.printStackTrace();
         }
 
-        if(ok) return false;
-        else return true;
+        return !ok;
     }
 
     @Override

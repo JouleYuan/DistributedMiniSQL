@@ -503,6 +503,7 @@ public class Interpreter {
                             String str;
                             do{
                                 str = lexer.readLine().trim();
+                                sql.append(" ");
                                 sql.append(str);
                             } while(!str.endsWith(";"));
 
@@ -564,6 +565,7 @@ public class Interpreter {
                             String str;
                             do{
                                 str = lexer.readLine().trim();
+                                sql.append(" ");
                                 sql.append(str);
                             } while(!str.endsWith(";"));
 
@@ -590,6 +592,7 @@ public class Interpreter {
                             String str;
                             do{
                                 str = lexer.readLine().trim();
+                                sql.append(" ");
                                 sql.append(str);
                             } while(!str.endsWith(";"));
 

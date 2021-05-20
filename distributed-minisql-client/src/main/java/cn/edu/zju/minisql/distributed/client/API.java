@@ -80,7 +80,6 @@ public class API {
 
     public static void regionSQL(String tableName, String sql, boolean isWrite){
         List<String> regions;
-        System.out.println(sql);
         try{
             masterTransport.open();
             if(isWrite){
@@ -104,11 +103,11 @@ public class API {
                         transport.open();
 
                         response = client.sqlRequest(sql);
+                        if(!isWrite) break;
                     } catch (Exception e) {
                         regions.remove(regionServer);
                         e.printStackTrace();
                     }
-                    if(!isWrite) break;
                 }
                 tableToRegion.put(tableName, regions);
                 System.out.println(response);
