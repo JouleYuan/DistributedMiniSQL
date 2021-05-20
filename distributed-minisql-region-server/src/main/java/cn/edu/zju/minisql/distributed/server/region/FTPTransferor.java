@@ -13,8 +13,9 @@ import org.apache.commons.net.ftp.FTPReply;
 public class FTPTransferor {
     public static class FTPTransferorConfig {
         // 需要所有region server都一致
-        public static final String userName = "ftpuser";
-        public static final String password = "lemontree";
+        //public static final String userName = "anonymous";
+        public static final String userName = "anonymous";
+        public static final String password = "";
         public static final int port = 21;
         public static final int maxRetry = 5;
     }
@@ -26,21 +27,13 @@ public class FTPTransferor {
 
         public MiniSQLTableFiles(String tableName) {
             String prefix = System.getProperty("user.dir");
-            String env = System.getProperty("env");
-            String delimiter = env.equals("unix") ? "/" : "\\";
 
             try {
                 // <tableName>
                 fileStreams.add(new FileInputStream(
-                        new File(prefix + delimiter + tableName)
+                        new File(prefix + File.separator + tableName)
                 ));
                 fileNames.add(tableName);
-
-                // <tableName>_prikey.index
-                fileStreams.add(new FileInputStream(
-                        new File(prefix + delimiter + tableName + "_prikey.index"))
-                );
-                fileNames.add(tableName + "_prikey.index");
 
                 ok = true;
             } catch (final IOException ioe) {
@@ -55,8 +48,8 @@ public class FTPTransferor {
                 for (InputStream fileStream : fileStreams) {
                     fileStream.close();
                 }
-            } catch (final IOException ioe) {
-                ioe.printStackTrace();
+            } catch (final IOException ioee) {
+                ioee.printStackTrace();
             }
         }
     }
@@ -90,8 +83,8 @@ public class FTPTransferor {
             if (client.isConnected()) {
                 try {
                     client.disconnect();
-                } catch (final IOException e) {
-                    e.printStackTrace();
+                } catch (final IOException ioee) {
+                    ioee.printStackTrace();
                 }
             }
             System.err.println("Could not connect to " + ip + ":" + FTPTransferorConfig.port);
@@ -111,7 +104,7 @@ public class FTPTransferor {
                     break;
             }
             if (retry == FTPTransferorConfig.maxRetry) {
-                System.err.println("Login error");
+                System.err.println("Login for " + FTPTransferorConfig.maxRetry + " times, still failed");
                 return false; // 达到重试上限
             }
 
@@ -128,7 +121,6 @@ public class FTPTransferor {
             for (InputStream fileStream : files.fileStreams) {
                 retry = 0;
                 while (retry != FTPTransferorConfig.maxRetry) {
-                    System.out.println(files.fileNames.get(idx) + " retry: " + retry);
                     if (!client.storeFile(
                             files.fileNames.get(idx),
                             fileStream
@@ -138,11 +130,12 @@ public class FTPTransferor {
                         break;
                 }
                 if(retry == FTPTransferorConfig.maxRetry)  {
-                    System.err.println("Upload error");
+                    System.err.println("Upload for " + FTPTransferorConfig.maxRetry + " times, still failed");
                     return false;
                 }
+
+                System.out.println(files.fileNames.get(idx) + " transferred");
                 idx++;
-                System.out.println("finished: " + files.fileNames.get(idx));
             }
         } catch (final IOException ioe) {
             ioe.printStackTrace();
@@ -155,8 +148,8 @@ public class FTPTransferor {
             if (client.isConnected()) {
                 try {
                     client.disconnect();
-                } catch (final IOException ioe) {
-                    ioe.printStackTrace();
+                } catch (final IOException ioee) {
+                    ioee.printStackTrace();
                 }
             }
         }
