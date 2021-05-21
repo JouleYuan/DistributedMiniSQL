@@ -5,6 +5,8 @@ package cn.edu.zju.minisql.distributed.server.region.lib.catalogmanager;
 3.	数据库中所有索引的定义，包括所属表、索引建立在那个字段上等。
 Catalog Manager还必需提供访问及操作上述信息的接口，供Interpreter和API模块使用。
 */
+import cn.edu.zju.minisql.distributed.server.region.Config;
+
 import java.io.*;
 import java.util.*;
 /*实现的功能：
@@ -24,7 +26,7 @@ public class CatalogManager {
 	}
 	private static void InitialIndexCatalog() throws IOException  {
 		// TODO Auto-generated method stub
-		File file=new File(indexFilename);
+		File file=new File(Config.Minisql.path + indexFilename);
 		if(!file.exists()) return;
 		FileInputStream fis = new FileInputStream(file);
 		DataInputStream dis = new DataInputStream(fis);
@@ -43,7 +45,7 @@ public class CatalogManager {
 	}
 	private static void InitialTableCatalog() throws IOException {
 		// TODO Auto-generated method stub
-		File file=new File(tableFilename);
+		File file=new File(Config.Minisql.path + tableFilename);
 		if(!file.exists()) return;
 		FileInputStream fis = new FileInputStream(file);
 		DataInputStream dis = new DataInputStream(fis);
@@ -86,7 +88,7 @@ public class CatalogManager {
 	private static void storeIndexCatalog() throws IOException {
 		// TODO Auto-generated method stub
 
-		File file=new File(indexFilename);
+		File file=new File(Config.Minisql.path + indexFilename);
 		if(file.exists())file.delete();
 		FileOutputStream fos = new FileOutputStream(file);
 		DataOutputStream dos = new DataOutputStream(fos);
@@ -105,7 +107,7 @@ public class CatalogManager {
 	}
 	private static void storeTableCatalog() throws IOException {
 		// TODO Auto-generated method stub
-		File file=new File(tableFilename);
+		File file=new File(Config.Minisql.path + tableFilename);
 		//if(file.exists())file.d;
 		FileOutputStream fos = new FileOutputStream(file);
 		DataOutputStream dos = new DataOutputStream(fos);

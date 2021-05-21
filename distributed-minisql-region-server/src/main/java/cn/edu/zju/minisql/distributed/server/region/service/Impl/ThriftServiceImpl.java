@@ -1,5 +1,6 @@
 package cn.edu.zju.minisql.distributed.server.region.service.Impl;
 
+import cn.edu.zju.minisql.distributed.server.region.Config;
 import cn.edu.zju.minisql.distributed.server.region.lib.API;
 import cn.edu.zju.minisql.distributed.server.region.lib.Interpreter;
 import cn.edu.zju.minisql.distributed.server.region.lib.catalogmanager.CatalogManager;
@@ -46,7 +47,7 @@ public class ThriftServiceImpl implements RegionService.Iface {
         for(;;) {
             // 回写MiniSql的内存到磁盘
             try {
-                minisql.API.close();
+                API.close();
             } catch (final IOException ioe) {
                 System.err.println("MiniSql closing failed");
                 ioe.printStackTrace();
@@ -63,7 +64,7 @@ public class ThriftServiceImpl implements RegionService.Iface {
             final String indexFileExtName = ".index";
             final String indexFilePatternStr = "\\.index$"; // 以.index结尾的
             final Pattern indexFilePattern = Pattern.compile(indexFilePatternStr);
-            final File dirFile = new File(baseDir);
+            final File dirFile = new File(baseDir + "\\" + Config.Minisql.path.substring(0, Config.Minisql.path.length() - 1));
 
             // 列出目录所有文件
             final File[] files = dirFile.listFiles();
@@ -88,8 +89,8 @@ public class ThriftServiceImpl implements RegionService.Iface {
                         continue;
                     }
 
-                    minisql.CATALOGMANAGER.index miniSqlIndex =
-                            minisql.CATALOGMANAGER.CatalogManager.getIndex(indexName);
+                    cn.edu.zju.minisql.distributed.server.region.lib.catalogmanager.Index miniSqlIndex =
+                            CatalogManager.getIndex(indexName);
 
                     if (miniSqlIndex.tableName.equals(tableName)) {
                         // 若index对应的tableName与参数相同，
@@ -110,7 +111,7 @@ public class ThriftServiceImpl implements RegionService.Iface {
         }
 
         try {
-            minisql.API.close();
+            API.close();
         } catch (final IOException ioe) {
             System.err.println("MiniSql initializing failed");
             ioe.printStackTrace();

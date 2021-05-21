@@ -1,6 +1,7 @@
 package cn.edu.zju.minisql.distributed.server.region.lib.indexmanager;
 
 
+import cn.edu.zju.minisql.distributed.server.region.Config;
 import cn.edu.zju.minisql.distributed.server.region.lib.buffermanager.Block;
 import cn.edu.zju.minisql.distributed.server.region.lib.catalogmanager.CatalogManager;
 import cn.edu.zju.minisql.distributed.server.region.lib.catalogmanager.Index;
@@ -94,7 +95,7 @@ public class IndexManager{
 	//删除索引，即删除索引文件
 	public static boolean dropIndex(String filename ){
 		filename+=".index";
-		File file = new File(filename);
+		File file = new File(Config.Minisql.path + filename);
 
 		try{
 			if(file.exists())

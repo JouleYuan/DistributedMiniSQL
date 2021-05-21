@@ -23,6 +23,8 @@
 //                      好人一生平安
 package cn.edu.zju.minisql.distributed.server.region.lib.buffermanager;
 
+import cn.edu.zju.minisql.distributed.server.region.Config;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -66,7 +68,7 @@ public class BufferManager {
 			return blocks[num];
 		else {
 			num = getFreeBlockNum();
-			File file = new File(filename);
+			File file = new File(Config.Minisql.path + filename);
 			if (!file.exists()) {
 				blocks[num].blockoffset = blockoffset;
 				blocks[num].filename = filename;
@@ -123,7 +125,7 @@ public class BufferManager {
 		for (int i = 0; i < Block.BLOCKSIZE; i++)
 			blocks[num].data[i] = 0;
 		try {
-			file = new File(filename);
+			file = new File(Config.Minisql.path + filename);
 			raf = new RandomAccessFile(file, "rw");
 
 			if (raf.length() >= blocks[num].blockoffset * Block.BLOCKSIZE
@@ -159,7 +161,7 @@ public class BufferManager {
 			File file = null;
 			RandomAccessFile raf = null;
 			try {
-				file = new File(blocks[num].filename);
+				file = new File(Config.Minisql.path + blocks[num].filename);
 				raf = new RandomAccessFile(file, "rw");
 				// if file doesn't exists, then create it
 				if (!file.exists()) {

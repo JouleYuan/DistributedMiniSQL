@@ -4,4 +4,6 @@
 /target
 */target
 
+/data
+
 /distributed-minisql-service/src/thrift/gen-java

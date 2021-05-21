@@ -23,6 +23,8 @@
 //                      好人一生平安
 package cn.edu.zju.minisql.distributed.server.region.lib.filemanager;
 
+import cn.edu.zju.minisql.distributed.server.region.Config;
+
 import java.io.File;
 
 public class FileManager {
@@ -30,7 +32,7 @@ public class FileManager {
 	//	功能描述：给定文件名，判断文件是否已存在
 //	实现原理：调用File.exist函数
 	public static boolean findFile(String filename) {
-		File file = new File(filename);
+		File file = new File(Config.Minisql.path + filename);
 		if (!file.exists())
 			return false;
 		return true;
@@ -40,12 +42,12 @@ public class FileManager {
 //	实现原理：调用File.createNewFile()
 	public static void creatFile(String filename) {
 		try {
-			File myFile = new File(filename);
+			File myFile = new File(Config.Minisql.path + filename);
 			// 判断文件是否存在，如果不存在则调用createNewFile()方法创建新目录，否则跳至异常处理代码
 			if (!myFile.exists())
 				myFile.createNewFile();
 			else
-				// 如果不存在则扔出异常
+				// 如果存在则扔出异常
 				throw new Exception("The new file already exists!");
 		} catch (Exception ex) {
 			System.out.println("无法创建新文件！");
@@ -56,7 +58,7 @@ public class FileManager {
 	//	功能描述：给定文件名，删除文件
 //	实现原理：调用File.delete()
 	public static void dropFile(String filename) {
-		File f=new File(filename);
+		File f=new File(Config.Minisql.path + filename);
 		if(f.exists())f.delete();
 	}
 }

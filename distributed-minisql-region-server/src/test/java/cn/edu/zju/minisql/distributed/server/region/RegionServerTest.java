@@ -7,6 +7,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class RegionServerTest {
     @Test
     public void testRegion() {
-        assertEquals(1, 1);
+        System.out.println(System.getProperty("user.dir"));
     }
 }
