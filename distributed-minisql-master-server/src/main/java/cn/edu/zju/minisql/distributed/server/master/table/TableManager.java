@@ -43,6 +43,10 @@ public class TableManager {
         List<String> regionList = RegionManager.getAddressList();
         List<String> tableRegionList = tableMap.get(tableName);
         tableRegionList.remove(regionIdentifier);
+        if(tableRegionList.size() == 0) {
+            removeTable(tableName);
+            return;
+        }
         for(String region: tableRegionList) regionList.remove(region);
         for(int i = 0; tableRegionList.size() < Config.minRegionSize && regionList.size() > 0; i++) {
             String tableIdentifier = i + tableName;
