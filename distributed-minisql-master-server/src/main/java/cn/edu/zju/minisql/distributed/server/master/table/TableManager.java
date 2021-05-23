@@ -19,7 +19,7 @@ public class TableManager {
         List<String> tableRegionList = new ArrayList<>();
         for(int i = 0; tableRegionList.size() < Config.minRegionSize && regionList.size() > 0; i++){
             String tableIdentifier = i + tableName;
-            int index = tableIdentifier.hashCode() % regionList.size();
+            int index = Math.abs(tableIdentifier.hashCode() % regionList.size());
             tableRegionList.add(regionList.remove(index));
         }
         tableMap.put(tableName, tableRegionList);

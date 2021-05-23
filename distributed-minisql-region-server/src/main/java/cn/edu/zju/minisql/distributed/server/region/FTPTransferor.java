@@ -26,12 +26,12 @@ public class FTPTransferor {
         public boolean ok = false;
 
         public MiniSQLTableFiles(String tableName) {
-            String prefix = System.getProperty("user.dir");
+            String prefix = System.getProperty("user.dir") + File.separator + Config.Minisql.path;
 
             try {
                 // <tableName>
                 fileStreams.add(new FileInputStream(
-                        new File(prefix + File.separator + tableName)
+                        new File(prefix + tableName)
                 ));
                 fileNames.add(tableName);
 
