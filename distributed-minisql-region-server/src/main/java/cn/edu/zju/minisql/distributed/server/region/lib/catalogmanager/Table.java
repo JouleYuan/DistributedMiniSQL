@@ -11,6 +11,15 @@ public class Table {
 	int attriNum;				//字段数量
 	int tupleNum;				//记录条数
 	int tupleLength;			//单条记录总字节数
+	public String getTableName() {
+		return new String(tableName);
+	}
+	public String getPrimaryKey() {
+		return new String(primaryKey);
+	}
+	public Vector<Attribute> getAttributes() {
+		return attributes;
+	}
 	//创建表格时的构造方法
 	public Table(String tableName, Vector<Attribute> attributes, String primaryKey){
 		this.tableName=tableName;

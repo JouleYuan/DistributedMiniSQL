@@ -1,9 +1,12 @@
 package cn.edu.zju.minisql.distributed.server.region;
 
 import cn.edu.zju.minisql.distributed.server.region.lib.catalogmanager.Attribute;
+import cn.edu.zju.minisql.distributed.server.region.lib.catalogmanager.CatalogManager;
 import cn.edu.zju.minisql.distributed.server.region.lib.catalogmanager.Table;
 import cn.edu.zju.minisql.distributed.server.region.lib.catalogmanager.Index;
+import cn.edu.zju.minisql.distributed.service.AttributeType;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -27,7 +30,7 @@ public class TypesRedefinition {
         }
 
         public SqlTable(cn.edu.zju.minisql.distributed.service.Table t){
-            super(t.name, list2vector(t.attributes), getPrimaryKey(t));
+            super(t.name, list2vector(t.attributes), TypesRedefinition.getPrimaryKey(t));
         }
     };
 
@@ -67,5 +70,46 @@ public class TypesRedefinition {
             return "int";
         }
         return "";
+    }
+
+    static List<cn.edu.zju.minisql.distributed.service.Attribute> vector2list(Vector<Attribute> miniSqlAttrs) {
+        ArrayList<cn.edu.zju.minisql.distributed.service.Attribute> serviceAttrs = new ArrayList<>();
+        for (Attribute miniSqlAttr : miniSqlAttrs) {
+            serviceAttrs.add(new ServiceAttribute(miniSqlAttr));
+        }
+        return serviceAttrs;
+    }
+
+    public static cn.edu.zju.minisql.distributed.service.AttributeType str2type(String str) {
+        if (str.equals("float"))
+            return AttributeType.FLOAT;
+        if (str.equals("char"))
+            return AttributeType.CHAR;
+        return AttributeType.INT;
+    }
+
+    public static class ServiceAttribute extends cn.edu.zju.minisql.distributed.service.Attribute {
+        public ServiceAttribute(Attribute miniSqlAttr) {
+            super(
+                    miniSqlAttr.getAttrName(),
+                    str2type(miniSqlAttr.getType()),
+                    miniSqlAttr.getLength(),
+                    miniSqlAttr.isUnique()
+            );
+        }
+    }
+
+    public static class ServiceTable extends cn.edu.zju.minisql.distributed.service.Table {
+        public ServiceTable(String tableName,
+                            Vector<Attribute> miniSqlAttrs,
+                            int primaryKeyIdx,
+                            List<List<String>> tuples) {
+            super(
+                    tableName,
+                    vector2list(miniSqlAttrs),
+                    primaryKeyIdx,
+                    tuples
+            );
+        }
     }
 }

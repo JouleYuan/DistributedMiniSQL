@@ -1,5 +1,7 @@
 package cn.edu.zju.minisql.distributed.server.region.service.Impl;
 
+import cn.edu.zju.minisql.distributed.server.region.lib.catalogmanager.Attribute;
+import cn.edu.zju.minisql.distributed.server.region.region.RegionServer;
 import cn.edu.zju.minisql.distributed.server.region.Config;
 import cn.edu.zju.minisql.distributed.server.region.lib.API;
 import cn.edu.zju.minisql.distributed.server.region.lib.Interpreter;
@@ -10,10 +12,12 @@ import cn.edu.zju.minisql.distributed.service.RegionService;
 import cn.edu.zju.minisql.distributed.service.Table;
 
 import cn.edu.zju.minisql.distributed.server.region.FTPTransferor;
+import org.apache.thrift.TException;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 import java.util.regex.*;
 
 public class ThriftServiceImpl implements RegionService.Iface {
@@ -106,7 +110,35 @@ public class ThriftServiceImpl implements RegionService.Iface {
             }
 
             // 使用Thrift，调用备份对象重建Catalog与Index
-            // TODO
+            cn.edu.zju.minisql.distributed.server.region.lib.catalogmanager.Table miniSqlTable =
+                    CatalogManager.getTable(tableName);
+            Vector<Attribute> miniSqlAttrs
+                    = miniSqlTable.getAttributes();
+            String primaryKey = miniSqlTable.getPrimaryKey();
+
+            int primaryKeyIdx = 0;
+            for (Attribute miniSqlAttr : miniSqlAttrs) {
+                if(miniSqlAttr.getAttrName().equals(primaryKey))
+                    break;
+                primaryKeyIdx++;
+            }
+
+            List<List<String>> tuples = new ArrayList<>(); // 空即可
+
+            // 注意：这里是region.region.RegionServer
+            RegionServer regionServer = new RegionServer(ip, path);
+            try {
+                regionServer.openTransport();
+                regionServer.getServiceClient().
+                        duplicateCatalog(
+                                new TypesRedefinition.ServiceTable(
+                                  tableName, miniSqlAttrs, primaryKeyIdx, tuples
+                                ),
+                                indexes
+                        );
+            } catch (TException e) {
+                e.printStackTrace();
+            }
             break;
         }
 
