@@ -29,9 +29,9 @@ public class FTPTransferor {
             String prefix = System.getProperty("user.dir") + File.separator + Config.Minisql.path;
 
             try {
-                // <tableName>
+                // tableName
                 fileStreams.add(new FileInputStream(
-                        new File(prefix + tableName)
+                        prefix + tableName
                 ));
                 fileNames.add(tableName);
 
@@ -110,7 +110,7 @@ public class FTPTransferor {
 
             // 配置
             client.setFileType(FTP.BINARY_FILE_TYPE);
-            //client.enterLocalPassiveMode(); // 考虑防火墙使用被动模式
+            client.enterLocalPassiveMode();  // 使用被动模式
             client.setControlEncoding("UTF-8");
 
             // 切换FTP目录

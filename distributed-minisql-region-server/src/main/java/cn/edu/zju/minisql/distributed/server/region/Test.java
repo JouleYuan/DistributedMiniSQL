@@ -10,9 +10,12 @@ import cn.edu.zju.minisql.distributed.service.RegionService;
 
 import cn.edu.zju.minisql.distributed.server.region.FTPTransferor;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 public class Test {
-    public static void main(String[] args){
-        sqlRequestTest();
+    public static void main(String[] args) throws UnknownHostException {
+        getIP();
     }
 
     public static void ftpTest(){
@@ -41,23 +44,21 @@ public class Test {
         };
 
         System.out.println("start");
-        TTransport transport = null;
-        try{
-            transport = new TSocket(null,"localhost", 7999, 30000);
+        try (TTransport transport = new TSocket(null, "localhost", 7999, 30000)) {
             TProtocol protocol = new TBinaryProtocol(transport);
             RegionService.Client client = new RegionService.Client(protocol);
             transport.open();
-            for(String statement: statements){
+            for (String statement : statements) {
                 String result = client.sqlRequest(statement);
                 System.out.println(result);
 
             }
         } catch (TException e) {
             e.printStackTrace();
-        } finally {
-            if (null != transport) {
-                transport.close();
-            }
         }
+    }
+
+    public static void getIP() throws UnknownHostException {
+        System.out.println(InetAddress.getLocalHost().getHostAddress());
     }
 }
