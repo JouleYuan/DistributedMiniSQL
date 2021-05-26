@@ -279,10 +279,6 @@ public class Interpreter {
 					theToken =lexer.scan();
 					if(theToken.tag==Tag.ID){//create index a
 						tmpIndexName= theToken.toString();
-						if(CatalogManager.isIndexExist(tmpIndexName)){
-							semaErrMsg="The index "+tmpIndexName+" already exist";
-							isSemaCorrect=false;
-						}
 						theToken =lexer.scan();
 						if(theToken.tag==Tag.ON){//create index a on
 							theToken =lexer.scan();
@@ -290,6 +286,10 @@ public class Interpreter {
 								tmpTableName= theToken.toString();
 								if(!CatalogManager.isTableExist(tmpTableName)){
 									semaErrMsg="The table "+tmpTableName+" doesn't exist";
+									isSemaCorrect=false;
+								}
+								if(CatalogManager.isIndexExist(tmpTableName + "_" + tmpIndexName)){
+									semaErrMsg="The index " + tmpIndexName + " on " + tmpTableName + " already exist";
 									isSemaCorrect=false;
 								}
 								theToken =lexer.scan();
@@ -315,7 +315,7 @@ public class Interpreter {
 											 * 执行create index操作
 											 * */
 											if(isSemaCorrect){
-												if(API.createIndex(new Index(tmpIndexName,tmpTableName,tmpAttriName)))
+												if(API.createIndex(new Index(tmpTableName + "_" + tmpIndexName,tmpTableName,tmpAttriName)))
 													System.out.println("create index "+tmpIndexName+" on "+tmpTableName+" ("+tmpAttriName+") succeeded.");
 												else
 													System.out.println("Error:create index failed");
@@ -409,29 +409,44 @@ public class Interpreter {
 					theToken =lexer.scan();
 					if(theToken.tag==Tag.ID){//drop index a
 						String tmpIndexName= theToken.toString();
-						if(!CatalogManager.isIndexExist(tmpIndexName)){
-							semaErrMsg="The index "+tmpIndexName+" doesn't exist, ";
-							isSemaCorrect=false;
-						}
 						if(tmpIndexName.endsWith("_prikey")){
 							semaErrMsg="The index "+tmpIndexName+" is a primary key, ";
 							isSemaCorrect=false;
 						}
 						theToken =lexer.scan();
-						if(theToken.toString().equals(";")){//drop index a ;
-							/*
-							 * 执行drop index 操作
-							 * */
-							if(isSemaCorrect){
-								if(API.dropIndex(tmpIndexName))
-									System.out.println("drop index "+tmpIndexName+" succeeded.");
+						if(theToken.tag==Tag.ON) {//drop index a on
+							theToken = lexer.scan();
+							if (theToken.tag == Tag.ID) {//drop index a on b
+								String tmpTableName = theToken.toString();
+								if(!CatalogManager.isIndexExist(tmpTableName + "_" + tmpIndexName)){
+									semaErrMsg="The index " + tmpIndexName + " on " + tmpTableName + "doesn't exist, ";
+									isSemaCorrect=false;
+								}
+								theToken = lexer.scan();
+								if(theToken.toString().equals(";")){//drop index a ;
+									/*
+									 * 执行drop index 操作
+									 * */
+									if(isSemaCorrect){
+										if(API.dropIndex(tmpTableName + "_" + tmpIndexName))
+											System.out.println("drop index "+tmpIndexName+" on " + tmpTableName + " succeeded.");
+									}
+									else{
+										System.out.print(semaErrMsg);
+										System.out.println("drop index "+tmpIndexName+" failed");
+										isSemaCorrect=true;
+									}
+									continue;
+								}
+								else{
+									if(isSynCorrect)  synErrMsg="Synthetic error near: "+ theToken.toString();isSynCorrect=false;
+									continue;
+								}
 							}
 							else{
-								System.out.print(semaErrMsg);
-								System.out.println("drop index "+tmpIndexName+" failed");
-								isSemaCorrect=true;
+								if(isSynCorrect)  synErrMsg="Synthetic error near: "+ theToken.toString();isSynCorrect=false;
+								continue;
 							}
-							continue;
 						}
 						else{
 							if(isSynCorrect)  synErrMsg="Synthetic error near: "+ theToken.toString();isSynCorrect=false;

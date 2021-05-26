@@ -384,9 +384,12 @@ public class Interpreter {
                         String tmpIndexName = currentToken.toString();
 
                         currentToken = lexer.scan();
-
+                        sql.append(" ");
+                        sql.append(currentToken);
                         if (currentToken.tag == Tag.ON) { // drop index a on
                             currentToken = lexer.scan();
+                            sql.append(" ");
+                            sql.append(currentToken);
 
                             String tmpTableName = currentToken.toString(); // drop index a on b
                             currentToken = lexer.scan();
