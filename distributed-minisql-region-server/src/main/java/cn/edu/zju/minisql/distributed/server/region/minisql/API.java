@@ -1,17 +1,17 @@
-package cn.edu.zju.minisql.distributed.server.region.lib;
+package cn.edu.zju.minisql.distributed.server.region.minisql;
 
 import java.io.IOException;
 import java.util.Vector;
 
-import cn.edu.zju.minisql.distributed.server.region.lib.catalogmanager.CatalogManager;
-import cn.edu.zju.minisql.distributed.server.region.lib.catalogmanager.Index;
-import cn.edu.zju.minisql.distributed.server.region.lib.catalogmanager.Table;
-import cn.edu.zju.minisql.distributed.server.region.lib.lexer.Comparison;
-import cn.edu.zju.minisql.distributed.server.region.lib.buffermanager.BufferManager;
-import cn.edu.zju.minisql.distributed.server.region.lib.indexmanager.IndexManager;
-import cn.edu.zju.minisql.distributed.server.region.lib.recordmanager.ConditionNode;
-import cn.edu.zju.minisql.distributed.server.region.lib.recordmanager.RecordManager;
-import cn.edu.zju.minisql.distributed.server.region.lib.recordmanager.Tuple;
+import cn.edu.zju.minisql.distributed.server.region.minisql.catalogmanager.CatalogManager;
+import cn.edu.zju.minisql.distributed.server.region.minisql.catalogmanager.Index;
+import cn.edu.zju.minisql.distributed.server.region.minisql.catalogmanager.Table;
+import cn.edu.zju.minisql.distributed.server.region.minisql.lexer.Comparison;
+import cn.edu.zju.minisql.distributed.server.region.minisql.buffermanager.BufferManager;
+import cn.edu.zju.minisql.distributed.server.region.minisql.indexmanager.IndexManager;
+import cn.edu.zju.minisql.distributed.server.region.minisql.recordmanager.ConditionNode;
+import cn.edu.zju.minisql.distributed.server.region.minisql.recordmanager.RecordManager;
+import cn.edu.zju.minisql.distributed.server.region.minisql.recordmanager.Tuple;
 
 /*
  * 疑问：1. select和delete返回的结果是record,

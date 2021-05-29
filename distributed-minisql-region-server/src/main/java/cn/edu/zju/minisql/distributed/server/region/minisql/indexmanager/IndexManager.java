@@ -1,12 +1,12 @@
-package cn.edu.zju.minisql.distributed.server.region.lib.indexmanager;
+package cn.edu.zju.minisql.distributed.server.region.minisql.indexmanager;
 
 
 import cn.edu.zju.minisql.distributed.server.region.Config;
-import cn.edu.zju.minisql.distributed.server.region.lib.buffermanager.Block;
-import cn.edu.zju.minisql.distributed.server.region.lib.catalogmanager.CatalogManager;
-import cn.edu.zju.minisql.distributed.server.region.lib.catalogmanager.Index;
-import cn.edu.zju.minisql.distributed.server.region.lib.recordmanager.RecordManager;
-import cn.edu.zju.minisql.distributed.server.region.lib.recordmanager.Tuple;
+import cn.edu.zju.minisql.distributed.server.region.minisql.buffermanager.Block;
+import cn.edu.zju.minisql.distributed.server.region.minisql.catalogmanager.CatalogManager;
+import cn.edu.zju.minisql.distributed.server.region.minisql.catalogmanager.Index;
+import cn.edu.zju.minisql.distributed.server.region.minisql.recordmanager.RecordManager;
+import cn.edu.zju.minisql.distributed.server.region.minisql.recordmanager.Tuple;
 
 import java.io.*;
 import java.util.Vector;

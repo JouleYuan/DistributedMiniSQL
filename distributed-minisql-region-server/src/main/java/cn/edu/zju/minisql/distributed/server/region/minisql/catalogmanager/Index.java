@@ -1,4 +1,4 @@
-package cn.edu.zju.minisql.distributed.server.region.lib.catalogmanager;
+package cn.edu.zju.minisql.distributed.server.region.minisql.catalogmanager;
 
 public class Index {
 	public String indexName;//索引名，唯一标记索引

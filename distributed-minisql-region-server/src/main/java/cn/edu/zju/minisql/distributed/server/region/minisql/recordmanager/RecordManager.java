@@ -21,17 +21,17 @@
 //
 //     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //                      好人一生平安
-package cn.edu.zju.minisql.distributed.server.region.lib.recordmanager;
+package cn.edu.zju.minisql.distributed.server.region.minisql.recordmanager;
 
 import java.util.Comparator;
 import java.util.Vector;
 
-import cn.edu.zju.minisql.distributed.server.region.lib.buffermanager.Block;
-import cn.edu.zju.minisql.distributed.server.region.lib.buffermanager.BufferManager;
-import cn.edu.zju.minisql.distributed.server.region.lib.catalogmanager.CatalogManager;
-import cn.edu.zju.minisql.distributed.server.region.lib.catalogmanager.Index;
-import cn.edu.zju.minisql.distributed.server.region.lib.filemanager.FileManager;
-import cn.edu.zju.minisql.distributed.server.region.lib.indexmanager.IndexManager;
+import cn.edu.zju.minisql.distributed.server.region.minisql.buffermanager.Block;
+import cn.edu.zju.minisql.distributed.server.region.minisql.buffermanager.BufferManager;
+import cn.edu.zju.minisql.distributed.server.region.minisql.catalogmanager.CatalogManager;
+import cn.edu.zju.minisql.distributed.server.region.minisql.catalogmanager.Index;
+import cn.edu.zju.minisql.distributed.server.region.minisql.filemanager.FileManager;
+import cn.edu.zju.minisql.distributed.server.region.minisql.indexmanager.IndexManager;
 
 
 //功能描述：用来组织表中的记录在每个块如何存储

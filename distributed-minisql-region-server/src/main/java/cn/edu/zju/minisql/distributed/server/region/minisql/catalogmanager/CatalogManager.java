@@ -1,4 +1,4 @@
-package cn.edu.zju.minisql.distributed.server.region.lib.catalogmanager;
+package cn.edu.zju.minisql.distributed.server.region.minisql.catalogmanager;
 /*Catalog Manager负责管理数据库的所有模式信息，包括：
 1.	数据库中所有表的定义信息，包括表的名称、表中字段（列）数、主键、定义在该表上的索引。
 2.	表中每个字段的定义信息，包括字段类型、是否唯一等。

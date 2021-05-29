@@ -1,4 +1,4 @@
-package cn.edu.zju.minisql.distributed.server.region.lib;
+package cn.edu.zju.minisql.distributed.server.region.minisql;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -7,16 +7,16 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Vector;
 
-import cn.edu.zju.minisql.distributed.server.region.lib.catalogmanager.CatalogManager;
-import cn.edu.zju.minisql.distributed.server.region.lib.catalogmanager.Attribute;
-import cn.edu.zju.minisql.distributed.server.region.lib.catalogmanager.Index;
-import cn.edu.zju.minisql.distributed.server.region.lib.catalogmanager.Table;
-import cn.edu.zju.minisql.distributed.server.region.lib.recordmanager.ConditionNode;
-import cn.edu.zju.minisql.distributed.server.region.lib.recordmanager.Tuple;
-import cn.edu.zju.minisql.distributed.server.region.lib.lexer.Comparison;
-import cn.edu.zju.minisql.distributed.server.region.lib.lexer.Lexer;
-import cn.edu.zju.minisql.distributed.server.region.lib.lexer.Tag;
-import cn.edu.zju.minisql.distributed.server.region.lib.lexer.Token;
+import cn.edu.zju.minisql.distributed.server.region.minisql.catalogmanager.CatalogManager;
+import cn.edu.zju.minisql.distributed.server.region.minisql.catalogmanager.Attribute;
+import cn.edu.zju.minisql.distributed.server.region.minisql.catalogmanager.Index;
+import cn.edu.zju.minisql.distributed.server.region.minisql.catalogmanager.Table;
+import cn.edu.zju.minisql.distributed.server.region.minisql.recordmanager.ConditionNode;
+import cn.edu.zju.minisql.distributed.server.region.minisql.recordmanager.Tuple;
+import cn.edu.zju.minisql.distributed.server.region.minisql.lexer.Comparison;
+import cn.edu.zju.minisql.distributed.server.region.minisql.lexer.Lexer;
+import cn.edu.zju.minisql.distributed.server.region.minisql.lexer.Tag;
+import cn.edu.zju.minisql.distributed.server.region.minisql.lexer.Token;
 
 /*
  * 表名只能是字母开头的东西
@@ -991,13 +991,20 @@ public class Interpreter {
 
 	//显示 选择返回结果
 	private static void showSelectRes(String tmpTableName, Vector<String> tmpAttriNames, ConditionNode tmpConditionNode, String tmpOrderAttriName, boolean order){
-		if(tmpAttriNames==null)
-			for(int i=0;i<CatalogManager.getTableAttriNum(tmpTableName);i++){ //输出属性名
-				System.out.print("\t"+CatalogManager.getAttriName(tmpTableName, i));
+		if(tmpAttriNames==null) {
+			tmpAttriNames = new Vector<>();
+			for (int i = 0; i < CatalogManager.getTableAttriNum(tmpTableName); i++) { //输出属性名
+				//System.out.print("\t" + CatalogManager.getAttriName(tmpTableName, i));
+				tmpAttriNames.add(CatalogManager.getAttriName(tmpTableName, i));
 			}
-		else
-			for(int i=0;i<tmpAttriNames.size();i++)
-				System.out.print("\t"+tmpAttriNames.get(i));
+		}
+		/* original code
+		else {
+			for (int i = 0; i < tmpAttriNames.size(); i++) {
+				System.out.print("\t" + tmpAttriNames.get(i));
+			}
+		}
+		 */
 		System.out.println();
 		Vector<Tuple> selectedTuples;
 		if(tmpOrderAttriName==null)
@@ -1005,11 +1012,19 @@ public class Interpreter {
 		else{
 			selectedTuples=API.selectTuples(tmpTableName,tmpAttriNames, tmpConditionNode,tmpOrderAttriName,order);
 		}
+
+		// added to beautify the table output
+		TableUtils.print(tmpAttriNames, selectedTuples);
+
+		/* original code
 		for(int i=0;i<selectedTuples.size();i++){
 			System.out.println(selectedTuples.get(i).getString());
 		}
+		*/
+
 		System.out.println("There are "+selectedTuples.size()+" tuples returned");
 	}
+
 	//对project部分语句进行解析
 	private static Vector<String> ParsingProjection(Lexer lexer) throws IOException{
 		Vector<String>tmpAttrNames=new Vector<String>();

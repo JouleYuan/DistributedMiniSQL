@@ -21,7 +21,7 @@
 //
 //     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //                      好人一生平安
-package cn.edu.zju.minisql.distributed.server.region.lib.recordmanager;
+package cn.edu.zju.minisql.distributed.server.region.minisql.recordmanager;
 
 
 import java.util.Vector;

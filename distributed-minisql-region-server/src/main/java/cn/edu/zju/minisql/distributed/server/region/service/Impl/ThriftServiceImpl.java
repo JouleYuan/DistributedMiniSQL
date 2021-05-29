@@ -1,11 +1,11 @@
 package cn.edu.zju.minisql.distributed.server.region.service.Impl;
 
-import cn.edu.zju.minisql.distributed.server.region.lib.catalogmanager.Attribute;
+import cn.edu.zju.minisql.distributed.server.region.minisql.catalogmanager.Attribute;
 import cn.edu.zju.minisql.distributed.server.region.region.RegionServer;
 import cn.edu.zju.minisql.distributed.server.region.Config;
-import cn.edu.zju.minisql.distributed.server.region.lib.API;
-import cn.edu.zju.minisql.distributed.server.region.lib.Interpreter;
-import cn.edu.zju.minisql.distributed.server.region.lib.catalogmanager.CatalogManager;
+import cn.edu.zju.minisql.distributed.server.region.minisql.API;
+import cn.edu.zju.minisql.distributed.server.region.minisql.Interpreter;
+import cn.edu.zju.minisql.distributed.server.region.minisql.catalogmanager.CatalogManager;
 import cn.edu.zju.minisql.distributed.server.region.TypesRedefinition;
 import cn.edu.zju.minisql.distributed.service.Index;
 import cn.edu.zju.minisql.distributed.service.RegionService;
@@ -93,7 +93,7 @@ public class ThriftServiceImpl implements RegionService.Iface {
                         continue;
                     }
 
-                    cn.edu.zju.minisql.distributed.server.region.lib.catalogmanager.Index miniSqlIndex =
+                    cn.edu.zju.minisql.distributed.server.region.minisql.catalogmanager.Index miniSqlIndex =
                             CatalogManager.getIndex(indexName);
 
                     if (miniSqlIndex.tableName.equals(tableName)) {
@@ -110,7 +110,7 @@ public class ThriftServiceImpl implements RegionService.Iface {
             }
 
             // 使用Thrift，调用备份对象重建Catalog与Index
-            cn.edu.zju.minisql.distributed.server.region.lib.catalogmanager.Table miniSqlTable =
+            cn.edu.zju.minisql.distributed.server.region.minisql.catalogmanager.Table miniSqlTable =
                     CatalogManager.getTable(tableName);
             Vector<Attribute> miniSqlAttrs
                     = miniSqlTable.getAttributes();

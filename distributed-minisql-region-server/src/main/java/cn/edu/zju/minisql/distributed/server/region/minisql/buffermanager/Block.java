@@ -21,7 +21,7 @@
 //
 //     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //                      好人一生平安
-package cn.edu.zju.minisql.distributed.server.region.lib.buffermanager;
+package cn.edu.zju.minisql.distributed.server.region.minisql.buffermanager;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

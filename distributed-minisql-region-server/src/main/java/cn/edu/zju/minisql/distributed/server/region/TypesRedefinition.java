@@ -1,9 +1,8 @@
 package cn.edu.zju.minisql.distributed.server.region;
 
-import cn.edu.zju.minisql.distributed.server.region.lib.catalogmanager.Attribute;
-import cn.edu.zju.minisql.distributed.server.region.lib.catalogmanager.CatalogManager;
-import cn.edu.zju.minisql.distributed.server.region.lib.catalogmanager.Table;
-import cn.edu.zju.minisql.distributed.server.region.lib.catalogmanager.Index;
+import cn.edu.zju.minisql.distributed.server.region.minisql.catalogmanager.Attribute;
+import cn.edu.zju.minisql.distributed.server.region.minisql.catalogmanager.Table;
+import cn.edu.zju.minisql.distributed.server.region.minisql.catalogmanager.Index;
 import cn.edu.zju.minisql.distributed.service.AttributeType;
 
 import java.util.ArrayList;

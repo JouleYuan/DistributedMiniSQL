@@ -21,10 +21,10 @@
 //
 //     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //                      好人一生平安
-package cn.edu.zju.minisql.distributed.server.region.lib.recordmanager;
+package cn.edu.zju.minisql.distributed.server.region.minisql.recordmanager;
 
-import cn.edu.zju.minisql.distributed.server.region.lib.catalogmanager.CatalogManager;
-import cn.edu.zju.minisql.distributed.server.region.lib.lexer.Comparison;
+import cn.edu.zju.minisql.distributed.server.region.minisql.catalogmanager.CatalogManager;
+import cn.edu.zju.minisql.distributed.server.region.minisql.lexer.Comparison;
 
 //功能描述：以二叉树结构记录并计算sql语句中的where条件语句。该结构支持条件语句中出现and, or以及括号，支持表中数据与常数进行比较，也支持同一个表中两个不同属性之间的数据进行比较。计算时输入一条tuple,返回true表示符合条件,false表示不符合条件。
 //实现原理：将sql语句的条件语句按照执行优先级存入二叉树，优先级越高的深度越大。计算时从根节点开始递归地计算出结果。

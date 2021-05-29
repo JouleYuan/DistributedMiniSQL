@@ -1,4 +1,4 @@
-package cn.edu.zju.minisql.distributed.server.region.lib.indexmanager;
+package cn.edu.zju.minisql.distributed.server.region.minisql.indexmanager;
 
 import java.util.Vector;
 

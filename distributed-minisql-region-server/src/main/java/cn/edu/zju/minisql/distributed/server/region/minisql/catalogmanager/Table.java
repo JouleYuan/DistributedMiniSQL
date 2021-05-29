@@ -1,4 +1,4 @@
-package cn.edu.zju.minisql.distributed.server.region.lib.catalogmanager;
+package cn.edu.zju.minisql.distributed.server.region.minisql.catalogmanager;
 
 import java.util.Vector;
 

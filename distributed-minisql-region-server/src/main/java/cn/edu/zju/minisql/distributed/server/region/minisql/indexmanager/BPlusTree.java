@@ -1,10 +1,10 @@
-package cn.edu.zju.minisql.distributed.server.region.lib.indexmanager;
+package cn.edu.zju.minisql.distributed.server.region.minisql.indexmanager;
 
 
-import cn.edu.zju.minisql.distributed.server.region.lib.buffermanager.Block;
-import cn.edu.zju.minisql.distributed.server.region.lib.buffermanager.BufferManager;
-import cn.edu.zju.minisql.distributed.server.region.lib.catalogmanager.Index;
-import cn.edu.zju.minisql.distributed.server.region.lib.filemanager.FileManager;
+import cn.edu.zju.minisql.distributed.server.region.minisql.buffermanager.Block;
+import cn.edu.zju.minisql.distributed.server.region.minisql.buffermanager.BufferManager;
+import cn.edu.zju.minisql.distributed.server.region.minisql.catalogmanager.Index;
+import cn.edu.zju.minisql.distributed.server.region.minisql.filemanager.FileManager;
 
 public class BPlusTree {
 	private static final int POINTERLENGTH = 4;//设指针定长为4个字符，即假设节点在文件中用4个字节就可以标记了

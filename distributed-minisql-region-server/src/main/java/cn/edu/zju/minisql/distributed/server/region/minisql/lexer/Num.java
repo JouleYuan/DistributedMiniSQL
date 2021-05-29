@@ -1,4 +1,4 @@
-package cn.edu.zju.minisql.distributed.server.region.lib.lexer;
+package cn.edu.zju.minisql.distributed.server.region.minisql.lexer;
 
 public class Num extends Token{  
     public final double value;  

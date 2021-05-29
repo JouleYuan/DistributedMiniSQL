@@ -21,7 +21,7 @@
 //
 //     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //                      好人一生平安
-package cn.edu.zju.minisql.distributed.server.region.lib.filemanager;
+package cn.edu.zju.minisql.distributed.server.region.minisql.filemanager;
 
 import cn.edu.zju.minisql.distributed.server.region.Config;
 

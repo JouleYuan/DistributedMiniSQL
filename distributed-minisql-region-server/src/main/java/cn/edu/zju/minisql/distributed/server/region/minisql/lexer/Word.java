@@ -1,4 +1,4 @@
-package cn.edu.zju.minisql.distributed.server.region.lib.lexer;
+package cn.edu.zju.minisql.distributed.server.region.minisql.lexer;
 
 public class Word extends Token {  
     public String lexme = "";  

@@ -1,4 +1,4 @@
-package cn.edu.zju.minisql.distributed.server.region.lib.lexer;
+package cn.edu.zju.minisql.distributed.server.region.minisql.lexer;
 import java.io.*;
 import java.util.*;
 
