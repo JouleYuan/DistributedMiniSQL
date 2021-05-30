@@ -56,6 +56,14 @@
             <artifactId>commons-net</artifactId>
             <version>3.6</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.bethecoder.ascii_table</groupId>
+            <artifactId>btc-ascii-table</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/btc-ascii-table-1.0.jar</systemPath>
+        </dependency>
     </dependencies>
 
 </project>

@@ -43,7 +43,7 @@ public class ThriftServiceImpl implements RegionService.Iface {
     }
 
     @Override
-    public boolean duplicateTable(String tableName, String ip, String path) {
+    public boolean duplicateTable(String tableName, String address, String path) {
         // 最终结果判定
         boolean ok = false;
 
@@ -59,7 +59,7 @@ public class ThriftServiceImpl implements RegionService.Iface {
             }
 
             // 使用FTP传输所有记录
-            ok = FTPTransferor.fromLocalFTPto(tableName, ip, path);
+            ok = FTPTransferor.fromLocalFTPto(tableName, address.split(":", 2)[0], path);
             if(!ok)
                 break;
 
@@ -68,7 +68,7 @@ public class ThriftServiceImpl implements RegionService.Iface {
             final String indexFileExtName = ".index";
             final String indexFilePatternStr = "\\.index$"; // 以.index结尾的
             final Pattern indexFilePattern = Pattern.compile(indexFilePatternStr);
-            final File dirFile = new File(baseDir + "\\" + Config.Minisql.path.substring(0, Config.Minisql.path.length() - 1));
+            final File dirFile = new File(baseDir + File.separator + Config.Minisql.path.substring(0, Config.Minisql.path.length() - 1));
 
             // 列出目录所有文件
             final File[] files = dirFile.listFiles();
@@ -126,7 +126,7 @@ public class ThriftServiceImpl implements RegionService.Iface {
             List<List<String>> tuples = new ArrayList<>(); // 空即可
 
             // 注意：这里是region.region.RegionServer
-            RegionServer regionServer = new RegionServer(ip, path);
+            RegionServer regionServer = new RegionServer(address, path);
             try {
                 regionServer.openTransport();
                 regionServer.getServiceClient().

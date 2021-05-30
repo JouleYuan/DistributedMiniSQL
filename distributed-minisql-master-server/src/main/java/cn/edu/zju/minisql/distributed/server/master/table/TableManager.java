@@ -58,7 +58,7 @@ public class TableManager {
                 sourceRegionServer.openTransport();
                 sourceRegionServer.getServiceClient().duplicateTable(
                         tableName,
-                        targetRegionAddress.split(":", 2)[0],
+                        targetRegionAddress,
                         targetRegionServer.getPath());
                 sourceRegionServer.closeTransport();
                 /*targetRegionServer.getServiceClient().duplicateTable(
