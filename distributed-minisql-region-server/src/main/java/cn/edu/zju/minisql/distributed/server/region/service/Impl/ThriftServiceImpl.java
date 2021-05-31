@@ -99,6 +99,8 @@ public class ThriftServiceImpl implements RegionService.Iface {
                         );
             } catch (TException e) {
                 e.printStackTrace();
+            } finally {
+                regionServer.closeTransport();
             }
             break;
         }
