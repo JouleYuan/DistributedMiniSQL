@@ -66,6 +66,7 @@ public class TableManager {
                         sourceRegionAddress.split(":", 2)[0],
                         sourceRegionServer.getPath());*/
                 tableRegionList.add(targetRegionAddress);
+                targetRegionServer.getTables().add(tableName);
             } catch (TException e) {
                 e.printStackTrace();
             }
