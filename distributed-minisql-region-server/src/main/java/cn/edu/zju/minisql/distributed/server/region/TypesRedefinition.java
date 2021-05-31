@@ -18,6 +18,14 @@ public class TypesRedefinition {
         return res;
     }
 
+    static Vector<Index> indexList2vector(List<cn.edu.zju.minisql.distributed.service.Index> indexes){
+        Vector<Index> res = new Vector<>();
+        for(int i=0; i<indexes.size(); i++){
+            res.add(new SqlIndex(indexes.get(i)));
+        }
+        return res;
+    }
+
     static String getPrimaryKey(cn.edu.zju.minisql.distributed.service.Table t){
         return t.attributes.get(t.primaryKeyIndex).name;
     }
@@ -30,6 +38,19 @@ public class TypesRedefinition {
 
         public SqlTable(cn.edu.zju.minisql.distributed.service.Table t){
             super(t.name, list2vector(t.attributes), TypesRedefinition.getPrimaryKey(t));
+        }
+
+        public SqlTable(
+                cn.edu.zju.minisql.distributed.service.Table t,
+                List<cn.edu.zju.minisql.distributed.service.Index> indexes
+        ){
+            super(
+                    t.name,
+                    list2vector(t.attributes),
+                    indexList2vector(indexes),
+                    TypesRedefinition.getPrimaryKey(t),
+                    t.tuples.size()
+            );
         }
     };
 
@@ -87,6 +108,16 @@ public class TypesRedefinition {
         return AttributeType.INT;
     }
 
+    public static class ServiceIndex extends cn.edu.zju.minisql.distributed.service.Index {
+        public ServiceIndex(Index miniSqlIndex) {
+            super (
+                    miniSqlIndex.indexName,
+                    miniSqlIndex.tableName,
+                    miniSqlIndex.attriName
+            );
+        }
+    }
+
     public static class ServiceAttribute extends cn.edu.zju.minisql.distributed.service.Attribute {
         public ServiceAttribute(Attribute miniSqlAttr) {
             super(
@@ -99,15 +130,32 @@ public class TypesRedefinition {
     }
 
     public static class ServiceTable extends cn.edu.zju.minisql.distributed.service.Table {
-        public ServiceTable(String tableName,
-                            Vector<Attribute> miniSqlAttrs,
-                            int primaryKeyIdx,
-                            List<List<String>> tuples) {
+        private static List<List<String>> getTuples(Table miniSqlTable) {
+            List<List<String>> tuples = new ArrayList<>();
+            for (int i=0;i<miniSqlTable.getTupleNum();i++) {
+                // 空即可，用于记载数量
+                tuples.add(new ArrayList<String>());
+            }
+            return tuples;
+        }
+
+        private static int getPrimaryKeyIdx(Vector<Attribute> miniSqlAttrs, String primaryKeyName) {
+            // 找到主索引下标
+            int primaryKeyIdx = 0;
+            for (Attribute attr : miniSqlAttrs) {
+                if (attr.getAttrName().equals(primaryKeyName))
+                    break;
+                primaryKeyIdx++;
+            }
+            return primaryKeyIdx;
+        }
+
+        public ServiceTable(Table minisqlTable) {
             super(
-                    tableName,
-                    vector2list(miniSqlAttrs),
-                    primaryKeyIdx,
-                    tuples
+                    minisqlTable.getTableName(),
+                    vector2list(minisqlTable.getAttributes()),
+                    getPrimaryKeyIdx(minisqlTable.getAttributes(), minisqlTable.getPrimaryKey()),
+                    getTuples(minisqlTable)
             );
         }
     }

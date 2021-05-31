@@ -20,6 +20,8 @@ public class Table {
 	public Vector<Attribute> getAttributes() {
 		return attributes;
 	}
+	public Vector<Index> getIndexes() { return  indexes; }
+	public int getTupleNum() { return tupleNum; }
 	//创建表格时的构造方法
 	public Table(String tableName, Vector<Attribute> attributes, String primaryKey){
 		this.tableName=tableName;

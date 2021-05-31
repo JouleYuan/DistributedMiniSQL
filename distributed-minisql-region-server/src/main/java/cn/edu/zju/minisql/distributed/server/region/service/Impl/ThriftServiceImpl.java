@@ -2,7 +2,6 @@ package cn.edu.zju.minisql.distributed.server.region.service.Impl;
 
 import cn.edu.zju.minisql.distributed.server.region.minisql.catalogmanager.Attribute;
 import cn.edu.zju.minisql.distributed.server.region.region.RegionServer;
-import cn.edu.zju.minisql.distributed.server.region.Config;
 import cn.edu.zju.minisql.distributed.server.region.minisql.API;
 import cn.edu.zju.minisql.distributed.server.region.minisql.Interpreter;
 import cn.edu.zju.minisql.distributed.server.region.minisql.catalogmanager.CatalogManager;
@@ -13,12 +12,12 @@ import cn.edu.zju.minisql.distributed.service.Table;
 
 import cn.edu.zju.minisql.distributed.server.region.FTPTransferor;
 import org.apache.thrift.TException;
+import org.checkerframework.checker.units.qual.A;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
-import java.util.regex.*;
 
 public class ThriftServiceImpl implements RegionService.Iface {
     static {
@@ -43,118 +42,76 @@ public class ThriftServiceImpl implements RegionService.Iface {
     }
 
     @Override
-    public boolean duplicateTable(String tableName, String address, String path) {
+    public boolean duplicateTable(String tableName, String ip, String path) {
         // 最终结果判定
         boolean ok = false;
 
         // 使用for简化流程
         for(;;) {
-            // 回写MiniSql的内存到磁盘
+            // 关闭MiniSql以回写MiniSql的内存到磁盘
             try {
                 API.close();
             } catch (final IOException ioe) {
                 System.err.println("MiniSql closing failed");
                 ioe.printStackTrace();
+                ok = false;
                 break;
             }
 
-            // 使用FTP传输所有记录
-            ok = FTPTransferor.fromLocalFTPto(tableName, address.split(":", 2)[0], path);
+            // 使用FTP传输所有记录、索引文件
+            final String onlyIP = ip.split(":", 2)[0];
+            ok = FTPTransferor.fromLocalFTPto(tableName, onlyIP, path);
             if(!ok)
                 break;
 
-            final String baseDir = System.getProperty("user.dir");
-            final String primaryKeyIndexFilePatternStr = "_prikey";
-            final String indexFileExtName = ".index";
-            final String indexFilePatternStr = "\\.index$"; // 以.index结尾的
-            final Pattern indexFilePattern = Pattern.compile(indexFilePatternStr);
-            final File dirFile = new File(baseDir + File.separator + Config.Minisql.path.substring(0, Config.Minisql.path.length() - 1));
+            // 重启MiniSql以获得各个Manager的数据
+            try {
+                API.Initialize();
+            } catch (final IOException ioe) {
+                System.err.println("MiniSql initializing failed");
+                ioe.printStackTrace();
+                ok = false;
+                break;
+            }
 
-            // 列出目录所有文件
-            final File[] files = dirFile.listFiles();
+            // 获取MiniSql数据
+            cn.edu.zju.minisql.distributed.server.region.minisql.catalogmanager.Table miniSqlTable =
+                    CatalogManager.getTable(tableName);
+            Vector<cn.edu.zju.minisql.distributed.server.region.minisql.catalogmanager.Index> miniSqlIndexes
+                    = miniSqlTable.getIndexes();
 
-            List<Index> indexes = new ArrayList<>();
-            for(File f : files) {
-                if(f.isDirectory())
-                    continue;
-
-                // 使用正则表达式匹配文件名
-                Matcher matcher = indexFilePattern.matcher(f.getName());
-
-                if(matcher.find()) {
-                    // 若文件名匹配
-                    System.out.println("find index: " + f.getName());
-
-                    String indexName = f.getName().substring(
-                            0, f.getName().indexOf(indexFileExtName)
-                    );
-                    if(indexName.contains(primaryKeyIndexFilePatternStr)) {
-                        // 若是主键的索引，不加入indexes
-                        continue;
-                    }
-
-                    cn.edu.zju.minisql.distributed.server.region.minisql.catalogmanager.Index miniSqlIndex =
-                            CatalogManager.getIndex(indexName);
-
-                    if (miniSqlIndex.tableName.equals(tableName)) {
-                        // 若index对应的tableName与参数相同，
-                        // 将index加入列表
-                        Index serviceIndex = new Index(
-                                miniSqlIndex.indexName,
-                                miniSqlIndex.tableName,
-                                miniSqlIndex.attriName
-                        );
-                        indexes.add(serviceIndex);
-                    }
-                }
+            // 转换索引格式
+            ArrayList<cn.edu.zju.minisql.distributed.service.Index> serviceIndexes = new ArrayList<>();
+            for (cn.edu.zju.minisql.distributed.server.region.minisql.catalogmanager.Index idx
+                    : miniSqlIndexes) {
+                serviceIndexes.add(new TypesRedefinition.ServiceIndex(idx));
             }
 
             // 使用Thrift，调用备份对象重建Catalog与Index
-            cn.edu.zju.minisql.distributed.server.region.minisql.catalogmanager.Table miniSqlTable =
-                    CatalogManager.getTable(tableName);
-            Vector<Attribute> miniSqlAttrs
-                    = miniSqlTable.getAttributes();
-            String primaryKey = miniSqlTable.getPrimaryKey();
-
-            int primaryKeyIdx = 0;
-            for (Attribute miniSqlAttr : miniSqlAttrs) {
-                if(miniSqlAttr.getAttrName().equals(primaryKey))
-                    break;
-                primaryKeyIdx++;
-            }
-
-            List<List<String>> tuples = new ArrayList<>(); // 空即可
-
             // 注意：这里是region.region.RegionServer
-            RegionServer regionServer = new RegionServer(address, path);
+            RegionServer regionServer = new RegionServer(ip, path);
             try {
                 regionServer.openTransport();
                 regionServer.getServiceClient().
                         duplicateCatalog(
-                                new TypesRedefinition.ServiceTable(
-                                  tableName, miniSqlAttrs, primaryKeyIdx, tuples
-                                ),
-                                indexes
+                                new TypesRedefinition.ServiceTable(miniSqlTable),
+                                serviceIndexes
                         );
             } catch (TException e) {
                 e.printStackTrace();
             }
             break;
         }
-
-        try {
-            API.close();
-        } catch (final IOException ioe) {
-            System.err.println("MiniSql initializing failed");
-            ioe.printStackTrace();
-        }
-
         return !ok;
     }
 
     @Override
     public boolean duplicateCatalog(Table table, List<Index> indexes) {
-        if(CatalogManager.createTable(new TypesRedefinition.SqlTable(table))){                     // add catalog of table first
+        if(
+                CatalogManager.createTable(
+                        new TypesRedefinition.SqlTable(table, indexes)
+                )
+        ){                     // add catalog of table first
             for (Index index : indexes) {
                 boolean t = CatalogManager.createIndex(new TypesRedefinition.SqlIndex(index));     // then add catalog of each index
                 if (!t) return false;

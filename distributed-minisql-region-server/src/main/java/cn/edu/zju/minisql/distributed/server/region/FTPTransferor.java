@@ -5,10 +5,15 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import cn.edu.zju.minisql.distributed.server.region.minisql.catalogmanager.CatalogManager;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
+
+import cn.edu.zju.minisql.distributed.server.region.minisql.*;
 
 public class FTPTransferor {
     public static class FTPTransferorConfig {
@@ -25,15 +30,49 @@ public class FTPTransferor {
         public ArrayList<String> fileNames = new ArrayList<>();
         public boolean ok = false;
 
+        final String tableNameAndIdxNameSep = "_";
+        final String indexFilePatternStr = "\\.index$"; // 以.index结尾的
+        final Pattern indexFilePattern = Pattern.compile(indexFilePatternStr);
+
         public MiniSQLTableFiles(String tableName) {
-            String prefix = System.getProperty("user.dir") + File.separator + Config.Minisql.path;
+            final String baseDir = System.getProperty("user.dir");
+            final String prefix = baseDir + File.separator + Config.Minisql.path;
+            final File dirFile = new File(baseDir
+                    + File.separator
+                    + Config.Minisql.path.substring(0, Config.Minisql.path.length() - 1)
+            );
 
             try {
-                // tableName
-                fileStreams.add(new FileInputStream(
-                        prefix + tableName
-                ));
+                // file: <tableName>
+                System.out.println("MiniSQLTableFiles. Add table: " + tableName);
+                fileStreams.add(
+                        new FileInputStream(prefix + tableName)
+                );
                 fileNames.add(tableName);
+
+                // file: <tableName><indexName>.index
+                final File[] files = dirFile.listFiles(); // 列出目录所有文件
+                for(File f : files) {
+                    if (f.isDirectory())
+                        continue;
+
+                    Matcher matcher = indexFilePattern.matcher(f.getName());
+
+                    if (matcher.find()) {
+                        // 若文件名匹配正则 indexFilePatternStr
+                        System.out.println("MiniSQLTableFiles. Find index file: " + f.getName());
+
+                        String tbNameOfIndexFile = tableNameOfIndexFile(f.getName());
+                        if (tbNameOfIndexFile.equals(tableName)) {
+                            // 若表名匹配参数 tableName
+                            System.out.println("MiniSQLTableFiles. Add index: " + f.getName());
+                            fileStreams.add(
+                                    new FileInputStream(prefix + f.getName())
+                            );
+                            ok = fileNames.add(f.getName());
+                        }
+                    }
+                }
 
                 ok = true;
             } catch (final IOException ioe) {
@@ -41,6 +80,12 @@ public class FTPTransferor {
                 ioe.printStackTrace();
                 System.err.println("Local file doesn't exist");
             }
+        }
+
+        private String tableNameOfIndexFile(String fileName)
+        {
+            int afterTbName = fileName.indexOf(tableNameAndIdxNameSep);
+            return fileName.substring(0, afterTbName);
         }
 
         public void close() {
@@ -67,12 +112,12 @@ public class FTPTransferor {
         // 连接
         try {
             client.connect(ip, FTPTransferorConfig.port);
-            System.out.println("Connect to " + ip + ":" + FTPTransferorConfig.port);
+            System.out.println("FTPTransferor. Connect to " + ip + ":" + FTPTransferorConfig.port);
 
             final int reply = client.getReplyCode();
             if (!FTPReply.isPositiveCompletion(reply)) {
                 client.disconnect();
-                System.err.println("FTP server refused connection");
+                System.err.println("FTPTransferor. FTP server refused connection");
                 return false;
             }
         } catch (final IOException ioe) {
@@ -87,7 +132,7 @@ public class FTPTransferor {
                     ioee.printStackTrace();
                 }
             }
-            System.err.println("Could not connect to " + ip + ":" + FTPTransferorConfig.port);
+            System.err.println("FTPTransferor. Could not connect to " + ip + ":" + FTPTransferorConfig.port);
             ioe.printStackTrace();
             return false;
         }
@@ -104,7 +149,7 @@ public class FTPTransferor {
                     break;
             }
             if (retry == FTPTransferorConfig.maxRetry) {
-                System.err.println("Login for " + FTPTransferorConfig.maxRetry + " times, still failed");
+                System.err.println("FTPTransferor. Login for " + FTPTransferorConfig.maxRetry + " times, still failed");
                 return false; // 达到重试上限
             }
 
@@ -121,20 +166,22 @@ public class FTPTransferor {
             for (InputStream fileStream : files.fileStreams) {
                 retry = 0;
                 while (retry != FTPTransferorConfig.maxRetry) {
-                    if (!client.storeFile(
-                            files.fileNames.get(idx),
-                            fileStream
-                    )) {
+                    if (
+                            !client.storeFile(
+                                    files.fileNames.get(idx),
+                                    fileStream
+                            )
+                    ) {
                         retry++;
                     } else
                         break;
                 }
                 if(retry == FTPTransferorConfig.maxRetry)  {
-                    System.err.println("Upload for " + FTPTransferorConfig.maxRetry + " times, still failed");
+                    System.err.println("FTPTransferor. Upload for " + FTPTransferorConfig.maxRetry + " times, still failed");
                     return false;
                 }
 
-                System.out.println(files.fileNames.get(idx) + " transferred");
+                System.out.println("FTPTransferor. " + files.fileNames.get(idx) + " transferred");
                 idx++;
             }
         } catch (final IOException ioe) {
