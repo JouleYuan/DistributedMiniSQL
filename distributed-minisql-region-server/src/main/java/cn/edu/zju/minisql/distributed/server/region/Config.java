@@ -8,7 +8,8 @@ public class Config {
     public static class Zookeeper {
         public static String ip;
         public static int port;
-        public static int timeout;
+        public static int connectionTimeout;
+        public static int sessionTimeout;
         public static int baseSleepTime;
         public static int maxRetries;
         public static String namespace;
@@ -30,7 +31,8 @@ public class Config {
 
             Zookeeper.ip = properties.getProperty("zookeeper.ip");
             Zookeeper.port = Integer.parseInt(properties.getProperty("zookeeper.port"));
-            Zookeeper.timeout = Integer.parseInt(properties.getProperty("zookeeper.timeout"));
+            Zookeeper.connectionTimeout = Integer.parseInt(properties.getProperty("zookeeper.connectionTimeout"));
+            Zookeeper.sessionTimeout = Integer.parseInt(properties.getProperty("zookeeper.sessionTimeout"));
             Zookeeper.baseSleepTime = Integer.parseInt(properties.getProperty("zookeeper.baseSleepTime"));
             Zookeeper.maxRetries = Integer.parseInt(properties.getProperty("zookeeper.maxRetries"));
             Zookeeper.namespace = properties.getProperty("zookeeper.namespace");
