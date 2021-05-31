@@ -8,6 +8,7 @@ import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.layered.TFramedTransport;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -40,14 +41,14 @@ public class API {
                 List<String> regions =  masterServiceClient.createTable(newTable);
                 if(regions.size() > 0){
                     tableToRegion.put(tableName, regions);
-                    System.out.println("Query OK, 0 rows affected");
+                    System.out.println("Query OK, 0 rows affected\n");
                 }
                 else{
-                    System.out.println("ERROR: Fail to create table " + tableName);
+                    System.out.println("ERROR: Fail to create table " + tableName + "\n");
                 }
             }
             else{
-                System.out.println("ERROR: Table " + tableName + " already exists.");
+                System.out.println("ERROR: Table " + tableName + " already exists.\n");
             }
         } catch (TException e) {
             e.printStackTrace();
@@ -62,14 +63,15 @@ public class API {
             masterTransport.open();
             if(!masterServiceClient.getRegionServers(tableName).isEmpty()){
                 if(masterServiceClient.dropTable(tableName)){
-                    System.out.println("Query OK, 0 rows affected");
+                    tableToRegion.remove(tableName);
+                    System.out.println("Query OK, 0 rows affected\n");
                 }
                 else{
-                    System.out.println("ERROR: Fail to drop table " + tableName);
+                    System.out.println("ERROR: Fail to drop table " + tableName + "\n");
                 }
             }
             else{
-                System.out.println("ERROR: Unknown table " + tableName);
+                System.out.println("ERROR: Unknown table " + tableName + "\n");
             }
         } catch (TException e) {
             e.printStackTrace();
@@ -81,19 +83,20 @@ public class API {
     public static void regionSQL(String tableName, String sql, boolean isWrite){
         List<String> regions;
         try{
-            masterTransport.open();
-            if(isWrite){
-                regions = masterServiceClient.getRegionServers(tableName);
+
+            if(!isWrite && tableToRegion.containsKey(tableName)){
+                regions = tableToRegion.get(tableName);
             }else{
-                regions = tableToRegion.containsKey(tableName)? tableToRegion.get(tableName) : masterServiceClient.getRegionServers(tableName);
+                masterTransport.open();
+                regions = masterServiceClient.getRegionServers(tableName);
+                masterTransport.close();
             }
-            masterTransport.close();
 
             // 存在表
             if(!regions.isEmpty()){
-                String response = "ERROR: Region servers failed.";
-
-                for(String regionServer: regions) {
+                String response = "ERROR: Region servers failed.\n";
+                List<String> regionsCopy = new ArrayList<>(regions);
+                for(String regionServer: regionsCopy) {
                     String regionIP = regionServer.split(":")[0];
                     int regionPort = Integer.parseInt(regionServer.split(":")[1]);
 
@@ -101,19 +104,53 @@ public class API {
                         TProtocol protocol = new TBinaryProtocol(transport);
                         RegionService.Client client = new RegionService.Client(protocol);
                         transport.open();
-
                         response = client.sqlRequest(sql);
+                        if(response.startsWith("The table ")) {
+                            regions.remove(regionServer);
+                            continue;
+                        }
                         if(!isWrite) break;
-                    } catch (Exception e) {
+                    } catch (TException e) {
                         regions.remove(regionServer);
-                        e.printStackTrace();
                     }
                 }
-                tableToRegion.put(tableName, regions);
+                if (regions.isEmpty()) {
+                    masterTransport.open();
+                    regions = masterServiceClient.getRegionServers(tableName);
+                    masterTransport.close();
+                    if(!regions.isEmpty()) {
+                        regionsCopy = new ArrayList<>(regions);
+                        for(String regionServer: regionsCopy) {
+                            String regionIP = regionServer.split(":")[0];
+                            int regionPort = Integer.parseInt(regionServer.split(":")[1]);
+
+                            try (TTransport transport = new TFramedTransport(new TSocket(regionIP, regionPort))) {
+                                TProtocol protocol = new TBinaryProtocol(transport);
+                                RegionService.Client client = new RegionService.Client(protocol);
+                                transport.open();
+                                response = client.sqlRequest(sql);
+                                if(response.startsWith("The table ")) {
+                                    regions.remove(regionServer);
+                                    continue;
+                                }
+                                if(!isWrite) break;
+                            } catch (TException e) {
+                                regions.remove(regionServer);
+                            }
+                        }
+                        if (regions.isEmpty()) tableToRegion.remove(tableName);
+                        else tableToRegion.put(tableName, regions);
+                    } else {
+                        tableToRegion.remove(tableName);
+                        response = "ERROR: Table " + tableName + " doesn't exist\n";
+                    }
+                } else {
+                    tableToRegion.put(tableName, regions);
+                }
                 System.out.println(response);
             }
             else{
-                System.out.println("ERROR: Table " + tableName + " doesn't exist");
+                System.out.println("ERROR: Table " + tableName + " doesn't exist\n");
             }
         } catch (TException e) {
             e.printStackTrace();
@@ -127,8 +164,9 @@ public class API {
             masterTransport.open();
             List<String> regions = masterServiceClient.showTables();
             for(String table:regions){
-                System.out.println(table);
+                System.out.print(table + " ");
             }
+            System.out.println();
         } catch (TException e) {
             e.printStackTrace();
         } finally {

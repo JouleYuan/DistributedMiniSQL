@@ -26,17 +26,18 @@ public class Interpreter {
         Lexer lexer = new Lexer(reader);
 
         while (!lexer.getReaderState()) {
-            System.out.print("miniSQL> ");
             if (!isSynCorrect) {
                 while (!currentToken.toString().equals(";")) {
                     currentToken = lexer.scan();
                 }
-                System.out.println(synErrMsg);
+                System.out.println(synErrMsg + "\n");
                 isSemaCorrect = true;
                 isSynCorrect = true;
                 sql.delete(0,sql.length());
                 continue;
             }
+
+            System.out.print("miniSQL> ");
 
             currentToken = lexer.scan();
             sql.append(currentToken);
@@ -62,7 +63,7 @@ public class Interpreter {
             else if (currentToken.tag == Tag.QUIT) {
                 currentToken = lexer.scan();
                 if (currentToken.toString().equals(";")) {
-                    System.out.println("Quit the MiniSql. See you next time!");
+                    System.out.println("Quit Distributed MiniSql. See you next time!\n");
                     API.close();
                     reader.close();
                     System.exit(0);
@@ -239,11 +240,11 @@ public class Interpreter {
                                         }
                                     }
                                     if (!find){
-                                        System.out.println("Synthetic error: no field named" + tmpPrimaryKey + ", create table " + tmpTableName + " failed");
+                                        System.out.println("Synthetic error: no field named" + tmpPrimaryKey + ", create table " + tmpTableName + " failed\n");
                                     }
                                 } else {
                                     System.out.print(semaErrMsg);
-                                    System.out.println(", create table " + tmpTableName + " failed");
+                                    System.out.println(", create table " + tmpTableName + " failed\n");
                                     isSemaCorrect = true;
                                 }
                                 sql.delete(0,sql.length());
@@ -300,7 +301,7 @@ public class Interpreter {
                                                 sql.append(";");
                                                 API.regionSQL(tmpTableName, sql.toString(), true);
                                             } else {
-                                                System.out.println(semaErrMsg + ", create index failed");
+                                                System.out.println(semaErrMsg + ", create index failed\n");
                                                 isSemaCorrect = true;
                                             }
                                             sql.delete(0,sql.length());
@@ -358,7 +359,7 @@ public class Interpreter {
                                 API.dropTable(tmpTableName);
                             } else {
                                 System.out.print(semaErrMsg);
-                                System.out.println("drop table " + tmpTableName + " failed");
+                                System.out.println("drop table " + tmpTableName + " failed\n");
                                 isSemaCorrect = true;
                             }
                         } else {
@@ -403,7 +404,7 @@ public class Interpreter {
                                     API.regionSQL(tmpTableName, sql.toString(), true);
                                 } else {
                                     System.out.print(semaErrMsg);
-                                    System.out.println("drop index " + tmpIndexName + " failed");
+                                    System.out.println("drop index " + tmpIndexName + " failed\n");
                                     isSemaCorrect = true;
                                 }
                                 sql.delete(0,sql.length());
@@ -464,7 +465,7 @@ public class Interpreter {
                                     API.regionSQL(tmpTableName, sql.toString(),true);
                                 } else {
                                     System.out.print(semaErrMsg);
-                                    System.out.println(", insert failed");
+                                    System.out.println(", insert failed\n");
                                     isSemaCorrect = true;
                                 }
                                 sql.delete(0, sql.length());
@@ -519,7 +520,7 @@ public class Interpreter {
                                  */
                                 API.regionSQL(tmpTableName, sql.toString(), true);
                             } else if (isSynCorrect) {
-                                System.out.println(semaErrMsg + ", delete tuples failed");
+                                System.out.println(semaErrMsg + ", delete tuples failed\n");
                                 isSemaCorrect = true;
                             }
                             sql.delete(0, sql.length());
@@ -530,7 +531,7 @@ public class Interpreter {
                                  */
                                 API.regionSQL(tmpTableName, sql.toString(), true);
                             } else {
-                                System.out.println(semaErrMsg + ", delete tuples failed");
+                                System.out.println(semaErrMsg + ", delete tuples failed\n");
                                 isSemaCorrect = true;
                             }
                             sql.delete(0, sql.length());
@@ -578,16 +579,16 @@ public class Interpreter {
                                  * */
                                 API.regionSQL(tmpTableName, sql.toString(), false);
                             } else if (isSynCorrect) {
-                                System.out.println(semaErrMsg + ", select tuples failed");
+                                System.out.println(semaErrMsg + ", select tuples failed\n");
                                 isSemaCorrect = true;
                             }
                             sql.delete(0, sql.length());
                         } else if (currentToken.toString().equals(";")) {//select * from 表名；
                             if (isSemaCorrect) {
                                 /*执行select 操作*/
-                                API.regionSQL(tmpTableName, sql.toString(), true);
+                                API.regionSQL(tmpTableName, sql.toString(), false);
                             } else {
-                                System.out.println(semaErrMsg + ", select tuples failed");
+                                System.out.println(semaErrMsg + ", select tuples failed\n");
                                 isSemaCorrect = true;
                             }
                             sql.delete(0, sql.length());
@@ -603,9 +604,9 @@ public class Interpreter {
                                 /*
                                  * 执行select order操作
                                  */
-                                API.regionSQL(tmpTableName, sql.toString(), true);
+                                API.regionSQL(tmpTableName, sql.toString(), false);
                             } else {
-                                System.out.println(semaErrMsg + ", select tuples failed");
+                                System.out.println(semaErrMsg + ", select tuples failed\n");
                                 isSemaCorrect = true;
                             }
                             sql.delete(0, sql.length());

@@ -5,7 +5,7 @@ import java.io.InputStreamReader;
 
 public class Client {
     public static void main(String[] args) {
-        System.out.println("Welcome to MiniSql.");
+        System.out.println("Welcome to Distributed MiniSql.\n");
 
         API.init();
         try{
