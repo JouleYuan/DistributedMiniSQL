@@ -16,6 +16,6 @@ public class DirectoryManager {
     public static void init(String filename) {
         File file=new File(filename.substring(0, filename.length() - 1));
         if(file.exists()) delFiles(file);
-        file.mkdir();
+        file.mkdirs();
     }
 }
