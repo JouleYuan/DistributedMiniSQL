@@ -100,7 +100,7 @@ public class IndexManager{
 		try{
 			if(file.exists())
 				if(file.delete())   {
-					System.out.println("索引文件已删除");
+					System.out.println(filename + " has been deleted");
 					return true;}
 				else
 					//System.out.println("文件"+filename+"没有找到");

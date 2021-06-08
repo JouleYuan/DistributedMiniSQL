@@ -114,9 +114,11 @@ public class ThriftServiceImpl implements RegionService.Iface {
                         new TypesRedefinition.SqlTable(table, indexes)
                 )
         ){                     // add catalog of table first
+            System.out.println("Receive table " + table.getName());
             for (Index index : indexes) {
                 boolean t = CatalogManager.createIndex(new TypesRedefinition.SqlIndex(index));     // then add catalog of each index
                 if (!t) return false;
+                System.out.println("Receive index " + index.getIndexName() + " on " + index.getTableName());
             }
             return true;
         }
