@@ -111,13 +111,16 @@ public class ThriftServiceImpl implements RegionService.Iface {
     public boolean duplicateCatalog(Table table, List<Index> indexes) {
         if(
                 CatalogManager.createTable(
-                        new TypesRedefinition.SqlTable(table, indexes)
+                        new TypesRedefinition.SqlTable(table)
                 )
         ){                     // add catalog of table first
             System.out.println("Receive table " + table.getName());
             for (Index index : indexes) {
                 boolean t = CatalogManager.createIndex(new TypesRedefinition.SqlIndex(index));     // then add catalog of each index
-                if (!t) return false;
+                if (!t){
+                    CatalogManager.dropTable(table.getName());  // roll back
+                    return false;
+                }
                 System.out.println("Receive index " + index.getIndexName() + " on " + index.getTableName());
             }
             return true;
