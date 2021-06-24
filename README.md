@@ -4,6 +4,8 @@ This is a simple distributed relational database implementation for ZJU course. 
 
 ![architecture](image/architecture.jpeg)
 
+P.S. The [MiniSQL](https://github.com/LeeLeeYeah/MiniSQL) used in this project is based on an another open source project.
+
 ### Start
 
 First, you have to download and run [ZooKeeper](https://www.apache.org/dyn/closer.lua/zookeeper/zookeeper-3.6.3/apache-zookeeper-3.6.3-bin.tar.gz). To start ZooKeeper you need a configuration file. Here is a sample, create it in `conf/zoo.cfg`.
