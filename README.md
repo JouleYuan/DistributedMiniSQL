@@ -17,7 +17,7 @@ clientPort=2181
 Now that you created the configuration file, you can start ZooKeeper. (On Windows, you can directly open `bin\zkServer.cmd`)
 
 ```shell
-bin\zkServer.sh start
+bin/zkServer.sh start
 ```
 
 After that, you can connects to the ZooKeeper with ZooKeeper client. (On Windows, you can directly open `bin\zkCli.cmd`)
