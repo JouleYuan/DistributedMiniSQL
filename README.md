@@ -1,6 +1,6 @@
 # Distributed MiniSQL
 
-This is a simple distributed relational database implementation for ZJU course. It stores table data in multiple Region Servers, and replicates data when some Region Server crashes, which makes it a system with high availability. What's more, hash load balance and client cache is also applied to make it faster. Its architecture is shown in the following graph.
+This is a simple distributed relational database implementation for ZJU course. It stores table data in multiple Region Servers, and replicates data when some Region Server crashes, which makes it a system with high availability. What's more, hash load balance and client cache are also applied to make it faster. Its architecture is shown in the following graph.
 
 ![architecture](image/architecture.jpeg)
 
